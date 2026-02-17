@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",         /* Version de JavaScript générée */
+    "module": "commonjs",       /* Standard pour Node.js */
+    "outDir": "./dist",         /* Où le code compilé sera stocké */
+    "rootDir": "./src",         /* Où tu vas écrire ton code TS */
+    "strict": true,             /* Active toutes les vérifications de type */
+    "esModuleInterop": true,    /* Compatibilité avec les modules JS classiques */
+    "skipLibCheck": true,       /* Accélère la compilation */
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"],      /* Compile tout ce qui est dans le dossier src */
+  "exclude": ["node_modules"]   /* Ignore les bibliothèques externes */
+}
