@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="[mod] Gestion du logout (suppression des cookies)">
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="[mod] Affichage du nom de l'utilisateur dans la top bar">
+      <change afterPath="$PROJECT_DIR$/views/partials/footer.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/partials/head.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/partials/modals.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/partials/sidebar.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/partials/tables.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/partials/topBar.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/authControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/authControllers.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/login.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/login.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +113,7 @@
       <workItem from="1771244277554" duration="3095000" />
       <workItem from="1771247405709" duration="12880000" />
       <workItem from="1771319336540" duration="16702000" />
-      <workItem from="1771336485675" duration="3529000" />
+      <workItem from="1771336485675" duration="5770000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -152,7 +155,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771338370417</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="[mod] Affichage du nom de l'utilisateur dans la top bar">
+      <option name="closed" value="true" />
+      <created>1771340149359</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1771340149359</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -184,6 +195,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Push de base" />
     <MESSAGE value="[mod] Gestion du logout (suppression des cookies)" />
-    <option name="LAST_COMMIT_MESSAGE" value="[mod] Gestion du logout (suppression des cookies)" />
+    <MESSAGE value="[mod] Affichage du nom de l'utilisateur dans la top bar" />
+    <option name="LAST_COMMIT_MESSAGE" value="[mod] Affichage du nom de l'utilisateur dans la top bar" />
   </component>
 </project>
