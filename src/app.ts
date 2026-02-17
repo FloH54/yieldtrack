@@ -35,9 +35,10 @@ app.get('/logout', logout);
 
 // Routes Protégées (On définit tout "à plat")
 app.get('/', isAuthenticated, (req: Request, res: Response) => {
-
+    // On récupère le user dans le middleware
+    const user = (req as any).user;
     // On rend la vue index et on passe les données
-    res.render('index', {  });
+    res.render('index', { user: user });
 });
 
 app.get('/tasks', isAuthenticated, (req: Request, res: Response) => {

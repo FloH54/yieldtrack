@@ -14,12 +14,12 @@ export const login = async (req: Request, res: Response) => {
 
         if (!user) {
             // Si pas d'email associé, le notifié
-            return res.status(401).send("Utilisateur non trouvé.");
+            return res.render('login', { error: 'Email inconnu ou utilisateur inexistant.' });
         }
 
         // Vérifier le mot de passe
         if (!await bcrypt.compare(password, user.password)) {
-            return res.status(401).send("Mot de passe incorrect.");
+            return res.render('login', { error: 'Mot de passe incorrect.' });
         };
 
         // tout est bon, redirection vers le Dashboard
@@ -27,7 +27,12 @@ export const login = async (req: Request, res: Response) => {
 
         // Génération du Token
         const token = jwt.sign(
-            { id: user.id, email: user.email },
+            {
+                id: user.id,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+            },
             JWT_SECRET,
             { expiresIn: rememberMe ? '7d' : '2h' } // 7 jours si coché, sinon 2h
         );

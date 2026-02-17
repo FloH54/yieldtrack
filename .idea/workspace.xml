@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="Push de base">
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="[mod] Gestion du logout (suppression des cookies)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/authControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/authControllers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/login.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/login.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +36,9 @@
     "accountId": "fc05e6b8-2003-4507-914c-0c08ebc84ca2"
   }
 }]]></component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -104,7 +110,7 @@
       <workItem from="1771244277554" duration="3095000" />
       <workItem from="1771247405709" duration="12880000" />
       <workItem from="1771319336540" duration="16702000" />
-      <workItem from="1771336485675" duration="1597000" />
+      <workItem from="1771336485675" duration="3529000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -138,7 +144,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771336624516</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="[mod] Gestion du logout (suppression des cookies)">
+      <option name="closed" value="true" />
+      <created>1771338370417</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1771338370417</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -169,6 +183,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Push de base" />
-    <option name="LAST_COMMIT_MESSAGE" value="Push de base" />
+    <MESSAGE value="[mod] Gestion du logout (suppression des cookies)" />
+    <option name="LAST_COMMIT_MESSAGE" value="[mod] Gestion du logout (suppression des cookies)" />
   </component>
 </project>
