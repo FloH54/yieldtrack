@@ -4,7 +4,7 @@ import path from 'path';
 import sequelize from './config/database';
 import cookieParser from 'cookie-parser';
 import User from './models/User';
-import { login } from "./controllers/authControllers";
+import { login, logout } from "./controllers/authControllers";
 
 const app = express();
 const PORT = 3000;
@@ -31,6 +31,7 @@ app.get('/login', (req: Request, res: Response) => {
 });
 
 app.post('/login', login);
+app.get('/logout', logout);
 
 // Routes Protégées (On définit tout "à plat")
 app.get('/', isAuthenticated, (req: Request, res: Response) => {
