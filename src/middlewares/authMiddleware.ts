@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import User from "../models/User";
 
-export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+export const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.token;
 
     // Si pas de token alors login
@@ -10,12 +11,27 @@ export const isAuthenticated = (req: Request, res: Response, next: NextFunction)
     }
 
     try {
-        const decoded = jwt.verify(token, 'ta_cle_secrete_tres_longue');
-        (req as any).user = decoded; // On stocke les infos de l'utilisateur dans la requête
-        next();
+        // verif de la signature du token
+        const decoded = jwt.verify(token, 'ta_cle_secrete_tres_longue') as any;
+
+        // récupération des données utilisateur
+        const user = await User.findByPk(decoded.id,{
+            include: ['role']
+        })
+
+        // verif si l'utilisateur est actif
+        if(!user || !user.isActive){
+            res.clearCookie('token');
+            return res.redirect('/login');
+        }
+
+        (req as any ).user = user.get({plain: true})
+
+
     } catch (err) {
         // Si erreur il doit se reconnecter
         res.clearCookie('token');
         return res.redirect('/login');
     }
 };
+

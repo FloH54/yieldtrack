@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import User from '../models/User';
+import {Role} from "../models/Role";
 
 const JWT_SECRET = 'ta_cle_secrete_tres_longue'; // TODO À mettre dans un fichier .env plus tard
 
@@ -10,7 +11,9 @@ export const login = async (req: Request, res: Response) => {
         const { email, password, rememberMe } = req.body;
 
         // Chercher l'utilisateur dans MariaDB via Sequelize
-        const user = await User.findOne({ where: { email } });
+        const user = await User.findOne({
+            where: { email }
+        });
 
         if (!user) {
             // Si pas d'email associé, le notifié

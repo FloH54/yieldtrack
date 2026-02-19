@@ -1,3 +1,4 @@
+import user from "../../src/models/User";
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -13,11 +14,13 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Settings -->
+    <% if(user.roles && user.roles.includes('Administrateur')) { %>
     <li class="nav-item active">
         <a class="nav-link" href="index.html">
             <i class="fas fa-fw fa-cog"></i>
             <span>Settings</span></a>
     </li>
+    <% } %>
 
     <!-- Ressources -->
     <li class="nav-item">
@@ -61,7 +64,7 @@
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="utilities-color.html">Teamp Up</a>
+                <a class="collapse-item" href="utilities-color.html">Teamp Fup</a>
                 <a class="collapse-item" href="utilities-border.html">Attribution</a>
             </div>
         </div>

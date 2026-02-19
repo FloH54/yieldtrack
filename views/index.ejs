@@ -20,6 +20,22 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
+                    <% if (user.roles.includes('admin')) { %>
+                        <div class="alert alert-info">
+                            Bienvenue, Administrateur. Vous avez accès aux réglages système.
+                        </div>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin">
+                                <i class="fas fa-fw fa-user-shield"></i>
+                                <span>Panneau Admin</span>
+                            </a>
+                        </li>
+                    <% } %>
+
+                    <% if (user.roles.includes('admin') || user.roles.includes('manager')) { %>
+                        <button class="btn btn-primary">Éditer le projet</button>
+                    <% } %>
+
                     <!-- Content Row -->
 
                     <!-- Begin Page Content -->

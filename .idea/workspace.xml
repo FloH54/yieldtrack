@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="[mod] Affichage du nom de l'utilisateur dans la top bar">
-      <change afterPath="$PROJECT_DIR$/views/partials/footer.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/partials/head.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/partials/modals.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/partials/sidebar.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/partials/tables.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/partials/topBar.ejs" afterDir="false" />
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="[modify] rétractation de la barre latérale">
+      <change afterPath="$PROJECT_DIR$/src/models/Role.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/authControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/authControllers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middlewares/authMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/authMiddleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/User.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/User.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/sidebar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/sidebar.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,12 +32,12 @@
     &quot;assignee&quot;: &quot;FloH54&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/FloH54/yieldtrack.git",
-    "accountId": "fc05e6b8-2003-4507-914c-0c08ebc84ca2"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/FloH54/yieldtrack.git&quot;,
+    &quot;accountId&quot;: &quot;fc05e6b8-2003-4507-914c-0c08ebc84ca2&quot;
   }
-}]]></component>
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -113,7 +112,9 @@
       <workItem from="1771244277554" duration="3095000" />
       <workItem from="1771247405709" duration="12880000" />
       <workItem from="1771319336540" duration="16702000" />
-      <workItem from="1771336485675" duration="5770000" />
+      <workItem from="1771336485675" duration="6585000" />
+      <workItem from="1771400449330" duration="18752000" />
+      <workItem from="1771430522348" duration="5477000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -163,7 +164,31 @@
       <option name="project" value="LOCAL" />
       <updated>1771340149359</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="[update] factorisation des composant graphique">
+      <option name="closed" value="true" />
+      <created>1771342388826</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1771342388826</updated>
+    </task>
+    <task id="LOCAL-00008" summary="[update] partition de création">
+      <option name="closed" value="true" />
+      <created>1771422810485</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1771422810485</updated>
+    </task>
+    <task id="LOCAL-00009" summary="[modify] rétractation de la barre latérale">
+      <option name="closed" value="true" />
+      <created>1771428936875</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1771428936875</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -174,19 +199,7 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="master" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
+            <State />
           </value>
         </entry>
       </map>
@@ -196,6 +209,9 @@
     <MESSAGE value="Push de base" />
     <MESSAGE value="[mod] Gestion du logout (suppression des cookies)" />
     <MESSAGE value="[mod] Affichage du nom de l'utilisateur dans la top bar" />
-    <option name="LAST_COMMIT_MESSAGE" value="[mod] Affichage du nom de l'utilisateur dans la top bar" />
+    <MESSAGE value="[update] factorisation des composant graphique" />
+    <MESSAGE value="[update] partition de création" />
+    <MESSAGE value="[modify] rétractation de la barre latérale" />
+    <option name="LAST_COMMIT_MESSAGE" value="[modify] rétractation de la barre latérale" />
   </component>
 </project>

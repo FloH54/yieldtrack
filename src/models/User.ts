@@ -1,4 +1,5 @@
 import { DataTypes, Model, Optional } from "sequelize";
+import { Role } from "./Role";
 import sequelize from "../config/database";
 
 // Définition des attributs pour TypeScript
@@ -8,6 +9,7 @@ interface UserAttributes {
     password: string;
     firstName: string;
     lastName: string;
+    roles: string[];
     isActive: boolean;
     createdAt?: Date; // Géré par la DB
     lastLoginAt?: Date | null;
@@ -22,6 +24,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public password!: string;
     public firstName!: string;
     public lastName!: string;
+    public roles!: string[];
     public isActive!: boolean;
     public createdAt!: Date;
     public lastLoginAt!: Date | null;
@@ -60,6 +63,12 @@ User.init({
         allowNull: false,
         field: 'UserLastName' // Lien vers 'UserLastName'
     },
+    roles: {
+        type: DataTypes.JSON, //Sequelize transforme le tableau en string Json pour maria DB
+        allowNull: false,
+        defaultValue:['user'],
+        field: 'UserRoles'
+    },
     isActive: {
         type: DataTypes.TINYINT, // TINYINT(1) est souvent lu comme boolean par Sequelize, mais TINYINT est plus sûr pour la définition
         defaultValue: 1,
@@ -83,5 +92,19 @@ User.init({
     createdAt: 'createdAt', // On mappe la propriété interne createdAt sur la colonne définie plus haut
     updatedAt: false,      // IMPORTANT : Ta table Users n'a pas de colonne UpdatedAt, donc on désactive
 });
+
+User.belongsToMany(Role,{
+    through: 'UserRoles',
+    foreignKey: 'UserId',
+    otherKey: 'RoleId',
+    as: 'Role'
+});
+
+User.belongsToMany(Role,{
+    through: 'UserRoles',
+    foreignKey: 'RoleId',
+    otherKey: 'UserId',
+    as: 'users'
+})
 
 export default User;
