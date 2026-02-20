@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import bcrypt, {hash} from 'bcrypt';
 import { Request, Response } from 'express';
-import User from '../models/User';
-import {Role} from "../models/Role";
+import { User, Profiles} from "../models/Index";
 
 const JWT_SECRET = 'ta_cle_secrete_tres_longue'; // TODO À mettre dans un fichier .env plus tard
 
@@ -12,7 +11,8 @@ export const login = async (req: Request, res: Response) => {
 
         // Chercher l'utilisateur dans MariaDB via Sequelize
         const user = await User.findOne({
-            where: { email }
+            where: { email },
+            include: ['profiles']
         });
 
         if (!user) {
@@ -21,7 +21,7 @@ export const login = async (req: Request, res: Response) => {
         }
 
         // Vérifier le mot de passe
-        if (!await bcrypt.compare(password, user.password)) {
+        if (!await bcrypt.compare(password, user.pwd)) {
             return res.render('login', { error: 'Mot de passe incorrect.' });
         };
 
@@ -34,7 +34,7 @@ export const login = async (req: Request, res: Response) => {
                 id: user.id,
                 email: user.email,
                 firstName: user.firstName,
-                lastName: user.lastName,
+                lastName: user.lastName
             },
             JWT_SECRET,
             { expiresIn: rememberMe ? '7d' : '2h' } // 7 jours si coché, sinon 2h
@@ -50,6 +50,7 @@ export const login = async (req: Request, res: Response) => {
 
         res.redirect('/');
 
+        console.log('voici le token :',token);
     } catch (error) {
         console.error("Erreur lors du login:", error);
         res.status(500).send("Erreur serveur.");

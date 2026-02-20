@@ -3,7 +3,6 @@ import { isAuthenticated } from "./middlewares/authMiddleware";
 import path from 'path';
 import sequelize from './config/database';
 import cookieParser from 'cookie-parser';
-import User from './models/User';
 import { login, logout } from "./controllers/authControllers";
 
 const app = express();
@@ -18,12 +17,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Interface pour les menus
-interface MenuItem {
-    title: string;
-    icon: string;
-    link: string;
-}
 
 // Routes Publiques
 app.get('/login', (req: Request, res: Response) => {
@@ -35,8 +28,9 @@ app.get('/logout', logout);
 
 // Routes Protégées (On définit tout "à plat")
 app.get('/', isAuthenticated, (req: Request, res: Response) => {
-    // On récupère le user dans le middleware
+    // On récupère le users dans le middleware
     const user = (req as any).user;
+
     // On rend la vue index et on passe les données
     res.render('index', { user: user });
 });
@@ -51,7 +45,7 @@ async function startServer() {
         await sequelize.authenticate();
         console.log('Connexion à MariaDB réussie.');
 
-        await sequelize.sync({ alter: true });
+        await sequelize.sync();
         console.log('Base de données synchronisée.');
 
         app.listen(PORT, () => {

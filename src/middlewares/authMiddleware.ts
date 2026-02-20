@@ -16,17 +16,18 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
 
         // récupération des données utilisateur
         const user = await User.findByPk(decoded.id,{
-            include: ['role']
+            include: ['profiles']
         })
 
         // verif si l'utilisateur est actif
-        if(!user || !user.isActive){
+        if(!user || !user.IsActive){
             res.clearCookie('token');
             return res.redirect('/login');
         }
-
+        // Attache l'utilisateur à la requête
         (req as any ).user = user.get({plain: true})
 
+        next();
 
     } catch (err) {
         // Si erreur il doit se reconnecter
