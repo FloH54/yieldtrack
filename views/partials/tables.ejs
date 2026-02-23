@@ -1,6 +1,6 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Task Management</h6>
+        <h6 class="m-0 font-weight-bold text-primary"><%= table.name%></h6>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -8,19 +8,45 @@
                 <!-- entête -->
                 <thead>
                     <tr>
-                        <% table.head.forEach((column) => { %>
-                        <th> <% column %> </th>
-                        <%})%>
+                        <th>Actions</th>
+                        <%table.head.forEach(column => { %>
+                        <th> <%=column %> </th>
+                        <%});%>
                     </tr>
                 </thead>
                 <!-- Début des tâches -->
                 <tbody>
-                <% table.lines.forEach((line) => { %>
+                <% table.lines.forEach(line => { %>
                     <tr>
-                    <% line.forEach((column) => { %>
-                        <th> <% column %> </th>
+                        <th>
+                            <li class="nav-item dropdown no-arrow">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-pen" aria-hidden="true"></i>
+                                </a>
+                                <!-- Dropdown - User Information -->
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                     aria-labelledby="userDropdown">
+
+                                    <% table.listOptions.forEach(option => { console.log()%>
+                                        <a class="dropdown-item" href="#" data-target="<%= option[0] %>">
+                                            <%= option[1] %> <i class="<%= option[2] %>"></i>
+                                        </a>
+                                    <%});%>
+
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Profile
+                                    </a>
+                                </div>
+                            </li>
+                            <button type="button" class="btn btn-sm" href="#" data-toggle="popUpInformation"><i class="fas fa-info-circle"></i></button>
+                        </th>
+                    <% line.forEach(column => { %>
+                        <th> <%= column %> </th>
                         <%})
                     })%>
+                    </tr>
                 </tbody>
                 <!-- Fin des tâches -->
             </table>

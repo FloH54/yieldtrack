@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="[modify] rétractation de la barre latérale">
-      <change afterPath="$PROJECT_DIR$/src/models/Role.ts" afterDir="false" />
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="[modify] ejs d'un tableau">
+      <change afterPath="$PROJECT_DIR$/src/controllers/tasksController.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/Task.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/tables/ResteAFaire.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/tables/TableInterface.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/authControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/authControllers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/middlewares/authMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/authMiddleware.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/User.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/User.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/sidebar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/sidebar.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/header.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/header.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/tables.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/tables.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,6 +82,7 @@
       <recent name="$PROJECT_DIR$/public" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/models/tables" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/public/img" />
       <recent name="$PROJECT_DIR$/public" />
@@ -115,6 +118,13 @@
       <workItem from="1771336485675" duration="6585000" />
       <workItem from="1771400449330" duration="18752000" />
       <workItem from="1771430522348" duration="5477000" />
+      <workItem from="1771496753864" duration="47000" />
+      <workItem from="1771496849841" duration="9391000" />
+      <workItem from="1771513937782" duration="4260000" />
+      <workItem from="1771575196232" duration="9217000" />
+      <workItem from="1771591940975" duration="792000" />
+      <workItem from="1771836539962" duration="22401000" />
+      <workItem from="1771866651434" duration="2465000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -188,7 +198,23 @@
       <option name="project" value="LOCAL" />
       <updated>1771428936875</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="[modify] gestion du roles admin">
+      <option name="closed" value="true" />
+      <created>1771579858986</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1771579858986</updated>
+    </task>
+    <task id="LOCAL-00011" summary="[modify] ejs d'un tableau">
+      <option name="closed" value="true" />
+      <created>1771579882953</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1771579882953</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -212,6 +238,9 @@
     <MESSAGE value="[update] factorisation des composant graphique" />
     <MESSAGE value="[update] partition de création" />
     <MESSAGE value="[modify] rétractation de la barre latérale" />
-    <option name="LAST_COMMIT_MESSAGE" value="[modify] rétractation de la barre latérale" />
+    <MESSAGE value="{&#10;    &quot;error&quot;: {&#10;        &quot;message&quot;: &quot;You didn't provide an API key. You need to provide your API key in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY), or as the password field (with blank username) if you're accessing the API from your browser and are prompted for a username and password. You can obtain an API key from https://platform.openai.com/account/api-keys.&quot;,&#10;        &quot;type&quot;: &quot;invalid_request_error&quot;,&#10;        &quot;param&quot;: null,&#10;        &quot;code&quot;: null&#10;    }&#10;}" />
+    <MESSAGE value="[modify] gestion du roles admin" />
+    <MESSAGE value="[modify] ejs d'un tableau" />
+    <option name="LAST_COMMIT_MESSAGE" value="[modify] ejs d'un tableau" />
   </component>
 </project>

@@ -4,6 +4,9 @@ import path from 'path';
 import sequelize from './config/database';
 import cookieParser from 'cookie-parser';
 import { login, logout } from "./controllers/authControllers";
+import ResteAFaire from "./models/tables/ResteAFaire";
+import resteAFaire from "./models/tables/ResteAFaire";
+import {generateResteAFaireView} from "./controllers/tasksController";
 
 const app = express();
 const PORT = 3000;
@@ -27,12 +30,14 @@ app.post('/login', login);
 app.get('/logout', logout);
 
 // Routes Protégées (On définit tout "à plat")
-app.get('/', isAuthenticated, (req: Request, res: Response) => {
+app.get('/', isAuthenticated, async (req: Request, res: Response) => {
     // On récupère le users dans le middleware
     const user = (req as any).user;
+    // On récupère les tâches (await pour attendre la rep de la bd)
+    const tableData = await generateResteAFaireView(user.id);
 
-    // On rend la vue index et on passe les données
-    res.render('index', { user: user });
+    // On rend la vue index et on passe les données avec les noms user et table
+    res.render('index', { user: user, table: tableData });
 });
 
 app.get('/tasks', isAuthenticated, (req: Request, res: Response) => {
