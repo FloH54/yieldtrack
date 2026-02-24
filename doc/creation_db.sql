@@ -47,15 +47,35 @@ CREATE TABLE IF NOT EXISTS WPTypes (
     UNIQUE KEY UK_WPTypes_Name (WPTypeName)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Projets (Dossiers contenant les WorkPackages)
+CREATE TABLE IF NOT EXISTS Projects (
+                                        ProjectId INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                                        ProjectName VARCHAR(255) NOT NULL,
+                                        Slug VARCHAR(255)NOT NULL UNIQUE,
+    CreatorUserId INT UNSIGNED NOT NULL,
+    StartDate DATE NULL,
+    EndDate DATE NULL,
+    CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (ProjectId),
+    KEY IX_Projects_CreatorUserId (CreatorUserId),
+    CONSTRAINT FK_Projects_Creator FOREIGN KEY (CreatorUserId) REFERENCES Users (UserId) ON DELETE RESTRICT ON UPDATE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Structure des WorkPackages (Hiérarchique)
 CREATE TABLE IF NOT EXISTS WorkPackages (
                                             WPId INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                                            AccountNumber VARCHAR(50) NOT NULL,
+                                            ProjectId INT UNSIGNED NOT NULL,
+                                            WPName VARCHAR(255) NOT NULL,
+                                            Slug VARCHAR(255)NOT NULL UNIQUE,
+    AccountNumber VARCHAR(50) NOT NULL,
     WPTypeId INT UNSIGNED NOT NULL,
     FatherWPId INT UNSIGNED NULL,
     PRIMARY KEY (WPId),
+    KEY IX_WorkPackages_ProjectId (ProjectId),
     KEY IX_WorkPackages_WPTypeId (WPTypeId),
     KEY IX_WorkPackages_FatherWPId (FatherWPId),
+    CONSTRAINT FK_WP_Project FOREIGN KEY (ProjectId) REFERENCES Projects (ProjectId) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT FK_WP_WPType FOREIGN KEY (WPTypeId) REFERENCES WPTypes (WPTypeId) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT FK_WP_Father FOREIGN KEY (FatherWPId) REFERENCES WorkPackages (WPId) ON DELETE SET NULL ON UPDATE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

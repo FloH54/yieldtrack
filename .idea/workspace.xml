@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="[modify] tableau v1">
-      <change afterPath="$PROJECT_DIR$/views/Pages/remaining.ejs" afterDir="false" />
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="[add] ajout du middleware pour verif les roles">
+      <change afterPath="$PROJECT_DIR$/src/middlewares/projectMiddleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/Project.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/WPContributor.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/WorkPackage.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/creation_db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/doc/creation_db.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/doc/data.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/ResteAFaire.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/ResteAFaire.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/sidebar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/sidebar.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/tables.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/tables.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/topbar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/topbar.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middlewares/authMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/authMiddleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middlewares/roleMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/roleMiddleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +128,7 @@
       <workItem from="1771836539962" duration="22401000" />
       <workItem from="1771866651434" duration="2465000" />
       <workItem from="1771873991758" duration="134000" />
-      <workItem from="1771922763118" duration="3304000" />
+      <workItem from="1771922763118" duration="16545000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -223,7 +226,23 @@
       <option name="project" value="LOCAL" />
       <updated>1771874046689</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="[modify] première gestion des routes sur plusieurs pages">
+      <option name="closed" value="true" />
+      <created>1771926152831</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1771926152831</updated>
+    </task>
+    <task id="LOCAL-00014" summary="[add] ajout du middleware pour verif les roles">
+      <option name="closed" value="true" />
+      <created>1771926291959</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1771926291959</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -251,6 +270,8 @@
     <MESSAGE value="[modify] gestion du roles admin" />
     <MESSAGE value="[modify] ejs d'un tableau" />
     <MESSAGE value="[modify] tableau v1" />
-    <option name="LAST_COMMIT_MESSAGE" value="[modify] tableau v1" />
+    <MESSAGE value="[modify] première gestion des routes sur plusieurs pages" />
+    <MESSAGE value="[add] ajout du middleware pour verif les roles" />
+    <option name="LAST_COMMIT_MESSAGE" value="[add] ajout du middleware pour verif les roles" />
   </component>
 </project>

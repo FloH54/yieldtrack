@@ -5,6 +5,7 @@ import sequelize from './config/database';
 import cookieParser from 'cookie-parser';
 import { login, logout } from "./controllers/authControllers";
 import { generateResteAFaireView } from "./controllers/tasksController";
+import {Project} from "./models/Project";
 
 const app = express();
 const PORT = 3000;
@@ -40,6 +41,28 @@ app.get('/remaining', async (req: Request, res: Response) => {
     const user = (req as any).user;
     const tableData = await generateResteAFaireView(user.id);
     res.render('Pages/remaining', { user: user, table: tableData });
+});
+
+// --- ROUTES PROJET DYNAMIQUE ---
+app.get('/projet/:slug', async (req: Request, res: Response) => {
+    try {
+        const user = (req as any).user;
+        const projectSlug = req.params.slug;
+
+        // Recherche du projet via son Slug !
+        const project = await Project.findOne({
+            where: { slug: projectSlug },
+            include: ['workPackages'] // On charge les lots en même temps
+        });
+
+        if (!project) {
+            return res.status(404).render('404', { url: req.originalUrl });
+        }
+
+        res.render('projetDetails', { user, project });
+    } catch (error) {
+        res.status(500).send("Erreur serveur");
+    }
 });
 
 // --- GESTION DE L'ERREUR 404 ---

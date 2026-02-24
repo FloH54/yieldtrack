@@ -16,7 +16,7 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
 
         // récupération des données utilisateur
         const user = await User.findByPk(decoded.id,{
-            include: ['profiles']
+            include: ['profiles'],
         })
 
         // verif si l'utilisateur est actif
