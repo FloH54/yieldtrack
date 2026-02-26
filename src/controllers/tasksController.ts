@@ -1,48 +1,50 @@
 import { Request, Response } from 'express';
-import { Task } from '../models/Task';
+import { Task, Status, WorkPackage, Project, RWs } from '../models/Index';
 import ResteAFaire from '../models/tables/ResteAFaire';
 
-// Générer l'objet ResteAFaire complet pour un ID donné.
-export const generateResteAFaireView = async (userId: number): Promise<ResteAFaire> => {
-    const tableResteAFaire = new ResteAFaire(userId);
+export const AVAILABLE_COLUMNS = [
+    { id: 'id', label: "ID", getValue: (t: any) => t.id?.toString() || "N/A" },
+    { id: 'project', label: "Projet", getValue: (t: any) => t.workPackage?.project?.projectName || "N/A" },
+    { id: 'wpName', label: "Work Package", getValue: (t: any) => t.workPackage?.wpName || "N/A" },
+    { id: 'taskName', label: "Task Name", getValue: (t: any) => t.taskName || "N/A" },
+    { id: 'status', label: "Statut", getValue: (t: any) => t.status?.statName || "N/A" },
+    { id: 'priority', label: "Priority", getValue: (t: any) => t.Priority?.toString() || "N/A" },
+    { id: 'budget', label: "Budget (h)", getValue: (t: any) => t.taskBudgetHours || "Not Found" },
+    { id: 'lastRmWork', label: "Last RM Work (h)", getValue: (t: any) => {
+            // Utilisation de l'alias correct 'RWs'
+            if (t.RWs && t.RWs.length > 0) {
+                const sortedLogs = t.RWs.sort((a: any, b: any) =>
+                    new Date(b.rwDate).getTime() - new Date(a.rwDate).getTime()
+                );
+                return (sortedLogs[0].rwHours);
+            }
+            return "Not Found";
+        }},
+    { id: 'start', label: "Start Date", getValue: (t: any) => t.taskStart || "N/A" },
+    { id: 'end', label: "End Date", getValue: (t: any) => t.taskEnd || "N/A" },
+    { id: 'created', label: "Created At", getValue: (t: any) => t.CreatedAt ? new Date(t.CreatedAt).toLocaleDateString() : "N/A" },
+    { id: 'updated', label: "Last Update", getValue: (t: any) => t.UpdatedAt ? new Date(t.UpdatedAt).toLocaleDateString() : "N/A" }
+];
+
+export const generateResteAFaireView = async (userId: number, selectedIds: string[]): Promise<ResteAFaire> => {
+    const tableData = new ResteAFaire();
 
     const userTasks = await Task.findAll({
-        where: { assigneeUserId: userId }
+        where: {
+            AssigneeUserId: userId,
+            StatId: 1
+        },
+        include: [
+            { model: Status, as: 'status' },
+            { model: WorkPackage, as: 'workPackage'},
+            { model: RWs, as: 'RWs' }
+        ]
     });
 
-    const tempLines: string[][] = [];
-    const tempMoreLines: string[][] = [];
+    const activeColumns = AVAILABLE_COLUMNS.filter(col => selectedIds.includes(col.id));
 
-    userTasks.forEach((task) => {
-        const { mainLine, extraLine } = task.getTableData();
-        tempLines.push(mainLine);
-        tempMoreLines.push(extraLine);
-    });
+    tableData.head = activeColumns.map(c => c.label);
+    tableData.lines = userTasks.map(task => activeColumns.map(c => c.getValue(task)));
 
-    tableResteAFaire.lines = tempLines;
-    tableResteAFaire.moreLines = tempMoreLines;
-
-    return tableResteAFaire;
-};
-
-// Récupérer l'ID, appeler la fonction, envoyer à la vue.
-export const renderTasksPage = async (req: Request, res: Response) => {
-    try {
-        // A. On récupère l'ID de l'utilisateur
-        const userId = (req as any).user.id;
-
-        // B. ON UTILISE LA FONCTION ICI ! (C'est ce qui manquait)
-        // On récupère notre objet tout prêt en une seule ligne
-        const dataPourLaVue = await generateResteAFaireView(userId);
-
-        // C. On transfère cet objet à la vue EJS
-        res.render('tasks', {
-            user: (req as any).user,
-            resteAFaireData: dataPourLaVue // On passe l'objet généré
-        });
-
-    } catch (error) {
-        console.error("Erreur lors de la génération des tâches :", error);
-        res.status(500).send("Erreur serveur");
-    }
+    return tableData;
 };

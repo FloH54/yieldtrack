@@ -1,23 +1,26 @@
 import TableInterface from './TableInterface';
-import {Model} from "sequelize";
-class ResteAFaire {
-    name: string;
-    head: string[];
-    lines: null|string[][];
-    more : null|string[];
-    moreLines : null|string[][];
-    listOptions : null|string[][];
 
-    constructor(userId : number) {
-        this.name = "Remaining Work";
-        this.head = ["Tack ID","Work Package", "Tack Name", "Status", "Priority", "Start Time", "End Time"];
-        this.more = ["Budget","Code","Create at","Update at","Comments"];
-        this.lines = []
-        this.moreLines = [];
+class ResteAFaire implements TableInterface {
+    name: string;
+    plusAction: boolean;
+    head: string[];
+    lines: string[][];
+    more: string[] | null;
+    moreLines: string[][] | null;
+    listOptions: string[][] | null;
+
+    constructor() {
+        this.name = "Remaining Tasks";
+        this.plusAction = false;
+        this.head = [];
+        this.lines = []; // Initialisé vide, sera rempli par le controller
+        this.more = null;
+        this.moreLines = null;
         this.listOptions = [
-            ["#editModal","Edit","fas fa-pen fa-fw"],
-            ["#archiveModal","Archive It","fas fa-trash fa-fw"]
-        ]
+            ["#editTaskModal", "Edit", "fas fa-pen fa-fw"]
+        ];
     }
 }
+
+// Correction cruciale : export par défaut direct de la classe, pas d'un objet
 export default ResteAFaire;

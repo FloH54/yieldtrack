@@ -1,13 +1,18 @@
-import { DataTypes, Model } from 'sequelize';
-import sequelize from '../config/database';
+import { DataTypes, Model, Association } from 'sequelize';
+import sequelize from '../../config/database';
+import { Profiles } from './Profiles';
 
 class User extends Model {
-    public UserId!: number;
-    public Mail!: string;
-    public PwdHash!: string;
-    public UserFirstName!: string;
-    public UserLastName!: string;
-    public IsActive!: boolean;
+    // On utilise 'declare' pour que TS comprenne que Sequelize gère ces champs
+    declare id: number;           // Mapped to UserId
+    declare email: string;        // Mapped to Mail
+    declare pwd: string;          // Mapped to PwdHash
+    declare firstName: string;    // Mapped to UserFirstName
+    declare lastName: string;     // Mapped to UserLastName
+    declare IsActive: boolean;
+
+    // Associations (utile pour l'autocomplétion)
+    declare profiles?: Profiles[];
 }
 
 User.init(
@@ -16,32 +21,32 @@ User.init(
             type: DataTypes.INTEGER.UNSIGNED,
             primaryKey: true,
             autoIncrement: true,
-            field: 'UserId',
+            field: 'UserId', // Le vrai nom en base
         },
         email: {
             type: DataTypes.STRING(320),
             unique: true,
             allowNull: false,
-            field: 'Mail',
+            field: 'Mail', // Le vrai nom en base
         },
         pwd: {
             type: DataTypes.STRING(255),
             allowNull: false,
-            field: 'PwdHash',
+            field: 'PwdHash', // Le vrai nom en base
         },
         firstName: {
             type: DataTypes.STRING(100),
             allowNull: false,
-            field: 'UserFirstName',
+            field: 'UserFirstName', // Le vrai nom en base
         },
         lastName: {
             type: DataTypes.STRING(100),
             allowNull: false,
-            field: 'UserLastName',
+            field: 'UserLastName', // Le vrai nom en base
         },
         IsActive: {
             type: DataTypes.BOOLEAN,
-            defaultValue: true, // Dans le SQL, la valeur par défaut est 1 (true)
+            defaultValue: true,
         },
         CreatedAt: {
             type: DataTypes.DATE,
@@ -55,7 +60,7 @@ User.init(
     {
         sequelize,
         tableName: 'Users',
-        timestamps: false, // On désactive les timestamps automatiques de Sequelize pour utiliser ceux du SQL
+        timestamps: false,
     }
 );
 

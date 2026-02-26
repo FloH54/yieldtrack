@@ -22,6 +22,15 @@ CREATE TABLE IF NOT EXISTS Users (
     UNIQUE KEY UK_Users_Mail (Mail)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
+-- Status (tâches, projet, wkpackage)
+CREATE TABLE IF NOT EXISTS Status (
+                                      StatId INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                                      StatName VARCHAR(100) NOT NULL,
+    PRIMARY KEY (StatId),
+    UNIQUE KEY UK_Stat_Name (StatName)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Profils (Rôles applicatifs et métiers)
 CREATE TABLE IF NOT EXISTS Profiles (
                                         ProfileId INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -118,9 +127,12 @@ CREATE TABLE IF NOT EXISTS Tasks (
                                      TaskName VARCHAR(255) NOT NULL,
     TaskStart DATE NULL,
     TaskEnd DATE NULL,
-    TaskBudgetMinutes INT UNSIGNED NULL,
+    TaskBudgetHours INT UNSIGNED NULL,
     CodeId INT UNSIGNED NULL,
-    Status VARCHAR(50) NOT NULL,
+
+    -- Remplacement de VARCHAR par l'ID du statut
+    StatId INT UNSIGNED NOT NULL,
+
     Priority INT NULL,
     CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UpdatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -129,10 +141,12 @@ CREATE TABLE IF NOT EXISTS Tasks (
     KEY IX_Tasks_AssigneeUserId (AssigneeUserId),
     KEY IX_Tasks_TaskFUPTypeId (TaskFUPTypeId),
     KEY IX_Tasks_CodeId (CodeId),
+    KEY IX_Tasks_StatId (StatId),
     CONSTRAINT FK_Tasks_WP FOREIGN KEY (WPId) REFERENCES WorkPackages (WPId) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT FK_Tasks_Assignee FOREIGN KEY (AssigneeUserId) REFERENCES Users (UserId) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT FK_Tasks_FUPType FOREIGN KEY (TaskFUPTypeId) REFERENCES TaskFUPTypes (TaskFUPTypeId) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT FK_Tasks_Code FOREIGN KEY (CodeId) REFERENCES Codes (CodeId) ON DELETE SET NULL ON UPDATE CASCADE
+    CONSTRAINT FK_Tasks_Code FOREIGN KEY (CodeId) REFERENCES Codes (CodeId) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT FK_Tasks_Status FOREIGN KEY (StatId) REFERENCES Status (StatId) ON DELETE RESTRICT ON UPDATE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Commentaires et fil de discussion
@@ -155,7 +169,7 @@ CREATE TABLE IF NOT EXISTS RWs (
                                    TaskId INT UNSIGNED NOT NULL,
                                    UserId INT UNSIGNED NOT NULL,
                                    RWDate DATE NOT NULL,
-                                   RWMinutes INT UNSIGNED NOT NULL,
+                                   RWHours INT UNSIGNED NOT NULL,
                                    PRIMARY KEY (RWId),
     UNIQUE KEY UK_RWs_Task_User_Date (TaskId, UserId, RWDate),
     KEY IX_RWs_UserId (UserId),

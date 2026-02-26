@@ -1,18 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="[add] ajout du middleware pour verif les roles">
-      <change afterPath="$PROJECT_DIR$/src/middlewares/projectMiddleware.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/models/Project.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/models/WPContributor.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/models/WorkPackage.ts" afterDir="false" />
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="[add] classes manquantes pour gérer les slugs de Project.ts et WorkPackage.ts">
+      <change afterPath="$PROJECT_DIR$/src/config/TaskColumns.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/controllers/projectController.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/middlewares/preferencesMiddleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/class/Codes.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/class/ContractHours.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/class/RMWork.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/class/RWs.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/class/Status.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/class/Task.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/class/TaskComment.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/class/Units.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/class/WPTypes.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/tables/ProjectsList.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/404.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/doc/creation_db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/doc/creation_db.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/doc/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/doc/data.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/tasksController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/tasksController.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/middlewares/authMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/authMiddleware.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/middlewares/roleMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/roleMiddleware.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/Index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Profiles.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/class/Profiles.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Project.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/class/Project.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Task.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/User.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/class/User.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/WPContributor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/class/WPContributor.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/WorkPackage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/class/WorkPackage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/tables/ResteAFaire.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/ResteAFaire.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/tables/TableInterface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/TableInterface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/sidebar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/sidebar.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/tables.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/tables.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/tables.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +65,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -84,10 +106,11 @@
       <recent name="$PROJECT_DIR$/public" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/models/class" />
+      <recent name="$PROJECT_DIR$/src/models" />
+      <recent name="$PROJECT_DIR$/src/models/Class" />
       <recent name="$PROJECT_DIR$/src/models/tables" />
       <recent name="$PROJECT_DIR$/src" />
-      <recent name="$PROJECT_DIR$/public/img" />
-      <recent name="$PROJECT_DIR$/public" />
     </key>
   </component>
   <component name="RunManager">
@@ -128,7 +151,11 @@
       <workItem from="1771836539962" duration="22401000" />
       <workItem from="1771866651434" duration="2465000" />
       <workItem from="1771873991758" duration="134000" />
-      <workItem from="1771922763118" duration="16545000" />
+      <workItem from="1771922763118" duration="20881000" />
+      <workItem from="1772004432035" duration="2400000" />
+      <workItem from="1772007209657" duration="22648000" />
+      <workItem from="1772038339957" duration="19000" />
+      <workItem from="1772038368138" duration="3320000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -242,7 +269,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771926291959</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="[add] classes manquantes pour gérer les slugs de Project.ts et WorkPackage.ts">
+      <option name="closed" value="true" />
+      <created>1771944610325</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1771944610325</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -272,6 +307,7 @@
     <MESSAGE value="[modify] tableau v1" />
     <MESSAGE value="[modify] première gestion des routes sur plusieurs pages" />
     <MESSAGE value="[add] ajout du middleware pour verif les roles" />
-    <option name="LAST_COMMIT_MESSAGE" value="[add] ajout du middleware pour verif les roles" />
+    <MESSAGE value="[add] classes manquantes pour gérer les slugs de Project.ts et WorkPackage.ts" />
+    <option name="LAST_COMMIT_MESSAGE" value="[add] classes manquantes pour gérer les slugs de Project.ts et WorkPackage.ts" />
   </component>
 </project>

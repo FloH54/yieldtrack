@@ -1,9 +1,11 @@
-import User from './User';
-import { Profiles } from './Profiles';
-import { Project } from './Project';
-import { WorkPackage } from './WorkPackage';
-import { Task } from './Task';
-import { WPContributor } from './WPContributor';
+import User from './class/User';
+import { Profiles } from './class/Profiles';
+import { Project } from './class/Project';
+import { WorkPackage } from './class/WorkPackage';
+import { Task } from './class/Task';
+import { WPContributor } from './class/WPContributor';
+import {Status} from "./class/Status";
+import {RWs} from "./class/RWs";
 
 
 // 1. UTILISATEURS ET PROFILS (ROLES GLOBAUX)
@@ -40,11 +42,21 @@ Task.belongsTo(WorkPackage, { foreignKey: 'WPId', as: 'workPackage' });
 User.hasMany(Task, { foreignKey: 'AssigneeUserId', as: 'assignedTasks' });
 Task.belongsTo(User, { foreignKey: 'AssigneeUserId', as: 'assignee' });
 
+// Relation avec les statuts (pour régler votre erreur précédente)
+Status.hasMany(Task, { foreignKey: 'StatId', as: 'tasks' });
+Task.belongsTo(Status, { foreignKey: 'StatId', as: 'status' });
+
+// Relation entre task er remainingwork
+Task.hasMany(RWs, { foreignKey: 'taskId', as: 'RWs' });
+RWs.belongsTo(Task, { foreignKey: 'taskId', as: 'task' });
+
 export {
     User,
     Profiles,
     Project,
     WorkPackage,
     Task,
-    WPContributor
+    WPContributor,
+    Status,
+    RWs
 };
