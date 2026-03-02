@@ -1,0 +1,107 @@
+<div class="modal fade" id="projectModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog-centered modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">New Project</h4>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+                <div id="alert-container"></div>
+            <form action="/create-project" id="projectForm" method="POST">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <h6>Project Name</h6>
+                            <input type="text" name="projectName" id="proj_name" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <h6>Slug (URL name)</h6>
+                            <input type="text" name="slug" id="proj_slug" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h6>Start Date</h6>
+                        <input type="date" name="startDate" id="start_date" class="form-control" required>
+                        <br>
+                        <h6>End Date</h6>
+                        <input type="date" name="endDate" id="end_date" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Project</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('projectForm');
+        const nameInput = document.getElementById('proj_name');
+        const slugInput = document.getElementById('proj_slug');
+        const startInput = document.getElementById('start_date');
+        const endInput = document.getElementById('end_date');
+        const alertContainer = document.getElementById('alert-container');
+
+        // GÉNÉRATION AUTOMATIQUE DU SLUG
+        nameInput.addEventListener('input', function() {
+            const slug = this.value
+                .toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Enlever accents
+                .replace(/[^a-z0-9]/g, '-')                      // Remplacer spécial par -
+                .replace(/-+/g, '-')                             // Éviter doubles --
+                .replace(/^-|-$/g, '');                          // Nettoyer début/fin
+            slugInput.value = slug;
+        });
+
+        startInput.addEventListener('change', function() {
+            endInput.min = this.value;
+            if (endInput.value && endInput.value < this.value) {
+                endInput.value = this.value;
+            }
+        });
+
+        // SOUMISSION AJAX (FETCH) ET ALERTES
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault(); // BLOQUE LE RECHARGEMENT DE PAGE
+            alertContainer.innerHTML = ''; // Nettoyer les anciennes erreurs
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Si succès (200), on redirige via JS
+                    window.location.href = result.redirect;
+                } else {
+                    // Si erreur (400, 500), on affiche l'alerte sans quitter la modale
+                    alertContainer.innerHTML = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-triangle mr-2"></i> ${result.error}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                `;
+                }
+            } catch (err) {
+                console.error("Erreur réseau :", err);
+                alertContainer.innerHTML = `<div class="alert alert-danger">Erreur de connexion au serveur.</div>`;
+            }
+        });
+    });
+</script>

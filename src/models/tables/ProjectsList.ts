@@ -6,22 +6,23 @@ class ProjectsList implements TableInterface { // C'est mieux d'implémenter l'i
     lines: string[][]; // Retiré le null pour simplifier, initialisé vide
     more: string[] | null;
     moreLines: string[][] | null;
-    listOptions: string[][] | null;
-    plusAction: boolean = false; // Manquait par rapport à l'interface
+    createAction = {
+        label: "New Project",
+        icon: "fas fa-plus",
+        modalTarget: "#projectModal",
+    };
+    rowActions = [
+        { label: "Edit", icon: "fas fa-pen fa-fw", modalTarget: "#editModal" },
+        { label: "Archive It", icon: "fas fa-trash fa-fw", modalTarget: "#archiveModal" }
+    ];
 
     constructor(userId: number) {
-        this.name = "Remaining Work";
-        this.head = ["Project ID", "Project Name", "Start at", "End at"];
+        this.name = "Projects List";
+        this.head = [ "Project Name", "Start at", "End at"];
         this.more = ["Creator", "Last Update", "Create at"];
 
-        // Correction ici : typage explicite pour éviter 'never[]'
         this.lines = [] as string[][];
         this.moreLines = [] as string[][];
-
-        this.listOptions = [
-            ["#editModal", "Edit", "fas fa-pen fa-fw"],
-            ["#archiveModal", "Archive It", "fas fa-trash fa-fw"]
-        ];
     }
 }
 export default ProjectsList;

@@ -1,28 +1,34 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary"><%= table.name%></h6>
+        <h4 class="m-0 font-weight-bold text-primary"><%= table.name %></h4>
 
-        <div class="dropdown no-arrow">
-            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownColumns" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-columns"></i> Columns
-            </button>
-            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in p-3" aria-labelledby="dropdownColumns" style="min-width: 200px;" onclick="event.stopPropagation()">
-                <form action="/preferences/columns" method="POST">
-                    <input type="hidden" name="tableId" value="<%= currentTableId %>">
-                    <h6 class="dropdown-header px-0 text-uppercase font-weight-bold">Display:</h6>
+        <div class="d-flex align-items-center" style="gap: 10px;">
+            <% if (table.createAction) { %>
+                <button class="btn btn-primary" data-toggle="modal" data-target="<%= table.createAction.modalTarget %>">
+                    <i class="<%= table.createAction.icon %>"></i> <%= table.createAction.label %>
+                </button>
+            <% } %>
 
-                    <% allColumns.forEach(col => { %>
-                        <div class="custom-control custom-checkbox mb-2">
-                            <input type="checkbox" class="custom-control-input" name="columns"
-                                   value="<%= col.id %>" id="col_<%= col.id %>"
-                                    <%= selectedColumns.includes(col.id) ? 'checked' : '' %>>
-                            <label class="custom-control-label" for="col_<%= col.id %>"><%= col.label %></label>
-                        </div>
-                    <% }); %>
-
-                    <div class="dropdown-divider"></div>
-                    <button type="submit" class="btn btn-primary btn-sm btn-block">Apply</button>
-                </form>
+            <div class="dropdown no-arrow">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownColumns" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-columns"></i> Colonnes
+                </button>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in p-3" aria-labelledby="dropdownColumns" style="min-width: 200px;" onclick="event.stopPropagation()">
+                    <form action="/preferences/columns" method="POST">
+                        <input type="hidden" name="tableId" value="<%= currentTableId %>">
+                        <h6 class="dropdown-header px-0 text-uppercase font-weight-bold">Affichage :</h6>
+                        <% allColumns.forEach(col => { %>
+                            <div class="custom-control custom-checkbox mb-2">
+                                <input type="checkbox" class="custom-control-input" name="columns"
+                                       value="<%= col.id %>" id="col_<%= col.id %>"
+                                        <%= selectedColumns.includes(col.id) ? 'checked' : '' %>>
+                                <label class="custom-control-label" for="col_<%= col.id %>"><%= col.label %></label>
+                            </div>
+                        <% }); %>
+                        <div class="dropdown-divider"></div>
+                        <button type="submit" class="btn btn-primary btn-sm btn-block">Appliquer</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -34,40 +40,44 @@
                 <tr>
                     <th>Actions</th>
                     <% table.head.forEach(column => { %>
-                        <th><%= column %></th>
+                        <th><%- column %></th>
                     <% }); %>
                 </tr>
                 </thead>
                 <tbody>
                 <% table.lines.forEach(line => { %>
                     <tr>
-                        <th>
-                            <a href="#" id="actionDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-pen" aria-hidden="true"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="actionDropdown">
-                                <% table.listOptions.forEach(option => { %>
-                                    <a class="dropdown-item" href="#" data-target="<%= option[0] %>">
-                                        <%= option[1] %> <i class="<%= option[2] %>"></i>
-                                    </a>
-                                <% }); %>
+                        <td>
+                            <div class="dropdown no-arrow d-inline">
+                                <a class="btn btn-link btn-sm dropdown-toggle" href="#" role="button" id="rowActionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-pen text-gray-400"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="rowActionDropdown">
+                                    <% if (table.rowActions && table.rowActions.length > 0) { %>
+                                        <% table.rowActions.forEach(action => { %>
+                                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="<%= action.target %>">
+                                                <i class="<%= action.icon %> mr-2"></i> <%= action.label %>
+                                            </a>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <span class="dropdown-item disabled">Aucune option</span>
+                                    <% } %>
+                                </div>
                             </div>
-                            <button type="button" class="btn btn-sm" href="#" data-toggle="popUpInformation"><i class="fas fa-info-circle"></i></button>
-                        </th>
+                            <button type="button" class="btn btn-sm text-info" data-toggle="tooltip" title="Détails"><i class="fas fa-info-circle"></i></button>
+                        </td>
                         <% line.forEach(column => { %>
-                            <th><%= column %></th>
+                            <td><%- column %></td>
                         <% }) %>
                     </tr>
                 <% }) %>
                 </tbody>
             </table>
         </div>
-        </div>
     </div>
 </div>
 
 <style>
-    /* align la bare de recherche du tableau*/
     .dataTables_length label,
     .dataTables_filter label {
         display: inline-flex !important;

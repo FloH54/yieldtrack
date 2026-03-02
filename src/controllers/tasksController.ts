@@ -1,17 +1,16 @@
 import { Request, Response } from 'express';
 import { Task, Status, WorkPackage, Project, RWs } from '../models/Index';
-import ResteAFaire from '../models/tables/ResteAFaire';
+import RemainingTasksTable from '../models/tables/RemainingTasksTable';
 
 export const AVAILABLE_COLUMNS = [
     { id: 'id', label: "ID", getValue: (t: any) => t.id?.toString() || "N/A" },
-    { id: 'project', label: "Projet", getValue: (t: any) => t.workPackage?.project?.projectName || "N/A" },
+    { id: 'project', label: "Project", getValue: (t: any) => t.workPackage?.project?.projectName || "N/A" },
     { id: 'wpName', label: "Work Package", getValue: (t: any) => t.workPackage?.wpName || "N/A" },
     { id: 'taskName', label: "Task Name", getValue: (t: any) => t.taskName || "N/A" },
     { id: 'status', label: "Statut", getValue: (t: any) => t.status?.statName || "N/A" },
     { id: 'priority', label: "Priority", getValue: (t: any) => t.Priority?.toString() || "N/A" },
     { id: 'budget', label: "Budget (h)", getValue: (t: any) => t.taskBudgetHours || "Not Found" },
     { id: 'lastRmWork', label: "Last RM Work (h)", getValue: (t: any) => {
-            // Utilisation de l'alias correct 'RWs'
             if (t.RWs && t.RWs.length > 0) {
                 const sortedLogs = t.RWs.sort((a: any, b: any) =>
                     new Date(b.rwDate).getTime() - new Date(a.rwDate).getTime()
@@ -26,8 +25,8 @@ export const AVAILABLE_COLUMNS = [
     { id: 'updated', label: "Last Update", getValue: (t: any) => t.UpdatedAt ? new Date(t.UpdatedAt).toLocaleDateString() : "N/A" }
 ];
 
-export const generateResteAFaireView = async (userId: number, selectedIds: string[]): Promise<ResteAFaire> => {
-    const tableData = new ResteAFaire();
+export const generateResteAFaireView = async (userId: number, selectedIds: string[]): Promise<RemainingTasksTable> => {
+    const tableData = new RemainingTasksTable();
 
     const userTasks = await Task.findAll({
         where: {

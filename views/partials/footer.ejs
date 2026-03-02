@@ -19,15 +19,12 @@
     $(document).ready(function() {
         $('#tasksTable').DataTable({
         });
-        // Gestion du clic sur le bouton rond en bas de la sidebar
         $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
             // Ajoute/Enlève la classe 'toggled' à la sidebar
             $(".sidebar").toggleClass("toggled");
 
-            // Ajoute/Enlève la classe au body (utile pour certains effets CSS)
             $("body").toggleClass("sidebar-toggled");
 
-            // Si la sidebar est rétractée, on ferme les sous-menus ouverts
             if ($(".sidebar").hasClass("toggled")) {
                 $('.sidebar .collapse').collapse('hide');
             };
