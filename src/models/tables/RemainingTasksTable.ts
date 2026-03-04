@@ -20,7 +20,7 @@ class RemainingTasksTable implements TableInterface {
         this.plusMapAction = new Map<string, any>();
         this.plusMapAction.set("name", "New Task");
         this.head = [];
-        this.lines = []; // Initialisé vide, sera rempli par le controller
+        this.lines = [];
         this.more = null;
         this.moreLines = null;
     }

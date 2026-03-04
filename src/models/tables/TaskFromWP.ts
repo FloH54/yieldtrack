@@ -20,8 +20,8 @@ class TaskFromWP implements TableInterface {
         { label: "Archive It", icon: "fas fa-trash fa-fw", modalTarget: "#archiveModal" }
     ];
 
-    constructor(wpName: string) {
-        this.name = "Tasks from " + wpName;
+    constructor() {
+        this.name = "Tasks List";
         this.plusAction = true;
         this.plusMapAction = new Map<string, any>();
         this.plusMapAction.set("name", "New Task");

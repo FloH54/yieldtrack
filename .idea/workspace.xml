@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="save (ouais c'est pas bien)">
-      <change afterPath="$PROJECT_DIR$/src/controllers/wpControllers.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/models/tables/TaskFromWP.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/models/tables/WorkPackagesList.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rootes/preferanceRoutes.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/modals/task" afterDir="false" />
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="gestion des préférence et redirection après login">
+      <change afterPath="$PROJECT_DIR$/views/Pages/wpDetails.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/authControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/authControllers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/projectController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/projectController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/middlewares/authMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/authMiddleware.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/middlewares/preferencesMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/preferencesMiddleware.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/ProjectsList.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/ProjectsList.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/wpControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/wpControllers.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/tables/RemainingTasksTable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/RemainingTasksTable.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/tables/TaskFromWP.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/TaskFromWP.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/login.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/login.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/modals/wp-custom.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/wp-custom.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/tables.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/tables.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/remaining.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/remaining.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,7 +135,7 @@
       <workItem from="1772179283275" duration="9080000" />
       <workItem from="1772372727221" duration="29622000" />
       <workItem from="1772482179405" duration="293000" />
-      <workItem from="1772528528371" duration="37038000" />
+      <workItem from="1772528528371" duration="42016000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -283,7 +273,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772478014099</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="gestion des préférence et redirection après login">
+      <option name="closed" value="true" />
+      <created>1772639042372</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1772639042372</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -316,6 +314,7 @@
     <MESSAGE value="[modify] changement en des colones mminutes en heure et ajout d'un 404 error" />
     <MESSAGE value="{&#10;    &quot;error&quot;: {&#10;        &quot;message&quot;: &quot;You didn't provide an API key. You need to provide your API key in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY), or as the password field (with blank username) if you're accessing the API from your browser and are prompted for a username and password. You can obtain an API key from https://platform.openai.com/account/api-keys.&quot;,&#10;        &quot;type&quot;: &quot;invalid_request_error&quot;,&#10;        &quot;param&quot;: null,&#10;        &quot;code&quot;: null&#10;    }&#10;}" />
     <MESSAGE value="save (ouais c'est pas bien)" />
-    <option name="LAST_COMMIT_MESSAGE" value="save (ouais c'est pas bien)" />
+    <MESSAGE value="gestion des préférence et redirection après login" />
+    <option name="LAST_COMMIT_MESSAGE" value="gestion des préférence et redirection après login" />
   </component>
 </project>

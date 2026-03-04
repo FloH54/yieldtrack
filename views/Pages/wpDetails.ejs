@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('../partials/header')%>
 
+<%- include('../partials/header')%>
 <body id="page-top">
 <div id="wrapper">
     <%- include('../partials/sidebar')%>
@@ -12,11 +12,11 @@
 
             <div class="container-fluid">
 
-                <h1 class="h3 mb-4 text-gray-800">Project : <%- project.projectName %></h1>
+                <h1 class="h3 mb-4 text-gray-800">Work Package : <%- wp.wpName %></h1>
 
                 <%- include('../partials/tables') %>
 
-                <a href="/project" class="btn btn-secondary mt-3"> Back to projects</a>
+                <a href="/project/<%= projectSlug %>" class="btn btn-secondary mt-3"> Back to Work Packages</a>
             </div>
         </div>
         <%- include('../partials/footer')%>

@@ -15,14 +15,14 @@ export const login = async (req: Request, res: Response) => {
             include: ['profiles']
         });
 
+        // Si pas d'email associé, le notifié
         if (!user) {
-            // Si pas d'email associé, le notifié
-            return res.render('login', { error: 'Email inconnu ou utilisateur inexistant.' });
+            return res.render('login', { error: 'Unknow email.' });
         }
 
         // Vérifier le mot de passe
         if (!await bcrypt.compare(password, user.pwd)) {
-            return res.render('login', { error: 'Mot de passe incorrect.' });
+            return res.render('login', { error: 'Password incorrect.' });
         };
 
         // tout est bon, redirection vers le Dashboard

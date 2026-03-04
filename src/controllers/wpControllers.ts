@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { WorkPackage, Task, Status, Project } from "../models/Index";
 import { AVAILABLE_COLUMNS } from "./tasksController"; // Réutilise tes colonnes de tâches
 import RemainingTasksTable from "../models/tables/RemainingTasksTable";
+import TaskFromWP from "../models/tables/TaskFromWP";
 
 export const renderWPDetails = async (req: Request, res: Response) => {
     const user = (req as any).user;
@@ -11,20 +12,26 @@ export const renderWPDetails = async (req: Request, res: Response) => {
 
     const wp = await WorkPackage.findOne({
         where: { slug: wpSlug },
-        include: [{ model: Task, as: 'tasks', include: [{ model: Status, as: 'status' }] }]
+        include: [
+            { model: Task, as: 'tasks', include: [{ model: Status, as: 'status' }] },
+            {model: Project, as: 'project'}
+        ]
     });
+
 
     if (!wp) return res.status(404).render('404');
 
-    const tableData = new RemainingTasksTable();
+    const tableData = new TaskFromWP();
     const activeCols = AVAILABLE_COLUMNS.filter(c => selectedIds.includes(c.id));
 
     tableData.head = activeCols.map(c => c.label);
     tableData.lines = (wp as any).tasks.map((t: any) => activeCols.map(c => c.getValue(t)));
 
-    res.render('Pages/remaining', {
+    res.render('Pages/wpDetails', {
         user, table: tableData, currentTableId: TABLE_ID,
-        allColumns: AVAILABLE_COLUMNS, selectedColumns: selectedIds
+        allColumns: AVAILABLE_COLUMNS, selectedColumns: selectedIds,
+        projectSlug: (wp as any).project.slug,
+        wp: wp
     });
 };
 
