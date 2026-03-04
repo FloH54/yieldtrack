@@ -8,7 +8,6 @@ export const loadTablePreferences = (req: Request, res: Response, next: NextFunc
         try {
             prefs = JSON.parse(req.cookies.tablePreferences);
         } catch (e) {
-            console.error("Erreur de lecture du cookie des préférences", e);
             prefs = {}; // En cas de cookie corrompu, on repart à zéro
         }
     }
@@ -18,6 +17,7 @@ export const loadTablePreferences = (req: Request, res: Response, next: NextFunc
 
     // On attache aussi à "locals" (pour y accéder directement dans n'importe quel fichier EJS)
     res.locals.tablePreferences = prefs;
+    res.locals.currentUrl = req.originalUrl;
 
     next();
 };

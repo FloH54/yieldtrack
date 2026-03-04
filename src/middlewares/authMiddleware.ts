@@ -7,7 +7,7 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
 
     // Si pas de token alors login
     if (!token) {
-        return res.redirect('/login');
+        return res.redirect('/login?next=' + req.originalUrl);
     }
 
     try {

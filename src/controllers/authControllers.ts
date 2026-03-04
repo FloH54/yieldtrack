@@ -7,7 +7,7 @@ const JWT_SECRET = 'ta_cle_secrete_tres_longue'; // TODO À mettre dans un fichi
 
 export const login = async (req: Request, res: Response) => {
     try {
-        const { email, password, rememberMe } = req.body;
+        const { email, password, rememberMe, next } = req.body;
 
         // Chercher l'utilisateur dans MariaDB via Sequelize
         const user = await User.findOne({
@@ -48,7 +48,9 @@ export const login = async (req: Request, res: Response) => {
             sameSite: 'strict'
         });
 
-        res.redirect('/');
+        const redirectPath = (next && next.startsWith('/')) ? next : '/';
+        console.log('Redirect to: ' + redirectPath);
+        res.redirect(redirectPath);
 
         console.log('voici le token :',token);
     } catch (error) {

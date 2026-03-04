@@ -16,6 +16,7 @@
                 <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in p-3" aria-labelledby="dropdownColumns" style="min-width: 200px;" onclick="event.stopPropagation()">
                     <form action="/preferences/columns" method="POST">
                         <input type="hidden" name="tableId" value="<%= currentTableId %>">
+                        <input type="hidden" name="redirectUrl" value="<%= currentUrl %>">
                         <h6 class="dropdown-header px-0 text-uppercase font-weight-bold">Affichage :</h6>
                         <% allColumns.forEach(col => { %>
                             <div class="custom-control custom-checkbox mb-2">

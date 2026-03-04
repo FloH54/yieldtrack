@@ -7,8 +7,7 @@ import { login, logout } from "./controllers/authControllers";
 import {loadTablePreferences} from "./middlewares/preferencesMiddleware";
 import projectRoutes from "./rootes/projectRoutes";
 import taskRoutes from "./rootes/taskRoutes";
-import {createProject} from "./controllers/projectController";
-import router from "./rootes/projectRoutes";
+import wpRoutes from "./rootes/wpRoutes";
 
 const app = express();
 const PORT = 3000;
@@ -27,7 +26,8 @@ app.use(loadTablePreferences);
 // --- ROUTES PUBLIQUES ---
 // (Accessibles sans être connecté)
 app.get('/login', (req: Request, res: Response) => {
-    res.render('login');
+    const nexUrl = req.query.next;
+    res.render('login',{next: nexUrl});
 });
 app.post('/login', login);
 app.get('/logout', logout);
@@ -36,13 +36,15 @@ app.get('/logout', logout);
 app.use(isAuthenticated);
 
 // --- ROUTES PROTÉGÉES ---
-app.use('/project', projectRoutes);
-app.use('/remaining', taskRoutes);
+app.use('/project', projectRoutes); // Gère tout ce qui commence par /project
+app.use('/remaining', taskRoutes); // Gére le reste à faire
+
 app.get('/', (req: Request, res: Response) => {
     const user = (req as any).user;
     res.render('index', { user: user});
 });
-app.post('/create-project', projectRoutes);
+app.post('/create-wp', wpRoutes);
+app.post('/preferences/columns', taskRoutes);
 
 // --- GESTION DE L'ERREUR 404 ---
 app.use((req: Request, res: Response) => {

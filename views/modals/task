@@ -1,26 +1,23 @@
-<div class="modal fade" id="customWPModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog-centered modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">New Work Package</h4>
+                <h4 class="modal-title">New Project</h4>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div id="alert-container"></div>
-            <form action="/create-wp" id="customWPForm" method="POST">
-                <!--Partie Invisble pour le formulaire-->
-                <input type="hidden" name="projectId" value="<%= project.id %>">
-                <input type="hidden" name="fatherWPId" value="<%= typeof parentWP !== 'undefined' ? parentWP.id : '' %>">
+                <div id="alert-container"></div>
+            <form action="/create-project" id="projectForm" method="POST">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <h6>Work Package Name</h6>
-                            <input type="text" name="wpName" id="wp_name" class="form-control" required>
+                            <h6>Project Name</h6>
+                            <input type="text" name="projectName" id="proj_name" class="form-control" required>
                         </div>
                         <div class="col-md-6 form-group">
                             <h6>Slug (URL name)</h6>
-                            <input type="text" name="slug" id="wp_slug" class="form-control" required>
+                            <input type="text" name="slug" id="proj_slug" class="form-control" required>
                         </div>
                     </div>
 
@@ -34,20 +31,20 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Create Work Package</button>
+                    <button type="submit" class="btn btn-primary">Create Project</button>
                 </div>
             </form>
+            </div>
         </div>
     </div>
-</div>
 </div>
 
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('customWPForm');
-        const nameInput = document.getElementById('wp_name');
-        const slugInput = document.getElementById('wp_slug');
+        const form = document.getElementById('projectForm');
+        const nameInput = document.getElementById('proj_name');
+        const slugInput = document.getElementById('proj_slug');
         const startInput = document.getElementById('start_date');
         const endInput = document.getElementById('end_date');
         const alertContainer = document.getElementById('alert-container');
@@ -108,4 +105,3 @@
         });
     });
 </script>
-

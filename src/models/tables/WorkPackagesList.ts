@@ -1,15 +1,15 @@
 import TableInterface from './TableInterface';
 
-class ProjectsList implements TableInterface { // C'est mieux d'implémenter l'interface
+class WorkPackagesList implements TableInterface { // C'est mieux d'implémenter l'interface
     name: string;
     head: string[];
     lines: string[][]; // Retiré le null pour simplifier, initialisé vide
     more: string[] | null;
     moreLines: string[][] | null;
     createAction = {
-        label: "New Project",
+        label: "New Work Package",
         icon: "fas fa-plus",
-        modalTarget: "#projectModal",
+        modalTarget: "#customWPModal",
     };
     rowActions = [
         { label: "Edit", icon: "fas fa-pen fa-fw", modalTarget: "#editModal" },
@@ -17,12 +17,12 @@ class ProjectsList implements TableInterface { // C'est mieux d'implémenter l'i
     ];
 
     constructor(userId: number) {
-        this.name = "Projects List";
-        this.head = [ "Project Name", "Start at", "End at"];
-        this.more = [ "Last Update", "Create at"];
+        this.name = "Work Package List";
+        this.head = [ "Name", "Account Number" ,"Start at", "End at"];
+        this.more = ["Creator", "Last Update", "Create at", "Poject Name"];
 
         this.lines = [] as string[][];
         this.moreLines = [] as string[][];
     }
 }
-export default ProjectsList;
+export default WorkPackagesList;

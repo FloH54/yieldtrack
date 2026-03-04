@@ -1,29 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="[modify] changement en des colones mminutes en heure et ajout d'un 404 error">
-      <change afterPath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/modals/logout.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/modals/project.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/modals/wp-custom.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/modals/wp-selection.ejs" afterDir="false" />
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="save (ouais c'est pas bien)">
+      <change afterPath="$PROJECT_DIR$/src/controllers/wpControllers.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/tables/TaskFromWP.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/tables/WorkPackagesList.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rootes/preferanceRoutes.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/modals/task" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/authControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/authControllers.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/projectController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/projectController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/tasksController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/tasksController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middlewares/authMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/authMiddleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middlewares/preferencesMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/preferencesMiddleware.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/tables/ProjectsList.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/ProjectsList.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/ResteAFaire.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/RemainingTasksTable.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/TableInterface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/TableInterface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/404.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/404.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Pages/remaining.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/remaining.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/footer.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/footer.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/header.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/header.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/modals.ejs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/sidebar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/sidebar.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/tables/RemainingTasksTable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/RemainingTasksTable.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/login.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/login.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/wp-custom.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/wp-custom.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/partials/tables.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/tables.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/topbar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/topbar.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,30 +63,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;JavaScript Debug.localhost:3000.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Node.js.app.ts.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;22.22.0&quot;,
-    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;22.19.11&quot;,
-    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/floflow/dev/yieldtrack/views&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.GitLab CI Expression&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/home/floflow/dev/yieldtrack/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "JavaScript Debug.localhost:3000.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Node.js.app.ts.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "main",
+    "javascript.nodejs.core.library.configured.version": "22.22.0",
+    "javascript.nodejs.core.library.typings.version": "22.19.11",
+    "javascript.preferred.runtime.type.id": "node",
+    "last_opened_file_path": "/home/floflow/dev/yieldtrack/src/models/tables",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.GitLab CI Expression",
+    "ts.external.directory.path": "/home/floflow/dev/yieldtrack/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/models/tables" />
       <recent name="$PROJECT_DIR$/views" />
       <recent name="$PROJECT_DIR$/public" />
     </key>
@@ -146,7 +143,9 @@
       <workItem from="1772038339957" duration="19000" />
       <workItem from="1772038368138" duration="14271000" />
       <workItem from="1772179283275" duration="9080000" />
-      <workItem from="1772372727221" duration="28626000" />
+      <workItem from="1772372727221" duration="29622000" />
+      <workItem from="1772482179405" duration="293000" />
+      <workItem from="1772528528371" duration="37038000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -276,7 +275,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772097567318</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="save (ouais c'est pas bien)">
+      <option name="closed" value="true" />
+      <created>1772478014099</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1772478014099</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -308,6 +315,7 @@
     <MESSAGE value="[add] classes manquantes pour gérer les slugs de Project.ts et WorkPackage.ts" />
     <MESSAGE value="[modify] changement en des colones mminutes en heure et ajout d'un 404 error" />
     <MESSAGE value="{&#10;    &quot;error&quot;: {&#10;        &quot;message&quot;: &quot;You didn't provide an API key. You need to provide your API key in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY), or as the password field (with blank username) if you're accessing the API from your browser and are prompted for a username and password. You can obtain an API key from https://platform.openai.com/account/api-keys.&quot;,&#10;        &quot;type&quot;: &quot;invalid_request_error&quot;,&#10;        &quot;param&quot;: null,&#10;        &quot;code&quot;: null&#10;    }&#10;}" />
-    <option name="LAST_COMMIT_MESSAGE" value="{&#10;    &quot;error&quot;: {&#10;        &quot;message&quot;: &quot;You didn't provide an API key. You need to provide your API key in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY), or as the password field (with blank username) if you're accessing the API from your browser and are prompted for a username and password. You can obtain an API key from https://platform.openai.com/account/api-keys.&quot;,&#10;        &quot;type&quot;: &quot;invalid_request_error&quot;,&#10;        &quot;param&quot;: null,&#10;        &quot;code&quot;: null&#10;    }&#10;}" />
+    <MESSAGE value="save (ouais c'est pas bien)" />
+    <option name="LAST_COMMIT_MESSAGE" value="save (ouais c'est pas bien)" />
   </component>
 </project>

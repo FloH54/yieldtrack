@@ -1,6 +1,6 @@
 import TableInterface from './TableInterface';
 
-class RemainingTasksTable implements TableInterface {
+class TaskFromWP implements TableInterface {
     name: string;
     plusAction: boolean;
     plusMapAction: Map<string, any>;
@@ -9,21 +9,27 @@ class RemainingTasksTable implements TableInterface {
     more: null | string[];
     moreLines: null;
 
+    createAction = {
+        label: "New Task",
+        icon: "fas fa-plus",
+        modalTarget: "#taskModal",
+    };
+
     rowActions = [
         { label: "Edit", icon: "fas fa-pen fa-fw", modalTarget: "#editModal" },
         { label: "Archive It", icon: "fas fa-trash fa-fw", modalTarget: "#archiveModal" }
     ];
 
-    constructor() {
-        this.name = "Remaining Tasks";
+    constructor(wpName: string) {
+        this.name = "Tasks from " + wpName;
         this.plusAction = true;
         this.plusMapAction = new Map<string, any>();
         this.plusMapAction.set("name", "New Task");
         this.head = [];
-        this.lines = []; // Initialisé vide, sera rempli par le controller
+        this.lines = [];
         this.more = null;
         this.moreLines = null;
     }
 }
 
-export default RemainingTasksTable;
+export default TaskFromWP;

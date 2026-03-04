@@ -5,54 +5,27 @@
 <body id="page-top">
 <div id="wrapper">
     <%- include('../partials/sidebar')%>
+
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
             <%- include('../partials/topbar')%>
+
             <div class="container-fluid">
 
                 <h1 class="h3 mb-4 text-gray-800">Projet : <%- project.projectName %></h1>
 
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Liste des Work Packages</h6>
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#createWPModal">
-                            <i class="fas fa-plus"></i> New WorkPackage
-                        </button>
-                    </div>
+                <%- include('../partials/tables') %>
 
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                    <th>Nom du WP</th>
-                                    <th>Compte</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <% if(project.workPackages && project.workPackages.length > 0) { %>
-                                    <% project.workPackages.forEach(wp => { %>
-                                        <tr>
-                                            <td><a href="./<%= project.slug %>/wp/<%= wp.slug %>"><%= wp.wpName %></a></td>
-                                            <td><%= wp.accountNumber %></td>
-                                        </tr>
-                                    <% }) %>
-                                <% } else { %>
-                                    <tr><td colspan="3">Aucun Work Package trouvé.</td></tr>
-                                <% } %>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <a href="/project" class="btn btn-secondary mt-3">&larr; Retour aux projets</a>
             </div>
         </div>
-            <%- include('../partials/footer')%>
+        <%- include('../partials/footer')%>
     </div>
 </div>
-    <%- include('../modals/logout') %>
-    <%- include('../modals/wp-selection') %>
-    <%- include('../modals/wp-custom', { units: units }) %>
+
+<%- include('../modals/logout') %>
+<%- include('../modals/wp-selection') %>
+<%- include('../modals/wp-custom', { units: units }) %>
+
 </body>
 </html>
-
