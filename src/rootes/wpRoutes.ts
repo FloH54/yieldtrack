@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import {createWP} from "../controllers/wpControllers";
+import { createWorkPackage } from "../controllers/wpControllers";
 
 
 const router = Router();

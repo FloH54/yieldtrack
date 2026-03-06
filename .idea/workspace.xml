@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="gestion des préférence et redirection après login">
-      <change afterPath="$PROJECT_DIR$/views/Pages/wpDetails.ejs" afterDir="false" />
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="bouton retour au projet / workpackages">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/authControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/authControllers.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/wpControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/wpControllers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/RemainingTasksTable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/RemainingTasksTable.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/TaskFromWP.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/TaskFromWP.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/tables/WorkPackagesList.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/WorkPackagesList.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Pages/remaining.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/remaining.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/wpDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/wpDetails.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/task" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/task.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +41,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -53,28 +54,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "JavaScript Debug.localhost:3000.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Node.js.app.ts.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "git-widget-placeholder": "main",
-    "javascript.nodejs.core.library.configured.version": "22.22.0",
-    "javascript.nodejs.core.library.typings.version": "22.19.11",
-    "javascript.preferred.runtime.type.id": "node",
-    "last_opened_file_path": "/home/floflow/dev/yieldtrack/src/models/tables",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.GitLab CI Expression",
-    "ts.external.directory.path": "/home/floflow/dev/yieldtrack/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;JavaScript Debug.localhost:3000.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Node.js.app.ts.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;22.22.0&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;22.19.11&quot;,
+    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/floflow/dev/yieldtrack/src/models/tables&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.GitLab CI Expression&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/floflow/dev/yieldtrack/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/models/tables" />
@@ -135,7 +136,8 @@
       <workItem from="1772179283275" duration="9080000" />
       <workItem from="1772372727221" duration="29622000" />
       <workItem from="1772482179405" duration="293000" />
-      <workItem from="1772528528371" duration="42016000" />
+      <workItem from="1772528528371" duration="44742000" />
+      <workItem from="1772723541494" duration="5255000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -281,7 +283,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772639042372</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="bouton retour au projet / workpackages">
+      <option name="closed" value="true" />
+      <created>1772644055395</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1772644055395</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -315,6 +325,7 @@
     <MESSAGE value="{&#10;    &quot;error&quot;: {&#10;        &quot;message&quot;: &quot;You didn't provide an API key. You need to provide your API key in an Authorization header using Bearer auth (i.e. Authorization: Bearer YOUR_KEY), or as the password field (with blank username) if you're accessing the API from your browser and are prompted for a username and password. You can obtain an API key from https://platform.openai.com/account/api-keys.&quot;,&#10;        &quot;type&quot;: &quot;invalid_request_error&quot;,&#10;        &quot;param&quot;: null,&#10;        &quot;code&quot;: null&#10;    }&#10;}" />
     <MESSAGE value="save (ouais c'est pas bien)" />
     <MESSAGE value="gestion des préférence et redirection après login" />
-    <option name="LAST_COMMIT_MESSAGE" value="gestion des préférence et redirection après login" />
+    <MESSAGE value="bouton retour au projet / workpackages" />
+    <option name="LAST_COMMIT_MESSAGE" value="bouton retour au projet / workpackages" />
   </component>
 </project>

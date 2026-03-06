@@ -46,9 +46,9 @@ Task.belongsTo(User, { foreignKey: 'assigneeUserId', as: 'assignee' });
 Status.hasMany(Task, { foreignKey: 'statId', as: 'tasks' });
 Task.belongsTo(Status, { foreignKey: 'statId', as: 'status' });
 
-// Relation entre task er remainingwork
+// Relation entre task.ejs er remainingwork
 Task.hasMany(RWs, { foreignKey: 'taskId', as: 'RWs' });
-RWs.belongsTo(Task, { foreignKey: 'taskId', as: 'task' });
+RWs.belongsTo(Task, { foreignKey: 'taskId', as: 'task.ejs' });
 
 export {
     User,

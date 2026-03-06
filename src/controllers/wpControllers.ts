@@ -3,12 +3,14 @@ import { WorkPackage, Task, Status, Project } from "../models/Index";
 import { AVAILABLE_COLUMNS } from "./tasksController"; // Réutilise tes colonnes de tâches
 import RemainingTasksTable from "../models/tables/RemainingTasksTable";
 import TaskFromWP from "../models/tables/TaskFromWP";
+import {Units} from "../models/class/Units";
 
 export const renderWPDetails = async (req: Request, res: Response) => {
     const user = (req as any).user;
     const { wpSlug } = req.params;
     const TABLE_ID = 'wpTasks';
     const selectedIds = (req as any).tablePreferences[TABLE_ID] || ['taskName', 'status', 'priority'];
+    const allUnits = await Units.findAll();
 
     const wp = await WorkPackage.findOne({
         where: { slug: wpSlug },
@@ -17,6 +19,8 @@ export const renderWPDetails = async (req: Request, res: Response) => {
             {model: Project, as: 'project'}
         ]
     });
+
+
 
 
     if (!wp) return res.status(404).render('404');
@@ -31,8 +35,11 @@ export const renderWPDetails = async (req: Request, res: Response) => {
         user, table: tableData, currentTableId: TABLE_ID,
         allColumns: AVAILABLE_COLUMNS, selectedColumns: selectedIds,
         projectSlug: (wp as any).project.slug,
-        wp: wp
+        wp: wp,
+        allUnits : allUnits
     });
 };
 
-export const createWorkPackage = async (req: Request, res: Response) => {}
+export const createWorkPackage = async (req: Request, res: Response) => {
+
+}

@@ -9,7 +9,7 @@ class WorkPackagesList implements TableInterface { // C'est mieux d'implémenter
     createAction = {
         label: "New Work Package",
         icon: "fas fa-plus",
-        modalTarget: "#customWPModal",
+        modalTarget: "#createWPModal",
     };
     rowActions = [
         { label: "Edit", icon: "fas fa-pen fa-fw", modalTarget: "#editModal" },
