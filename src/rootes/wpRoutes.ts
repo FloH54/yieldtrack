@@ -1,9 +1,11 @@
 import { Router, Request, Response } from 'express';
-import { createWorkPackage } from "../controllers/wpControllers";
+import {createWP} from "../controllers/wpControllers";
+import {createTask} from "../controllers/tasksController";
 
 
 const router = Router();
 
-router.post('/create-wp', createWP=>{null});
+router.post('/create-wp', createWP);
+router.post('/create-task', createTask)
 
 export default router;

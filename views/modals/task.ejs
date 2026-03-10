@@ -9,6 +9,9 @@
             </div>
                 <div id="alert-container"></div>
             <form action="/create-task" id="taskForm" method="POST">
+                <input type="hidden" name="wpId" value="<%= wp.id %>">
+                <input type="hidden" name="wpSlug" value="<%= wp.slug %>">
+                <input type="hidden" name="projectSlug" value="<%= projectSlug %>">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6 form-group">
@@ -17,7 +20,7 @@
                         </div>
                         <div class="col-md-6 form-group">
                             <h6>Budget (in hours)</h6>
-                            <input type="text" name="slug" id="task_slug" class="form-control" required>
+                            <input type="text" name="budget" id="task_budget" class="form-control" required>
                         </div>
                     </div>
 
@@ -50,7 +53,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submitcol" class="btn btn-primary">Create Task</button>
+                    <button type="submit" class="btn btn-primary">Create Task</button>
                 </div>
             </form>
             </div>
@@ -61,8 +64,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('taskForm');
-        const nameInput = document.getElementById('task_name');
-        const slugInput = document.getElementById('task_slug');
         const unitSearch = document.getElementById('unitSearch');
         const unitIdInput = document.getElementById('unitId');
         const options = document.querySelectorAll('#unitsOptions option');
@@ -70,16 +71,6 @@
         const endInput = document.getElementById('end_date');
         const alertContainer = document.getElementById('alert-container');
 
-        // GÉNÉRATION AUTOMATIQUE DU SLUG
-        nameInput.addEventListener('input', function() {
-            const slug = this.value
-                .toLowerCase()
-                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Enlever accents
-                .replace(/[^a-z0-9]/g, '-')                      // Remplacer spécial par -
-                .replace(/-+/g, '-')                             // Éviter doubles --
-                .replace(/^-|-$/g, '');                          // Nettoyer début/fin
-            slugInput.value = slug;
-        });
 
         unitSearch.addEventListener('input', function() {
             const val = this.value;
@@ -132,7 +123,7 @@
                 `;
                 }
             } catch (err) {
-                console.error("Erreur réseau :", err);
+                console.log("Erreur réseau :", err);
                 alertContainer.innerHTML = `<div class="alert alert-danger">Erreur de connexion au serveur.</div>`;
             }
         });

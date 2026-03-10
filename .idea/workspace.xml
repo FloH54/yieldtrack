@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="bouton retour au projet / workpackages">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="formulaire pour les tâches">
+      <change afterPath="$PROJECT_DIR$/public/img/solcoIcon.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/creation_db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/doc/creation_db.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config/database.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/database.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/authControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/authControllers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/tasksController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/tasksController.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/wpControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/wpControllers.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/Index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/WorkPackagesList.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/WorkPackagesList.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/class/Task.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/class/Task.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rootes/preferanceRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/preferenceRoutes.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Pages/wpDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/wpDetails.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/modals/task" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/task.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/task.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/task.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/wp-custom.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/wp-custom.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/footer.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/footer.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/sidebar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/sidebar.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +48,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -68,16 +75,18 @@
     &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;22.22.0&quot;,
     &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;22.19.11&quot;,
     &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/floflow/dev/yieldtrack/src/models/tables&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/floflow/dev/yieldtrack/public/img&quot;,
     &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.GitLab CI Expression&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.grazie&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/home/floflow/dev/yieldtrack/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/img" />
       <recent name="$PROJECT_DIR$/src/models/tables" />
       <recent name="$PROJECT_DIR$/views" />
       <recent name="$PROJECT_DIR$/public" />
@@ -137,7 +146,10 @@
       <workItem from="1772372727221" duration="29622000" />
       <workItem from="1772482179405" duration="293000" />
       <workItem from="1772528528371" duration="44742000" />
-      <workItem from="1772723541494" duration="5255000" />
+      <workItem from="1772723541494" duration="8394000" />
+      <workItem from="1773047554162" duration="6623000" />
+      <workItem from="1773055129811" duration="17858000" />
+      <workItem from="1773131754379" duration="603000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -291,7 +303,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772644055395</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="formulaire pour les tâches">
+      <option name="closed" value="true" />
+      <created>1772799366113</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1772799366113</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -326,6 +346,7 @@
     <MESSAGE value="save (ouais c'est pas bien)" />
     <MESSAGE value="gestion des préférence et redirection après login" />
     <MESSAGE value="bouton retour au projet / workpackages" />
-    <option name="LAST_COMMIT_MESSAGE" value="bouton retour au projet / workpackages" />
+    <MESSAGE value="formulaire pour les tâches" />
+    <option name="LAST_COMMIT_MESSAGE" value="formulaire pour les tâches" />
   </component>
 </project>

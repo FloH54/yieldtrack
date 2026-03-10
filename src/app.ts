@@ -8,6 +8,7 @@ import {loadTablePreferences} from "./middlewares/preferencesMiddleware";
 import projectRoutes from "./rootes/projectRoutes";
 import taskRoutes from "./rootes/taskRoutes";
 import wpRoutes from "./rootes/wpRoutes";
+import preferenceRoutes from "./rootes/preferenceRoutes";
 
 const app = express();
 const PORT = 3000;
@@ -43,8 +44,9 @@ app.get('/', (req: Request, res: Response) => {
     const user = (req as any).user;
     res.render('index', { user: user});
 });
-app.post('/create-wp', wpRoutes);
-app.post('/preferences/columns', taskRoutes);
+
+app.use('/preferences', preferenceRoutes );
+app.use('/', wpRoutes);
 
 // --- GESTION DE L'ERREUR 404 ---
 app.use((req: Request, res: Response) => {

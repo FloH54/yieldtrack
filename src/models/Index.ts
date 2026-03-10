@@ -6,6 +6,7 @@ import { Task } from './class/Task';
 import { WPContributor } from './class/WPContributor';
 import { Status } from "./class/Status";
 import { RWs } from "./class/RWs";
+import {Units} from "./class/Units";
 
 
 // 1. UTILISATEURS ET PROFILS (ROLES GLOBAUX)
@@ -50,12 +51,17 @@ Task.belongsTo(Status, { foreignKey: 'statId', as: 'status' });
 Task.hasMany(RWs, { foreignKey: 'taskId', as: 'RWs' });
 RWs.belongsTo(Task, { foreignKey: 'taskId', as: 'task.ejs' });
 
+// Relation entre task et units
+Units.hasMany(Task, { foreignKey: 'unitId', as: 'tasks' });
+Task.belongsTo(Units, { foreignKey: 'unitId', as: 'unit' });
+
 export {
     User,
     Profiles,
     Project,
     WorkPackage,
     Task,
+    Units,
     WPContributor,
     Status,
     RWs

@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS WPTypes (
 CREATE TABLE IF NOT EXISTS Projects (
                                         ProjectId INT UNSIGNED NOT NULL AUTO_INCREMENT,
                                         ProjectName VARCHAR(255) NOT NULL,
-                                        Slug VARCHAR(255)NOT NULL UNIQUE,
+                                        Slug VARCHAR(255)NOT NULL,
     CreatorUserId INT UNSIGNED NOT NULL,
     StartDate DATE NULL,
     EndDate DATE NULL,
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS WorkPackages (
                                             WPId INT UNSIGNED NOT NULL AUTO_INCREMENT,
                                             ProjectId INT UNSIGNED NOT NULL,
                                             WPName VARCHAR(255) NOT NULL,
-                                            Slug VARCHAR(255)NOT NULL UNIQUE,
+                                            Slug VARCHAR(255)NOT NULL,
     AccountNumber VARCHAR(50) NOT NULL,
     WPTypeId INT UNSIGNED NOT NULL,
     FatherWPId INT UNSIGNED NULL,
@@ -125,6 +125,7 @@ CREATE TABLE IF NOT EXISTS Tasks (
                                      AssigneeUserId INT UNSIGNED NOT NULL,
                                      TaskFUPTypeId INT UNSIGNED NOT NULL,
                                      TaskName VARCHAR(255) NOT NULL,
+                                    UnitId INT UNSIGNED NULL,
     TaskStart DATE NULL,
     TaskEnd DATE NULL,
     TaskBudgetHours INT UNSIGNED NULL,
@@ -147,6 +148,7 @@ CREATE TABLE IF NOT EXISTS Tasks (
     CONSTRAINT FK_Tasks_FUPType FOREIGN KEY (TaskFUPTypeId) REFERENCES TaskFUPTypes (TaskFUPTypeId) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT FK_Tasks_Code FOREIGN KEY (CodeId) REFERENCES Codes (CodeId) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT FK_Tasks_Status FOREIGN KEY (StatId) REFERENCES Status (StatId) ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT FK_Tasks_Unit FOREIGN KEY (UnitId) REFERENCES Units (UnitId) ON DELETE SET NULL ON UPDATE CASCADE;
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Commentaires et fil de discussion

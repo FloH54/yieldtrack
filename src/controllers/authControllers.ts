@@ -49,7 +49,6 @@ export const login = async (req: Request, res: Response) => {
         });
 
         const redirectPath = (next && next.startsWith('/')) ? next : '/';
-        console.log('Redirect to: ' + redirectPath);
         res.redirect(redirectPath);
 
         console.log('voici le token :',token);

@@ -11,6 +11,7 @@
             <form action="/create-wp" id="customWPForm" method="POST">
                 <!--Partie Invisble pour le formulaire-->
                 <input type="hidden" name="projectId" value="<%= project.id %>">
+                <input type="hidden" name="projectSlug" value="<%= project.slug %>">
                 <input type="hidden" name="fatherWPId" value="<%= typeof parentWP !== 'undefined' ? parentWP.id : '' %>">
                 <div class="modal-body">
                     <div class="row">
