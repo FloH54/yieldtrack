@@ -1,9 +1,9 @@
-import TableInterface from './TableInterface';
+import TableInterface, {TableLine} from './TableInterface';
 
 class ProjectsList implements TableInterface { // C'est mieux d'implémenter l'interface
     name: string;
     head: string[];
-    lines: string[][]; // Retiré le null pour simplifier, initialisé vide
+    lines: TableLine[] | null; // Retiré le null pour simplifier, initialisé vide
     more: string[] | null;
     moreLines: string[][] | null;
     createAction = {
@@ -21,7 +21,7 @@ class ProjectsList implements TableInterface { // C'est mieux d'implémenter l'i
         this.head = [ "Project Name", "Start at", "End at"];
         this.more = [ "Last Update", "Create at"];
 
-        this.lines = [] as string[][];
+        this.lines = [];
         this.moreLines = [] as string[][];
     }
 }

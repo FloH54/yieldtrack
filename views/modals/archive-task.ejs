@@ -1,0 +1,41 @@
+<div class="modal fade" id="archiveTaskModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/task/archive" method="POST">
+                <input type="hidden" name="id" id="modal-item-id">
+                <input type="hidden" name="redirectUrl" value="<%= currentUrl %>">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Archive task</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Do you really want to archive <strong id="modal-item-name"></strong> ?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-warning" type="submit">Archive it</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#archiveTaskModal').on('show.bs.modal', function (event) {
+            // Le bouton sur lequel on a cliqué
+            var boutonClique = $(event.relatedTarget);
+
+            // Extraction des données data-id et data-name
+            var idRecupere = boutonClique.data('id');
+            var nomRecupere = boutonClique.data('name');
+
+            // Remplissage des champs de la modale
+            $('#modal-item-id').val(idRecupere);
+            $('#modal-item-name').text(nomRecupere);
+        });
+    });
+</script>

@@ -1,9 +1,9 @@
-import TableInterface from './TableInterface';
+import TableInterface, {TableLine} from './TableInterface';
 
 class WorkPackagesList implements TableInterface { // C'est mieux d'implémenter l'interface
     name: string;
     head: string[];
-    lines: string[][]; // Retiré le null pour simplifier, initialisé vide
+    lines: TableLine[] | null; // Retiré le null pour simplifier, initialisé vide
     more: string[] | null;
     moreLines: string[][] | null;
     createAction = {
@@ -21,7 +21,7 @@ class WorkPackagesList implements TableInterface { // C'est mieux d'implémenter
         this.head = [ "Name", "Account Number" ,"Start at", "End at"];
         this.more = ["Creator", "Last Update", "Create at", "Poject Name"];
 
-        this.lines = [] as string[][];
+        this.lines = [];
         this.moreLines = [] as string[][];
     }
 }

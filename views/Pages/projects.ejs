@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/header')%>
+
+<body id="page-top">
+<div id="wrapper">
+    <%- include('../partials/sidebar')%>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <%- include('../partials/topbar')%>
+
+            <div class="container-fluid">
+                <%- include('../partials/dynamic_table')%>
+            </div>
+        </div>
+        <%- include('../partials/footer')%>
+    </div>
+</div>
+
+<%- include('../modals/logout')%>
+<%- include('../modals/projects.ejs')%>
+
+<script>
+    $(document).ready(function() {
+        // Récupération des préférences de colonnes envoyées par le serveur
+        const prefs = <%- JSON.stringify(selectedColumns) %>;
+
+        // Définition des colonnes pour DataTables
+        const columnsDefinition = [
+            { data: 'id', name: 'id', title: 'ID' },
+            {
+                data: 'projectName', name: 'name', title: 'Project Name',
+                // On rend le nom du projet cliquable pour aller vers ses détails
+                render: function(data, type, row) {
+                    return `<a href="/project/${row.slug}">${data}</a>`;
+                }
+            },
+            { data: 'slug', name: 'slug', title: 'Slug' },
+            { data: 'startDate', name: 'start', title: 'Start Date', defaultContent: "N/A" },
+            { data: 'endDate', name: 'end', title: 'End Date', defaultContent: "N/A" },
+            {
+                // Colonne générée dynamiquement pour les actions
+                data: null, name: 'actions', title: 'Actions', orderable: false,
+                render: function(data, type, row) {
+                    // Vous pourrez ajouter ici un menu déroulant similaire à la page remaining.ejs si besoin
+                    return `
+                        <button class="btn btn-link btn-sm" data-toggle="tooltip" title="Modifier">
+                            <i class="fas fa-pen text-gray-400"></i>
+                        </button>
+                    `;
+                }
+            }
+        ];
+
+        // Initialisation du tableau avec l'API JSON
+        initYieldtrackTable('<%= tableId %>', '/project/api/data', columnsDefinition, prefs);
+    });
+</script>
+</body>
+</html>

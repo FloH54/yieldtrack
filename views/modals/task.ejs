@@ -7,11 +7,12 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-                <div id="alert-container"></div>
-            <form action="/create-task" id="taskForm" method="POST">
-                <input type="hidden" name="wpId" value="<%= wp.id %>">
-                <input type="hidden" name="wpSlug" value="<%= wp.slug %>">
-                <input type="hidden" name="projectSlug" value="<%= projectSlug %>">
+            <div id="alert-container"></div>
+            <form action="/task/create" id="taskForm" method="POST">
+                <input type="hidden" name="wpId" value="<%= (typeof wp !== 'undefined' && wp) ? wp.id : '' %>">
+                <input type="hidden" name="wpSlug" value="<%= (typeof wp !== 'undefined' && wp) ? wp.slug : '' %>">
+                <input type="hidden" name="projectSlug" value="<%= (typeof projectSlug !== 'undefined' && projectSlug) ? projectSlug : '' %>">
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6 form-group">
@@ -35,9 +36,11 @@
                                required>
 
                         <datalist id="unitsOptions">
-                            <% allUnits.forEach(unit => { %>
-                                <option value="<%= unit.unitName %>" data-id="<%= unit.unitId %>"></option>
-                            <% }) %>
+                            <% if (typeof allUnits !== 'undefined' && allUnits) { %>
+                                <% allUnits.forEach(unit => { %>
+                                    <option value="<%= unit.unitName %>" data-id="<%= unit.unitId %>"></option>
+                                <% }) %>
+                            <% } %>
                         </datalist>
 
                         <input type="hidden" name="unitId" id="unitId">
@@ -60,6 +63,12 @@
         </div>
     </div>
 </div>
+
+
+</div>
+
+
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

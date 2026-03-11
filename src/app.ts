@@ -9,6 +9,7 @@ import projectRoutes from "./rootes/projectRoutes";
 import taskRoutes from "./rootes/taskRoutes";
 import wpRoutes from "./rootes/wpRoutes";
 import preferenceRoutes from "./rootes/preferenceRoutes";
+import {archiveTask} from "./controllers/tasksController";
 
 const app = express();
 const PORT = 3000;
@@ -19,34 +20,29 @@ app.set('views', path.join(__dirname, '../views'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cookieParser()); // Un seul suffit
 app.use(express.static(path.join(__dirname, '../public')));
-app.use(cookieParser());
 app.use(loadTablePreferences);
 
 // --- ROUTES PUBLIQUES ---
-// (Accessibles sans être connecté)
-app.get('/login', (req: Request, res: Response) => {
-    const nexUrl = req.query.next;
-    res.render('login',{next: nexUrl});
+app.get('/login', (req, res) => {
+    res.render('login', { next: req.query.next });
 });
 app.post('/login', login);
 app.get('/logout', logout);
 
+
 // --- MIDDLEWARE D'AUTHENTIFICATION GLOBAL ---
 app.use(isAuthenticated);
 
-// --- ROUTES PROTÉGÉES ---
-app.use('/project', projectRoutes); // Gère tout ce qui commence par /project
-app.use('/remaining', taskRoutes); // Gére le reste à faire
+// --- ROUTES PROTÉGÉES (Groupées par entité) ---
+app.use('/project', projectRoutes);     // Tout ce qui touche aux projets
+app.use('/wp', wpRoutes);               // Tout ce qui touche aux Work Packages
+app.use('/task', taskRoutes);           // Tout ce qui touche aux tâches
+app.use('/remaining', taskRoutes);      // On garde l'accès pour la page "Reste à faire"
+app.use('/preferences', preferenceRoutes); // Un unique point d'entrée pour les colonnes
 
-app.get('/', (req: Request, res: Response) => {
-    const user = (req as any).user;
-    res.render('index', { user: user});
-});
-
-app.use('/preferences', preferenceRoutes );
-app.use('/', wpRoutes);
+app.get('/', (req, res) => res.render('index', { user: (req as any).user }));
 
 // --- GESTION DE L'ERREUR 404 ---
 app.use((req: Request, res: Response) => {

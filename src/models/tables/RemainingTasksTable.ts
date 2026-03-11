@@ -1,17 +1,17 @@
-import TableInterface from './TableInterface';
+import TableInterface, {TableLine} from './TableInterface';
 
 class RemainingTasksTable implements TableInterface {
     name: string;
     plusAction: boolean;
     plusMapAction: Map<string, any>;
     head: string[];
-    lines: string[][];
+    lines: TableLine[] | null;
     more: null | string[];
     moreLines: null;
 
     rowActions = [
         { label: "Edit", icon: "fas fa-pen fa-fw", modalTarget: "#editModal" },
-        { label: "Archive It", icon: "fas fa-trash fa-fw", modalTarget: "#archiveModal" }
+        { label: "Archive It", icon: "fas fa-trash fa-fw", modalTarget: "#archiveTaskModal" }
     ];
 
     constructor() {

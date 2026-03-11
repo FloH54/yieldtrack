@@ -1,11 +1,9 @@
-import { Router, Request, Response } from 'express';
-import {createWP} from "../controllers/wpControllers";
-import {createTask} from "../controllers/tasksController";
-
+import { Router } from 'express';
+// Supprimez renderWPDetails de l'import
+import { createWP } from "../controllers/wpControllers";
 
 const router = Router();
 
-router.post('/create-wp', createWP);
-router.post('/create-task', createTask)
+router.post('/create', createWP); // URL: /wp/create
 
 export default router;

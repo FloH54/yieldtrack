@@ -1,34 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <%- include('../partials/header')%>
 <body id="page-top">
 <div id="wrapper">
-
     <%- include('../partials/sidebar')%>
-
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
-
             <%- include('../partials/topbar')%>
-
             <div class="container-fluid">
-
-                <%- include('../partials/tables')%>
-
+                <%- include('../partials/dynamic_table')%>
             </div>
         </div>
-
         <%- include('../partials/footer')%>
-
     </div>
 </div>
 
-    <%- include('../modals/logout')%>
-    <%- include('../modals/project')%>
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-</div>
+<%- include('../modals/logout')%>
+<%- include('../modals/archive-task.ejs')%>
+<%- include('../modals/task.ejs')%>
+
+<script>
+    $(document).ready(function() {
+        const prefs = <%- JSON.stringify(selectedColumns) %>;
+
+        const columnsDefinition = [
+            { data: 'id', name: 'id', title: 'ID' },
+            { data: 'workPackage.project.projectName', name: 'project', title: 'Project', defaultContent: "N/A" },
+            { data: 'workPackage.wpName', name: 'wpName', title: 'Work Package', defaultContent: "N/A" },
+            { data: 'taskName', name: 'taskName', title: 'Task Name' },
+            { data: 'status.statName', name: 'status', title: 'Statut', defaultContent: "N/A" },
+            { data: 'Priority', name: 'priority', title: 'Priority', defaultContent: "N/A" },
+            { data: 'taskBudgetHours', name: 'budget', title: 'Budget (h)', defaultContent: "0" },
+            { data: 'unit.unitName', name: 'unit', title: 'Unit', defaultContent: "N/A" },
+            // COLONNE DES ACTIONS AVEC VOS BOUTONS
+            {
+                data: null, name: 'actions', title: 'Actions', orderable: false,
+                render: function(data, type, row) {
+                    return `
+                        <div class="dropdown no-arrow d-inline">
+                            <a class="btn btn-link btn-sm dropdown-toggle" href="#" data-toggle="dropdown">
+                                <i class="fas fa-pen text-gray-400"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#editModal" data-id="${row.id}" data-name="${row.taskName}">
+                                    <i class="fas fa-pen fa-fw mr-2"></i> Edit
+                                </a>
+                                <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#archiveTaskModal" data-id="${row.id}" data-name="${row.taskName}">
+                                    <i class="fas fa-trash fa-fw mr-2"></i> Archive It
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        ];
+
+        // Lancement !
+        initYieldtrackTable('<%= tableId %>', '/remaining/api/data', columnsDefinition, prefs);
+    });
+</script>
 </body>
 </html>
