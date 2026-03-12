@@ -1,29 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="fin du formulaire pour les tâches. Corrections d'affichages des colones">
-      <change afterPath="$PROJECT_DIR$/views/Pages/projects.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/modals/archive-task.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/partials/dynamic_table.ejs" afterDir="false" />
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="Refonte de la tables en version dynamique">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/projectController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/projectController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/tasksController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/tasksController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/wpControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/wpControllers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/ProjectsList.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/ProjectsList.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/RemainingTasksTable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/RemainingTasksTable.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/TableInterface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/TableInterface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/TaskFromWP.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/TaskFromWP.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/WorkPackagesList.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/tables/WorkPackagesList.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Pages/remaining.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/remaining.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Pages/wpDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/wpDetails.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/modals/project.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/projects.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/modals/task.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/task.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/modals/wp-custom.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/wp-custom.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/footer.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/footer.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/tables.ejs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,29 +48,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;JavaScript Debug.localhost:3000.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Node.js.app.ts.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;22.22.0&quot;,
-    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;22.19.11&quot;,
-    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/floflow/dev/yieldtrack/views/Pages&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.grazie&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/home/floflow/dev/yieldtrack/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "JavaScript Debug.localhost:3000.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Node.js.app.ts.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "main",
+    "javascript.nodejs.core.library.configured.version": "22.22.0",
+    "javascript.nodejs.core.library.typings.version": "22.19.11",
+    "javascript.preferred.runtime.type.id": "node",
+    "last_opened_file_path": "/home/floflow/dev/yieldtrack/views/Pages",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "com.android.studio.ml.bot.mainConfigurable",
+    "ts.external.directory.path": "/home/floflow/dev/yieldtrack/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/views/Pages" />
@@ -159,7 +140,10 @@
       <workItem from="1773131754379" duration="15941000" />
       <workItem from="1773176563958" duration="785000" />
       <workItem from="1773216731796" duration="14693000" />
-      <workItem from="1773241920002" duration="3535000" />
+      <workItem from="1773241920002" duration="4801000" />
+      <workItem from="1773304057764" duration="639000" />
+      <workItem from="1773304709563" duration="159000" />
+      <workItem from="1773304876975" duration="1750000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -329,7 +313,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773132578293</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Refonte de la tables en version dynamique">
+      <option name="closed" value="true" />
+      <created>1773247692027</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1773247692027</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -366,6 +358,7 @@
     <MESSAGE value="bouton retour au projet / workpackages" />
     <MESSAGE value="formulaire pour les tâches" />
     <MESSAGE value="fin du formulaire pour les tâches. Corrections d'affichages des colones" />
-    <option name="LAST_COMMIT_MESSAGE" value="fin du formulaire pour les tâches. Corrections d'affichages des colones" />
+    <MESSAGE value="Refonte de la tables en version dynamique" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refonte de la tables en version dynamique" />
   </component>
 </project>
