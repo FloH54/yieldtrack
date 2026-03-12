@@ -85,6 +85,7 @@ export const createTask = async (req: Request, res: Response) => {
     }
 }
 
+// Fonction d'archivage
 export const archiveTask = async (req: Request, res: Response) => {
     try {
         const { id , redirectUrl } = req.body;
@@ -94,3 +95,19 @@ export const archiveTask = async (req: Request, res: Response) => {
         res.status(500).json({ error: "Error while archiving the task" });
     }
 }
+
+// Rendu des tâches ayant un Unit sans user
+export const renderUnitTasks = async (req: Request, res: Response) => {
+    try {
+        const  unitId = req.params.unitId;
+        const tasks = await Units.findAll({
+            where: { UnitId: unitId,
+                UserId: null },
+            include: [ { model: Task },
+                {model: WorkPackage, as: 'workPackage'}]
+        })
+    } catch (err){
+        console.log("Erreur de chargement des tâches :" + err);
+        res.status(500).json({ error: "Error while loading the tasks" });
+    }
+};

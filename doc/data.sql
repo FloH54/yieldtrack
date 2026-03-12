@@ -133,3 +133,9 @@ INSERT INTO TaskComments (TaskId, UserId, Content) VALUES
                                                        (11, 5, 'Serveur Fedora opérationnel. J\'ai mis à jour le script d\'init.'),
                                                        (13, 5, 'Frank: Charlie, pense à vérifier la compatibilité des tokens JWT.'),
                                                        (13, 6, 'Charlie: C\'est noté, je teste ça depuis mon poste Fedora aussi.');
+
+
+
+INSERT INTO UserToUnits (UserId, UnitId, WeeklyHours, StartDate) VALUES
+                                                                     (1, 3, 25, '2026-01-01'), -- Charlie au Pôle Web (25h)
+                                                                     (2, 4, 10, '2026-01-01'); -- Charlie au Pôle Mobile (10h)

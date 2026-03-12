@@ -217,3 +217,14 @@ CREATE TABLE IF NOT EXISTS Absences (
     KEY IX_Absences_Period (UserId, AbStart, AbEnd),
     CONSTRAINT FK_Absences_User FOREIGN KEY (UserId) REFERENCES Users (UserId) ON DELETE CASCADE ON UPDATE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS UserToUnits (
+                                           UserId INT UNSIGNED NOT NULL,
+                                           UnitId INT UNSIGNED NOT NULL,
+                                           WeeklyHours INT UNSIGNED NOT NULL DEFAULT 0,
+                                           StartDate DATE NOT NULL,
+                                           EndDate DATE NULL,
+                                           PRIMARY KEY (UserId, UnitId), -- Clé primaire sur le couple
+    CONSTRAINT FK_U2U_User FOREIGN KEY (UserId) REFERENCES Users (UserId) ON DELETE CASCADE,
+    CONSTRAINT FK_U2U_Unit FOREIGN KEY (UnitId) REFERENCES Units (UnitId) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
