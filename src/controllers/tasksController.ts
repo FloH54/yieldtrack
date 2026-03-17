@@ -42,9 +42,6 @@ export const renderRemainingPage = async (req: Request, res: Response) => {
     }
 };
 
-// ... (Gardez getRemainingTasksData, createTask, archiveTask) ...
-
-// Nouvelle route API JSON
 export const getRemainingTasksData = async (req: Request, res: Response) => {
     try {
         const userId = (req as any).user.id;
@@ -64,7 +61,6 @@ export const getRemainingTasksData = async (req: Request, res: Response) => {
 };
 
 export const createTask = async (req: Request, res: Response) => {
-    // ... [Votre code existant pour createTask] ...
     try {
         const { taskName, budget, unitId, startDate, endDate, wpId, wpSlug, projectSlug, assigneeUser } = req.body;
         const existingTask = await Task.findOne({
@@ -95,19 +91,3 @@ export const archiveTask = async (req: Request, res: Response) => {
         res.status(500).json({ error: "Error while archiving the task" });
     }
 }
-
-// Rendu des tâches ayant un Unit sans user
-export const renderUnitTasks = async (req: Request, res: Response) => {
-    try {
-        const  unitId = req.params.unitId;
-        const tasks = await Units.findAll({
-            where: { UnitId: unitId,
-                UserId: null },
-            include: [ { model: Task },
-                {model: WorkPackage, as: 'workPackage'}]
-        })
-    } catch (err){
-        console.log("Erreur de chargement des tâches :" + err);
-        res.status(500).json({ error: "Error while loading the tasks" });
-    }
-};

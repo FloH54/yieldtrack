@@ -56,8 +56,8 @@ Units.hasMany(Task, { foreignKey: 'unitId', as: 'tasks' });
 Task.belongsTo(Units, { foreignKey: 'unitId', as: 'unit' });
 
 // Relation entre users et units
-User.belongsToMany(Units, { through: 'UserToUnits', foreignKey: 'UserId' });
-Units.belongsToMany(User, { through: 'UserToUnits', foreignKey: 'UnitId' });
+User.belongsToMany(Units, { through: 'UserToUnits', foreignKey: 'UserId' , timestamps: false});
+Units.belongsToMany(User, { through: 'UserToUnits', foreignKey: 'UnitId' , timestamps: false});
 
 export {
     User,

@@ -9,7 +9,7 @@ import projectRoutes from "./rootes/projectRoutes";
 import taskRoutes from "./rootes/taskRoutes";
 import wpRoutes from "./rootes/wpRoutes";
 import preferenceRoutes from "./rootes/preferenceRoutes";
-import {archiveTask} from "./controllers/tasksController";
+import {renderUnitTasksPage, getUnitTasks, updateAsigneeUser} from "./controllers/unitsController";
 
 const app = express();
 const PORT = 3000;
@@ -41,6 +41,9 @@ app.use('/wp', wpRoutes);               // Tout ce qui touche aux Work Packages
 app.use('/task', taskRoutes);           // Tout ce qui touche aux tâches
 app.use('/remaining', taskRoutes);      // On garde l'accès pour la page "Reste à faire"
 app.use('/preferences', preferenceRoutes); // Un unique point d'entrée pour les colonnes
+app.get('/allocation', renderUnitTasksPage); // Rendu de la page HTML
+app.get('/units/api/data', getUnitTasks);
+app.post('/units/update-assignee', updateAsigneeUser)
 
 app.get('/', (req, res) => res.render('index', { user: (req as any).user }));
 

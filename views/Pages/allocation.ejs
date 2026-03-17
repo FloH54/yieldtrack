@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/header')%>
+
+<body id="page-top">
+<div id="wrapper">
+    <%- include('../partials/sidebar')%>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <%- include('../partials/topbar')%>
+
+            <div class="container-fluid">
+                <%- include('../partials/dynamic_table')%>
+            </div>
+        </div>
+        <%- include('../partials/footer')%>
+    </div>
+</div>
+
+<%- include('../modals/logout')%>$
+
+<script>
+    $(document).ready(function(){
+        // 1. Récupération des préférences et de la liste des utilisateurs injectée par le controller
+        const prefs = <%- JSON.stringify(selectedColumns) %>;
+        const allUsers = <%- JSON.stringify(allUsers) %>; //
+
+        // 2. Définition des colonnes pour DataTables
+        const columnsDefinition = [
+            { data: 'id', name: 'id', title: 'ID' },
+            {
+                data: 'unit.unitName', // Chemin vers le nom de l'unité via la jointure
+                name: 'name',
+                title: 'Unit Name',
+                defaultContent: "N/A"
+            },
+            {
+                data: 'workPackage.project.projectName',
+                name: 'project',
+                title: 'Project',
+                defaultContent: "N/A"
+            },
+            {
+                data: 'workPackage.wpName',
+                name: 'workPackage',
+                title: 'Work Package',
+                defaultContent: "N/A"
+            },
+            { data: 'taskName', name: 'taskName', title: 'Task Name' },
+            { data: 'taskBudgetHours', name: 'budget', title: 'Budget (h)', defaultContent: "0" },
+
+            // 3. LA COLONNE AVEC LE MENU DÉROULANT (USER)
+            {
+                data: 'assigneeUserId', //
+                name: 'user',
+                title: 'Assigné à',
+                render: function(data, type, row) {
+                    // On crée le début du select
+                    let select = `<select class="form-control select-assignee" data-taskid="${row.id}">`;
+                    select += `<option value="">-- Choisir un utilisateur --</option>`;
+
+                    const taskUnitId = row.unitId;
+
+                    const eligibleUsers = allUsers.filter(u => {
+                        // Sequelize renvoie l'association sous 'Units' (ou 'units')
+                        const userUnits = u.Units || u.units || [];
+                        return userUnits.some(unit => unit.unitId === taskUnitId);
+                    });
+
+                    // On boucle sur la liste des users récupérée plus haut
+                    eligibleUsers.forEach(user => {
+                        const isSelected = (user.id == data) ? 'selected' : '';
+                        select += `<option value="${user.id}" ${isSelected}>${user.firstName} ${user.lastName}</option>`;
+                    });
+
+                    select += `</select>`;
+                    return select;
+                }
+            },
+            { data: 'startDate', name: 'startDate', title: 'Start Date', defaultContent: "N/A" },
+            { data: 'endDate', name: 'endDate', title: 'End Date', defaultContent: "N/A" }
+        ];
+
+        // 4. Initialisation du tableau avec la fonction universelle
+        initYieldtrackTable('<%= tableId %>', '/units/api/data', columnsDefinition, prefs); //
+    });
+
+    // 5. Script pour sauvegarder le changement d'utilisateur en temps réel
+    $(document).on('change', '.select-assignee', function() {
+        const taskId = $(this).data('taskid');
+        const userId = $(this).val();
+
+        // Appel API pour mettre à jour la tâche (à implémenter dans votre taskController)
+        fetch('/units/update-assignee', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ taskId, userId })
+        })
+            .then(response => {
+                if (response.ok) {
+                    $(this).css('border-color', '#1cc88a'); // Petit flash vert en cas de succès
+                } else {
+                    alert("Erreur lors de l'assignation");
+                }
+            });
+    });
+</script>
