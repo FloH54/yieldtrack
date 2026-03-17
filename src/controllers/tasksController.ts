@@ -91,3 +91,29 @@ export const archiveTask = async (req: Request, res: Response) => {
         res.status(500).json({ error: "Error while archiving the task" });
     }
 }
+
+export const updateTask = async (req: Request, res: Response) => {
+    try {
+        const { id, taskName, budget, startDate, endDate } = req.body;
+
+        // Validation basique des dates
+        if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
+            return res.status(400).json({ error: "The end date is invalid" });
+        }
+
+        const task = await Task.findByPk(id);
+        if (!task) return res.status(404).json({ error: "Task not found" });
+
+        await task.update({
+            taskName,
+            taskBudgetHours: budget ? parseInt(budget) : null,
+            startDate: startDate || null,
+            endDate: endDate || null
+        });
+
+        res.status(200).json({ success: true });
+    } catch (error) {
+        console.error("Error updating task:", error);
+        res.status(500).json({ error: "Error while updating the task" });
+    }
+};

@@ -20,6 +20,7 @@
 
 <%- include('../modals/logout')%>
 <%- include('../modals/projects.ejs')%>
+<%- include('../modals/edit-project.ejs')%>
 
 <script>
     $(document).ready(function() {
@@ -45,10 +46,13 @@
                 render: function(data, type, row) {
                     // Vous pourrez ajouter ici un menu déroulant similaire à la page remaining.ejs si besoin
                     return `
-                        <button class="btn btn-link btn-sm" data-toggle="tooltip" title="Modifier">
-                            <i class="fas fa-pen text-gray-400"></i>
-                        </button>
-                    `;
+                            <button class="btn btn-link btn-sm" data-toggle="modal" data-target="#editProjectModal"
+                                    data-id="${row.id}" data-name="${row.projectName}" data-slug="${row.slug}"
+                                    data-start="${row.startDate || ''}" data-end="${row.endDate || ''}"
+                                    title="Modifier">
+                                <i class="fas fa-pen text-gray-400"></i>
+                            </button>
+                        `;;
                 }
             }
         ];

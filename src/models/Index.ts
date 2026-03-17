@@ -7,6 +7,7 @@ import { WPContributor } from './class/WPContributor';
 import { Status } from "./class/Status";
 import { RWs } from "./class/RWs";
 import {Units} from "./class/Units";
+import {WPTypes} from "./class/WPTypes";
 
 
 // 1. UTILISATEURS ET PROFILS (ROLES GLOBAUX)
@@ -46,6 +47,10 @@ Task.belongsTo(User, { foreignKey: 'assigneeUserId', as: 'assignee' });
 // Relation avec les statuts (pour régler votre erreur précédente)
 Status.hasMany(Task, { foreignKey: 'statId', as: 'tasks' });
 Task.belongsTo(Status, { foreignKey: 'statId', as: 'status' });
+
+// Relatio, entre les WPtypes et les WP
+WPTypes.hasMany(WorkPackage, { foreignKey: 'wpTypeId', as: 'workPackages' });
+WorkPackage.belongsTo(WPTypes, { foreignKey: 'wpTypeId', as: 'type' });
 
 // Relation entre task.ejs er remainingwork
 Task.hasMany(RWs, { foreignKey: 'taskId', as: 'RWs' });

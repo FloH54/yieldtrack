@@ -1,0 +1,88 @@
+<div class="modal fade" id="editWPModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog-centered modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Work Package</h4>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div id="edit-wp-alert"></div>
+            <form action="/wp/update" id="editWPForm" method="POST">
+                <input type="hidden" name="id" id="edit_wp_id">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <h6>Work Package Name</h6>
+                            <input type="text" name="wpName" id="edit_wp_name" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <h6>Account Number</h6>
+                            <input type="text" name="accountNumber" id="edit_wp_account" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <h6>WP Type</h6>
+                            <select name="wpTypeId" id="edit_wp_type" class="form-control" required>
+                                <% allWPTypes.forEach(type => { %>
+                                    <option value="<%= type.wpTypeId %>"><%= type.wpTypeName %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <h6>Parent Work Package</h6>
+                            <select name="fatherWPId" id="edit_wp_father" class="form-control">
+                                <option value="">None (Root)</option>
+                                <% projectWPs.forEach(item => { %>
+                                    <option value="<%= item.id %>"><%= item.wpName %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <h6>Slug (URL name)</h6>
+                        <input type="text" name="slug" id="edit_wp_slug" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#editWPModal').on('show.bs.modal', function (event) {
+            const button = $(event.relatedTarget);
+            $('#edit_wp_id').val(button.data('id'));
+            $('#edit_wp_name').val(button.data('name'));
+            $('#edit_wp_slug').val(button.data('slug'));
+            $('#edit_wp_account').val(button.data('account'));
+            $('#edit_wp_type').val(button.data('type'));
+            $('#edit_wp_father').val(button.data('father'));
+        });
+
+        document.getElementById('editWPForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const alertContainer = document.getElementById('edit-wp-alert');
+            const data = Object.fromEntries(new FormData(this).entries());
+
+            try {
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (response.ok) { window.location.reload(); }
+                else {
+                    const res = await response.json();
+                    alertContainer.innerHTML = `<div class="alert alert-danger m-3">${res.error}</div>`;
+                }
+            } catch (err) { alertContainer.innerHTML = `<div class="alert alert-danger m-3">Server Error.</div>`; }
+        });
+    });
+</script>

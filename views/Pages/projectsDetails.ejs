@@ -25,6 +25,7 @@
 <%- include('../modals/logout') %>
 <%- include('../modals/wp-selection') %>
 <%- include('../modals/wp-custom') %>
+<%- include('../modals/edit-wp.ejs')%>
 
 <script>
     $(document).ready(function() {
@@ -34,18 +35,26 @@
             { data: 'id', name: 'id', title: 'ID' },
             {
                 data: 'wpName', name: 'name', title: 'WP Name',
-                // Rend le nom du WorkPackage cliquable !
                 render: function(data, type, row) {
                     return `<a href="/project/<%= project.slug %>/wp/${row.slug}">${data}</a>`;
                 }
             },
+            { data: 'type.wpTypeName', name: 'type', title: 'Type', defaultContent: 'N/A' },
+            { data: 'father.wpName', name: 'parent', title: 'Parent', defaultContent: '-' },
             { data: 'accountNumber', name: 'account', title: 'Account Number', defaultContent: "N/A" },
             { data: 'slug', name: 'slug', title: 'Slug' },
-            // (Optionnel) Colonne Actions si vous avez des boutons pour les WP
             {
-                data: null, name: 'actions', title: 'Actions', orderable: false, defaultContent: `
-                    <button class="btn btn-link btn-sm"><i class="fas fa-pen text-gray-400"></i></button>
-                `
+                data: null, name: 'actions', title: 'Actions', orderable: false,
+                render: function(data, type, row) {
+                    return `
+                <button class="btn btn-link btn-sm" data-toggle="modal" data-target="#editWPModal"
+                        data-id="${row.id}" data-name="${row.wpName}" data-slug="${row.slug}"
+                        data-account="${row.accountNumber}" data-type="${row.wpTypeId}"
+                        data-father="${row.fatherWPId || ''}" title="Edit">
+                    <i class="fas fa-pen text-gray-400"></i>
+                </button>
+            `;
+                }
             }
         ];
 
