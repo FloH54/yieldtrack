@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="Fin de la page d'attribution">
-      <change afterPath="$PROJECT_DIR$/views/modals/edit-project.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/modals/edit-task.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/modals/edit-wp.ejs" afterDir="false" />
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="Création et formulaire de modification pour les users">
+      <change afterPath="$PROJECT_DIR$/src/controllers/userController.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rootes/userRoutes.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/Pages/users.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/modals/create-user.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/modals/edit-user.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/projectController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/projectController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/tasksController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/tasksController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/wpControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/wpControllers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Pages/projects.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projects.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Pages/wpDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/wpDetails.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/tables/ProjectsList.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/tables/RemainingTasksTable.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/tables/TableInterface.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/tables/TaskFromWP.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/tables/WorkPackagesList.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/sidebar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/sidebar.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,7 +161,8 @@
       <workItem from="1773665935592" duration="1032000" />
       <workItem from="1773670348650" duration="6000000" />
       <workItem from="1773733294838" duration="18042000" />
-      <workItem from="1773760946345" duration="1929000" />
+      <workItem from="1773760946345" duration="2274000" />
+      <workItem from="1773821331419" duration="6731000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -362,7 +364,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773753491613</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Formulaire de modification">
+      <option name="closed" value="true" />
+      <created>1773763113986</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1773763113986</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -403,6 +413,8 @@
     <MESSAGE value="README.md" />
     <MESSAGE value="Début de la page d'attribution des tâches d'un units que possède un team manager" />
     <MESSAGE value="Fin de la page d'attribution" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fin de la page d'attribution" />
+    <MESSAGE value="Formulaire de modification" />
+    <MESSAGE value="Création et formulaire de modification pour les users" />
+    <option name="LAST_COMMIT_MESSAGE" value="Création et formulaire de modification pour les users" />
   </component>
 </project>

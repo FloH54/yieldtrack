@@ -1,0 +1,90 @@
+<div class="modal fade" id="createUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog-centered modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Create New User</h4>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div id="create-user-alert"></div>
+            <form action="/users/create" id="createUserForm" method="POST">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <h6>First Name</h6>
+                            <input type="text" name="firstName" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <h6>Last Name</h6>
+                            <input type="text" name="lastName" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <h6>Email</h6>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <h6>Password</h6>
+                            <input type="password" name="password" class="form-control" required minlength="6">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <h6>Assign Profiles</h6>
+                        <select name="profiles" class="form-control" multiple required style="height: 120px;">
+                            <% if (typeof allProfiles !== 'undefined') { %>
+                                <% allProfiles.forEach(profile => { %>
+                                    <option value="<%= profile.id %>"><%= profile.name %></option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                        <small class="text-muted">Hold Ctrl (Windows) or Command (Mac) to select multiple profiles.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('createUserForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const alertContainer = document.getElementById('create-user-alert');
+            alertContainer.innerHTML = '';
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            data.profiles = formData.getAll('profiles');
+
+            try {
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                // On vérifie si le serveur a bien répondu avec du JSON
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    const result = await response.json();
+                    if (response.ok) {
+                        window.location.href = result.redirect;
+                    } else {
+                        alertContainer.innerHTML = `<div class="alert alert-danger m-3">${result.error}</div>`;
+                    }
+                } else {
+                    // Si on reçoit du HTML, c'est que la route est mauvaise (404) ou que le serveur a crashé
+                    alertContainer.innerHTML = `<div class="alert alert-danger m-3">Erreur Serveur : La route ${this.action} a renvoyé une page web (potentiellement 404 Not Found) au lieu de données. Vérifiez vos routes dans app.ts.</div>`;
+                }
+            } catch (err) {
+                alertContainer.innerHTML = `<div class="alert alert-danger m-3">Erreur réseau critique : ${err.message}</div>`;
+            }
+        });
+    });
+</script>

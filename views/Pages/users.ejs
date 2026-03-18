@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/header')%>
+
+<body id="page-top">
+<div id="wrapper">
+    <%- include('../partials/sidebar')%>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <%- include('../partials/topbar')%>
+
+            <div class="container-fluid">
+                <%- include('../partials/dynamic_table')%>
+            </div>
+        </div>
+        <%- include('../partials/footer')%>
+    </div>
+</div>
+
+<%- include('../modals/logout')%>
+<%- include('../modals/create-user')%>
+<%- include('../modals/edit-user')%>
+
+<script>
+    $(document).ready(function() {
+        const prefs = <%- JSON.stringify(selectedColumns) %>;
+
+        const columnsDefinition = [
+            { data: 'id', name: 'id', title: 'ID' },
+            { data: 'firstName', name: 'firstName', title: 'First Name' },
+            { data: 'lastName', name: 'lastName', title: 'Last Name' },
+            { data: 'email', name: 'email', title: 'Email' },
+            {
+                data: 'profiles', name: 'profiles', title: 'Profiles', orderable: false,
+                render: function(data) {
+                    if (!data || data.length === 0) return '<em>Aucun</em>';
+                    // Transforme le tableau d'objets profils en une chaîne séparée par des virgules
+                    return data.map(p => `<span class="badge badge-secondary">${p.name}</span>`).join(' ');
+                }
+            },
+            {
+                data: 'IsActive', name: 'status', title: 'Status',
+                render: function(data) {
+                    return data
+                        ? '<span class="badge badge-success"><i class="fas fa-check"></i> Active</span>'
+                        : '<span class="badge badge-danger"><i class="fas fa-times"></i> Inactive</span>';
+                }
+            },
+            {
+                data: null, name: 'actions', title: 'Actions', orderable: false,
+                render: function(data, type, row) {
+                    // Pour le bouton d'activation/désactivation
+                    const icon = row.IsActive ? 'fa-user-slash text-danger' : 'fa-user-check text-success';
+                    const title = row.IsActive ? 'Deactivate User' : 'Reactivate User';
+
+                    // On prépare la liste des profils de l'utilisateur (on extrait uniquement les ID séparés par une virgule)
+                    const profileIds = (row.profiles && row.profiles.length > 0)
+                        ? row.profiles.map(p => p.id).join(',')
+                        : '';
+
+                    return `
+                        <button class="btn btn-link btn-sm" data-toggle="modal" data-target="#editUserModal"
+                                data-id="${row.id}" data-firstname="${row.firstName}"
+                                data-lastname="${row.lastName}" data-email="${row.email}"
+                                data-profiles="${profileIds}" title="Edit User">
+                            <i class="fas fa-pen text-gray-400"></i>
+                        </button>
+
+                        <button class="btn btn-link btn-sm toggle-status-btn" data-id="${row.id}" title="${title}">
+                            <i class="fas ${icon}"></i>
+                        </button>
+                    `;
+                }
+            }
+        ];
+
+        initYieldtrackTable('<%= tableId %>', '/users/api/data', columnsDefinition, prefs);
+
+        // Gestion du clic sur le bouton d'activation/désactivation
+        $('#<%= tableId %>').on('click', '.toggle-status-btn', async function() {
+            const userId = $(this).data('id');
+            if(confirm("Are you sure you want to change this user's status?")) {
+                try {
+                    const res = await fetch('/users/toggle-status', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: userId })
+                    });
+                    if(res.ok) {
+                        $('#<%= tableId %>').DataTable().ajax.reload(null, false); // Recharge le tableau sans perdre la pagination
+                    } else {
+                        alert("Erreur lors de la modification du statut.");
+                    }
+                } catch (e) {
+                    console.error("Network error", e);
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
