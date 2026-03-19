@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/header')%>
+
+<body id="page-top">
+<div id="wrapper">
+    <%- include('../partials/sidebar')%>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <%- include('../partials/topbar')%>
+            <div class="container-fluid">
+                <%- include('../partials/dynamic_table')%>
+            </div>
+        </div>
+        <%- include('../partials/footer')%>
+    </div>
+</div>
+
+<%- include('../modals/logout')%>
+
+<script>
+    $(document).ready(function() {
+        const prefs = <%- JSON.stringify(selectedColumns) %>;
+
+        const columnsDefinition = [
+            { data: 'id', name: 'id', title: 'ID' },
+            {
+                data: 'projectName', name: 'projectName', title: 'Project Name',
+                render: function(data, type, row) {
+                    return `<a href="/project/${row.slug}">${data}</a>`;
+                }
+            },
+            {
+                data: 'creator', name: 'creator', title: 'Manager',
+                render: function(data) { return data ? `${data.firstName} ${data.lastName}` : 'N/A'; }
+            },
+            { data: 'startDate', name: 'startDate', title: 'Start Date', defaultContent: "N/A" },
+            { data: 'endDate', name: 'endDate', title: 'End Date', defaultContent: "N/A" },
+            {
+                data: 'status.statName', name: 'status', title: 'Status',
+                render: function(data, type, row) {
+                    // ID 1 = Actif, 4 = Completed
+                    if (row.statId === 1) return '<span class="badge badge-success">Actif</span>';
+                    if (row.statId === 4) return '<span class="badge badge-secondary">Clôturé</span>';
+                    return `<span class="badge badge-warning">${data || 'Inconnu'}</span>`;
+                }
+            },
+            {
+                data: null, name: 'actions', title: 'Actions', orderable: false,
+                render: function(data, type, row) {
+                    const icon = row.statId === 1 ? 'fa-lock text-danger' : 'fa-lock-open text-success';
+                    const title = row.statId === 1 ? 'Clôturer le projet' : 'Rouvrir le projet';
+                    return `
+                        <button class="btn btn-link btn-sm toggle-proj-status" data-id="${row.id}" title="${title}">
+                            <i class="fas ${icon}"></i>
+                        </button>
+                    `;
+                }
+            }
+        ];
+
+        initYieldtrackTable('<%= tableId %>', '/director/projects/api/data', columnsDefinition, prefs);
+
+        // Appel AJAX pour fermer/ouvrir un projet
+        $('#<%= tableId %>').on('click', '.toggle-proj-status', async function() {
+            const projId = $(this).data('id');
+            if(confirm("Confirmer le changement d'état pour ce projet ?")) {
+                try {
+                    const res = await fetch('/director/projects/toggle-status', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: projId })
+                    });
+                    if(res.ok) {
+                        $('#<%= tableId %>').DataTable().ajax.reload(null, false);
+                    } else {
+                        alert("Erreur lors de la modification du statut.");
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

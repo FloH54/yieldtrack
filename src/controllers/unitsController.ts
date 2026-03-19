@@ -31,13 +31,22 @@ export const getUnitTasks = async (req: Request, res: Response) => {
         const tasks = await Task.findAll({
             where: {
                 assigneeUserId: null,
-                unitId: { [Op.in]: unitIds }},
+                statId: 1, // La tâche elle-même doit être active
+                unitId: { [Op.in]: unitIds }
+            },
             include: [
-                    { model: WorkPackage, as: 'workPackage',
-                        include: [{ model: Project, as: 'project' }]
-                    },
+                {
+                    model: WorkPackage,
+                    as: 'workPackage',
+                    where: { statId: 1 }, // WP actif
+                    include: [{
+                        model: Project,
+                        as: 'project',
+                        where: { statId: 1 } // Projet actif
+                    }]
+                },
                 { model: Units, as: 'unit' }
-                ]
+            ]
         });
 
             res.json({ data: tasks });

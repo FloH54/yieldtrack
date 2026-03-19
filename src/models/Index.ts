@@ -64,6 +64,14 @@ Task.belongsTo(Units, { foreignKey: 'unitId', as: 'unit' });
 User.belongsToMany(Units, { through: 'UserToUnits', foreignKey: 'UserId' , timestamps: false});
 Units.belongsToMany(User, { through: 'UserToUnits', foreignKey: 'UnitId' , timestamps: false});
 
+// Relation entre le statut et les projets
+Status.hasMany(Project, { foreignKey: 'statId', as: 'projects' });
+Project.belongsTo(Status, { foreignKey: 'statId', as: 'status' });
+
+// Relation entre le statut et les workpackages
+Status.hasMany(WorkPackage, { foreignKey: 'statId', as: 'workPackages' });
+WorkPackage.belongsTo(Status, { foreignKey: 'statId', as: 'status' });
+
 export {
     User,
     Profiles,

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Task, Status, WorkPackage, Project, RWs, Units } from '../models/Index';
+import {Task, Status, WorkPackage, Project, RWs, Units, WPContributor} from '../models/Index';
 import { Op } from "sequelize";
 
 export const AVAILABLE_COLUMNS = [
@@ -46,10 +46,22 @@ export const getRemainingTasksData = async (req: Request, res: Response) => {
     try {
         const userId = (req as any).user.id;
         const userTasks = await Task.findAll({
-            where: { AssigneeUserId: userId, StatId: 1 },
+            // 1. La tâche doit être active (statId: 1) et assignée au user
+            where: { assigneeUserId: userId, statId: 1 },
             include: [
                 { model: Status, as: 'status' },
-                { model: WorkPackage, as: 'workPackage', include: [{ model: Project, as: 'project' }] },
+                {
+                    model: WorkPackage,
+                    as: 'workPackage',
+                    // 2. Le Work Package doit être actif
+                    where: { statId: 1 },
+                    include: [{
+                        model: Project,
+                        as: 'project',
+                        // 3. Le Projet doit être actif
+                        where: { statId: 1 }
+                    }]
+                },
                 { model: RWs, as: 'RWs' },
                 { model: Units, as: 'unit' }
             ]
@@ -67,6 +79,11 @@ export const createTask = async (req: Request, res: Response) => {
             where: { wpId : wpId, [Op.or]: [{ taskName: taskName}] }
         });
         if (existingTask) { return res.status(400).json({"error": "This task name is already used"}); }
+
+        const wp = await WorkPackage.findByPk(wpId, { include: ['project'] });
+        if (!wp || wp.statId !== 1 || (wp as any).project.statId !== 1) {
+            return res.status(400).json({ error: "Impossible de créer une tâche : Le projet ou le lot est clôturé." });
+        }
 
         const newTask = await Task.create({
             taskName: taskName, wpId: wpId, taskBudgetHours: budget, startDate: startDate,

@@ -9,6 +9,7 @@ class WorkPackage extends Model {
     public accountNumber!: string;
     public wpTypeId!: number;
     public fatherWPId!: number | null;
+    public statId!: number;
 }
 
 WorkPackage.init(
@@ -19,7 +20,8 @@ WorkPackage.init(
         slug: { type: DataTypes.STRING(255), allowNull: false, unique: true, field: 'Slug' },
         accountNumber: { type: DataTypes.STRING(50), allowNull: false, field: 'AccountNumber' },
         wpTypeId: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false, field: 'WPTypeId' },
-        fatherWPId: { type: DataTypes.INTEGER.UNSIGNED, allowNull: true, field: 'FatherWPId' }
+        fatherWPId: { type: DataTypes.INTEGER.UNSIGNED, allowNull: true, field: 'FatherWPId' },
+        statId: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false, defaultValue: 1, field: 'StatId' }
     },
     { sequelize, tableName: 'WorkPackages', timestamps: false }
 );

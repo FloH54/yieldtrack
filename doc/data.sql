@@ -67,15 +67,15 @@ INSERT INTO ContractHours (UserId, UnitId, StartDate, WeeklyHours) VALUES
 -- ============================================================
 
 -- Création du Projet avec son Slug
-INSERT INTO Projects (ProjectName, Slug, CreatorUserId, StartDate, EndDate) VALUES
-    ('YieldTrack ERP v1', 'yieldtrack-project', 3, '2026-02-01', '2026-12-31');
+INSERT INTO Projects (ProjectName, Slug, CreatorUserId, StartDate, EndDate, StatId) VALUES
+    ('YieldTrack ERP v1', 'yieldtrack-project', 3, '2026-02-01', '2026-12-31',1);
 
 -- Structure des Lots (WorkPackages) incluant les Slugs obligatoires
-INSERT INTO WorkPackages (ProjectId, WPName, Slug, AccountNumber, WPTypeId, FatherWPId) VALUES
-                                                                                            (1, 'Pilotage & Gouvernance', 'pilotage-gouvernance', 'PRJ-2026-MGT', 1, NULL),
-                                                                                            (1, 'Infrastructure & DevOps', 'infra-devops', 'PRJ-2026-INFRA', 4, 1),
-                                                                                            (1, 'Développement Core', 'dev-core', 'PRJ-2026-DEV', 2, 1),
-                                                                                            (1, 'UX/UI Design', 'ux-ui-design', 'PRJ-2026-DSGN', 3, 1);
+INSERT INTO WorkPackages (ProjectId, WPName, Slug, AccountNumber, WPTypeId, FatherWPId, StatId) VALUES
+                                                                                            (1, 'Pilotage & Gouvernance', 'pilotage-gouvernance', 'PRJ-2026-MGT', 1, NULL,1),
+                                                                                            (1, 'Infrastructure & DevOps', 'infra-devops', 'PRJ-2026-INFRA', 4, 1,1),
+                                                                                            (1, 'Développement Core', 'dev-core', 'PRJ-2026-DEV', 2, 1,1),
+                                                                                            (1, 'UX/UI Design', 'ux-ui-design', 'PRJ-2026-DSGN', 3, 1,1);
 
 -- ============================================================
 -- 4. CONTRIBUTEURS (RÔLES SUR LE PROJET)

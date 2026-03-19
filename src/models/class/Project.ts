@@ -10,6 +10,7 @@ class Project extends Model {
     public endDate!: Date | null;
     public createdAt!: Date;
     public updatedAt!: Date;
+    public statId!: number;
 }
 
 Project.init(
@@ -21,7 +22,8 @@ Project.init(
         startDate: { type: DataTypes.DATEONLY, allowNull: true, field: 'StartDate' },
         endDate: { type: DataTypes.DATEONLY, allowNull: true, field: 'EndDate' },
         createdAt: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW, field: 'CreatedAt' },
-        updatedAt: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW, field: 'UpdatedAt' }
+        updatedAt: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW, field: 'UpdatedAt' },
+        statId: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false, defaultValue: 1, field: 'StatId' },
     },
     { sequelize, tableName: 'Projects', timestamps: false }
 );

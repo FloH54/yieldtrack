@@ -2,19 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="Création et formulaire de modification pour les users">
-      <change afterPath="$PROJECT_DIR$/src/controllers/userController.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rootes/userRoutes.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/Pages/users.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/modals/create-user.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/modals/edit-user.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/controllers/directorController.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/rootes/directorRoutes.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/Pages/director-projects.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/creation_db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/doc/creation_db.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/doc/data.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/ProjectsList.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/RemainingTasksTable.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/TableInterface.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/TaskFromWP.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/tables/WorkPackagesList.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/sidebar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/sidebar.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/tasksController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/tasksController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/unitsController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/unitsController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/class/Project.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/class/Project.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/class/WorkPackage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/class/WorkPackage.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +109,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-WS-253.31033.133" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-WS-253.32098.39" />
       </set>
     </attachedChunks>
   </component>
@@ -162,7 +161,8 @@
       <workItem from="1773670348650" duration="6000000" />
       <workItem from="1773733294838" duration="18042000" />
       <workItem from="1773760946345" duration="2274000" />
-      <workItem from="1773821331419" duration="6731000" />
+      <workItem from="1773821331419" duration="14698000" />
+      <workItem from="1773912610140" duration="3276000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -372,7 +372,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773763113986</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Création et formulaire de modification pour les users">
+      <option name="closed" value="true" />
+      <created>1773830073864</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1773830073864</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
