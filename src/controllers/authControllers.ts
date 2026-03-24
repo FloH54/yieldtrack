@@ -25,8 +25,7 @@ export const login = async (req: Request, res: Response) => {
             return res.render('login', { error: 'Password incorrect.' });
         };
 
-        // tout est bon, redirection vers le Dashboard
-        console.log(`Connexion réussie pour : ${email}`);
+        await user.update({ LastLoginAt: new Date() });
 
         // Génération du Token
         const token = jwt.sign(

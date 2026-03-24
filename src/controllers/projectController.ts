@@ -129,13 +129,30 @@ export const renderProjectDetails = async (req: Request, res: Response) => {
     const allWPTypes = await WPTypes.findAll();
     const projectWPs = await WorkPackage.findAll({ where: { projectId: project.id } });
 
+    const templateWPs = await WorkPackage.findAll({
+        include: [
+            {
+                model: WPContributor,
+                as: 'contributors',
+                where: { userId: user.id }, // Seulement les WPs où il contribue
+                required: true
+            },
+            {
+                model: Project,
+                as: 'project', // Pour afficher le nom du projet source dans le select
+                attributes: ['projectName']
+            }
+        ]
+    });
+
     res.render('Pages/projectsDetails', {
         user, project, tableId: TABLE_ID, tableTitle: "Work Packages",
         allColumns: WP_COLUMNS, selectedColumns,
         units: await Units.findAll(),
-        allWPTypes, projectWPs, // Envoyés à la vue
+        allWPTypes, projectWPs,
+        templateWPs,
         currentUrl: req.originalUrl,
-        createAction: { label: "New Work Package", icon: "fas fa-plus", modalTarget: "#customWPModal" }
+        createAction: { label: "New Work Package", icon: "fas fa-plus", modalTarget: "#createWPModal" }
     });
 };
 

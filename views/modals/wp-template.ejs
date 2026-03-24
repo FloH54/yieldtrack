@@ -1,0 +1,88 @@
+<div class="modal fade" id="templateWPModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog-centered modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Créer un Work Package depuis un Template</h4>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div id="template-wp-alert"></div>
+            <form action="/wp/create-from-template" id="templateWPForm" method="POST">
+                <input type="hidden" name="projectId" value="<%= project.id %>">
+                <input type="hidden" name="projectSlug" value="<%= project.slug %>">
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <h6>Choisir un Template (Vos Work Packages)</h6>
+                        <select name="sourceWpId" class="form-control" required>
+                            <option value="">-- Sélectionnez un modèle --</option>
+                            <% if (typeof templateWPs !== 'undefined') { %>
+                                <% templateWPs.forEach(twp => { %>
+                                    <option value="<%= twp.id %>">[<%= twp.project.projectName %>] - <%= twp.wpName %></option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <h6>Nom du nouveau Work Package</h6>
+                            <input type="text" name="wpName" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h6>Date de début (Optionnel)</h6>
+                        <input type="date" name="startDate" class="form-control">
+                        <br>
+                        <h6>Date de fin (Optionnel)</h6>
+                        <input type="date" name="endDate" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Générer le Work Package</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('templateWPForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const alertContainer = document.getElementById('template-wp-alert');
+            alertContainer.innerHTML = '';
+
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Génération...';
+
+            const data = Object.fromEntries(new FormData(this).entries());
+
+            try {
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    window.location.href = result.redirect;
+                } else {
+                    alertContainer.innerHTML = `<div class="alert alert-danger m-3">${result.error}</div>`;
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Générer le Work Package';
+                }
+            } catch (err) {
+                alertContainer.innerHTML = `<div class="alert alert-danger m-3">Erreur réseau lors de la création.</div>`;
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Générer le Work Package';
+            }
+        });
+    });
+</script>

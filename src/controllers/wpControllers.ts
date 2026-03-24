@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import {WorkPackage, Task, Status, Project, Units, RWs, Codes} from "../models/Index";
+import {WorkPackage, Task, Status, Project, Units, RWs, Codes, WPContributor} from "../models/Index";
 import { AVAILABLE_COLUMNS } from "./tasksController";
 import {Op} from "sequelize";
+import sequelize from "../config/database";
 
 export const renderWPDetails = async (req: Request, res: Response) => {
     const user = (req as any).user;
@@ -119,5 +120,86 @@ export const updateWP = async (req: Request, res: Response) => {
         res.status(200).json({ success: true });
     } catch (error) {
         res.status(500).json({ error: "Error while updating the Work Package." });
+    }
+};
+
+
+export const createWPFromTemplate = async (req: Request, res: Response) => {
+    const transaction = await sequelize.transaction();
+
+    try {
+        const { sourceWpId, wpName, startDate, endDate, projectId, projectSlug } = req.body;
+        const currentUser = (req as any).user;
+
+        // 1. Récupérer le WP source
+        const sourceWp = await WorkPackage.findByPk(sourceWpId);
+        if (!sourceWp) {
+            await transaction.rollback();
+            return res.status(404).json({ error: "Template Work Package introuvable." });
+        }
+
+        // 2. Générer le slug et vérifier les conflits
+        const generatedSlug = generateSlug(wpName);
+        const existingWP = await WorkPackage.findOne({
+            where: { projectId: projectId, [Op.or]: [{ wpName: wpName }, { slug: generatedSlug }] }
+        });
+
+        if (existingWP) {
+            await transaction.rollback();
+            return res.status(400).json({ error: "Ce nom (ou slug) de Work Package existe déjà dans ce projet." });
+        }
+
+        // 3. Créer le nouveau Work Package
+        const newWp = await WorkPackage.create({
+            wpName: wpName,
+            slug: generatedSlug,
+            startDate: startDate || null,
+            endDate: endDate || null,
+            projectId: projectId,
+            accountNumber: "Template-" + sourceWp.accountNumber, // Par défaut
+            wpTypeId: sourceWp.wpTypeId, // Hérite du type source
+            fatherWPId: null,
+            statId: 1
+        }, { transaction });
+
+        // Ajouter le créateur comme contributeur par défaut sur le nouveau WP
+        await WPContributor.create({
+            wpId: newWp.id,
+            userId: currentUser.id,
+            profileId: 3 // ID du profil Program Manager/Leader
+        }, { transaction });
+
+        // 4. Récupérer et dupliquer les tâches
+        const sourceTasks = await Task.findAll({ where: { wpId: sourceWpId } });
+
+        if (sourceTasks.length > 0) {
+            const newTasks = sourceTasks.map(task => ({
+                wpId: newWp.id,
+                taskName: task.taskName,
+                taskBudgetHours: task.taskBudgetHours,
+                unitId: task.unitId,
+                taskFUPTypeId: task.taskFUPTypeId,
+                Priority: task.priority,
+                // --- ON RÉINITIALISE CES VALEURS ---
+                statId: 1, // Remis à Actif
+                assigneeUserId: null, // Personne n'est assigné
+                startDate: null, // Reset des dates
+                endDate: null,
+                CodeId: null
+            }));
+
+            // BulkCreate insère toutes les tâches d'un coup
+            await Task.bulkCreate(newTasks, { transaction });
+        }
+
+        // 5. Tout s'est bien passé, on valide la transaction
+        await transaction.commit();
+        res.status(200).json({ redirect: `/project/${projectSlug}` });
+
+    } catch (error) {
+        // En cas d'erreur, on annule tout ce qui a été fait
+        await transaction.rollback();
+        console.error("Erreur Création WP depuis Template :", error);
+        res.status(500).json({ error: "Erreur serveur lors de la génération du Work Package." });
     }
 };

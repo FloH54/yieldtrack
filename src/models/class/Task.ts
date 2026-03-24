@@ -16,6 +16,7 @@ class Task extends Model {
     declare statId: number;
     declare taskFUPTypeId: number | null;
     declare unitId: number
+    declare priority: number | null;
 
     // Propriétés d'association (peuplées par les 'include')
     declare status?: Status;
@@ -36,7 +37,7 @@ Task.init(
         taskBudgetHours: { type: DataTypes.INTEGER.UNSIGNED, allowNull: true, field: 'taskBudgetHours' },
         CodeId: { type: DataTypes.INTEGER.UNSIGNED, allowNull: true, field: 'CodeId' },
         statId: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false, field: 'StatId' },
-        Priority: { type: DataTypes.INTEGER, allowNull: true, field: 'Priority' },
+        priority: { type: DataTypes.INTEGER, allowNull: true, field: 'Priority' },
         CreatedAt: { type: DataTypes.DATE, field: 'CreatedAt' },
         UpdatedAt: { type: DataTypes.DATE, field: 'UpdatedAt' },
         unitId: { type: DataTypes.INTEGER.UNSIGNED, allowNull: true, field: 'UnitId' },
