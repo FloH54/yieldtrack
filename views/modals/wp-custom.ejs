@@ -9,7 +9,6 @@
             </div>
             <div id="alert-container"></div>
             <form action="/wp/create" id="customWPForm" method="POST">
-                <!--Partie Invisble pour le formulaire-->
                 <input type="hidden" name="projectId" value="<%= project.id %>">
                 <input type="hidden" name="projectSlug" value="<%= project.slug %>">
                 <input type="hidden" name="fatherWPId" value="<%= typeof parentWP !== 'undefined' ? parentWP.id : '' %>">
@@ -19,18 +18,14 @@
                             <h6>Work Package Name</h6>
                             <input type="text" name="wpName" id="wp_name" class="form-control" required>
                         </div>
-                        <div class="col-md-6 form-group">
-                            <h6>Slug (URL name)</h6>
-                            <input type="text" name="slug" id="wp_slug" class="form-control" required>
-                        </div>
                     </div>
 
                     <div class="form-group">
                         <h6>Start Date</h6>
-                        <input type="date" name="startDate" id="start_date" class="form-control" required>
+                        <input type="date" name="startDate" id="start_date" class="form-control">
                         <br>
                         <h6>End Date</h6>
-                        <input type="date" name="endDate" id="end_date" class="form-control" required>
+                        <input type="date" name="endDate" id="end_date" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -41,26 +36,22 @@
         </div>
     </div>
 </div>
-</div>
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('customWPForm');
         const nameInput = document.getElementById('wp_name');
-        const slugInput = document.getElementById('wp_slug');
         const startInput = document.getElementById('start_date');
         const endInput = document.getElementById('end_date');
         const alertContainer = document.getElementById('alert-container');
 
-        // GÉNÉRATION AUTOMATIQUE DU SLUG
         nameInput.addEventListener('input', function() {
             const slug = this.value
                 .toLowerCase()
-                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Enlever accents
-                .replace(/[^a-z0-9]/g, '-')                      // Remplacer spécial par -
-                .replace(/-+/g, '-')                             // Éviter doubles --
-                .replace(/^-|-$/g, '');                          // Nettoyer début/fin
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9]/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '');
             slugInput.value = slug;
         });
 
@@ -71,10 +62,9 @@
             }
         });
 
-        // SOUMISSION AJAX (FETCH) ET ALERTES
         form.addEventListener('submit', async function(e) {
-            e.preventDefault(); // BLOQUE LE RECHARGEMENT DE PAGE
-            alertContainer.innerHTML = ''; // Nettoyer les anciennes erreurs
+            e.preventDefault();
+            alertContainer.innerHTML = '';
 
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
@@ -89,10 +79,8 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    // Si succès (200), on redirige via JS
                     window.location.href = result.redirect;
                 } else {
-                    // Si erreur (400, 500), on affiche l'alerte sans quitter la modale
                     alertContainer.innerHTML = `
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <i class="fas fa-exclamation-triangle mr-2"></i> ${result.error}
@@ -104,9 +92,9 @@
                 }
             } catch (err) {
                 console.error("Erreur réseau :", err);
-                alertContainer.innerHTML = `<div class="alert alert-danger">Erreur de connexion au serveur.</div>`;
+                // Traduit en anglais
+                alertContainer.innerHTML = `<div class="alert alert-danger">Server connection error.</div>`;
             }
         });
     });
 </script>
-

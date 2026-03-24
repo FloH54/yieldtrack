@@ -7,7 +7,8 @@ export const DIRECTOR_PROJECT_COLUMNS = [
     { id: 'creator', label: "Manager" },
     { id: 'startDate', label: "Start Date" },
     { id: 'endDate', label: "End Date" },
-    { id: 'status', label: "Status" }
+    { id: 'status', label: "Status" },
+    { id: 'createdAt', label: "Created At" }
 ];
 
 export const renderDirectorProjects = async (req: Request, res: Response) => {

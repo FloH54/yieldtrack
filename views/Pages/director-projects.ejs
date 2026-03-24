@@ -47,6 +47,10 @@
                 }
             },
             {
+                data: 'createdAt', name: 'createdAt', title: 'Created At',
+                render: function(data){ return data ? new Date(data).toLocaleDateString() : '-'; }
+            },
+            {
                 data: null, name: 'actions', title: 'Actions', orderable: false,
                 render: function(data, type, row) {
                     const icon = row.statId === 1 ? 'fa-lock text-danger' : 'fa-lock-open text-success';

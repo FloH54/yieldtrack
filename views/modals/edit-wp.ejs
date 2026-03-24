@@ -40,10 +40,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <h6>Slug (URL name)</h6>
-                        <input type="text" name="slug" id="edit_wp_slug" class="form-control" required>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -60,10 +56,15 @@
             const button = $(event.relatedTarget);
             $('#edit_wp_id').val(button.data('id'));
             $('#edit_wp_name').val(button.data('name'));
-            $('#edit_wp_slug').val(button.data('slug'));
             $('#edit_wp_account').val(button.data('account'));
             $('#edit_wp_type').val(button.data('type'));
             $('#edit_wp_father').val(button.data('father'));
+        });
+
+        // NOUVEAU : Auto-génération du slug lors de l'édition
+        document.getElementById('edit_wp_name').addEventListener('input', function() {
+            const slug = this.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+            document.getElementById('edit_wp_slug').value = slug;
         });
 
         document.getElementById('editWPForm').addEventListener('submit', async function(e) {
@@ -82,7 +83,10 @@
                     const res = await response.json();
                     alertContainer.innerHTML = `<div class="alert alert-danger m-3">${res.error}</div>`;
                 }
-            } catch (err) { alertContainer.innerHTML = `<div class="alert alert-danger m-3">Server Error.</div>`; }
+            } catch (err) {
+                // Traduit en anglais
+                alertContainer.innerHTML = `<div class="alert alert-danger m-3">Server connection error.</div>`;
+            }
         });
     });
 </script>

@@ -37,9 +37,29 @@
                     return `<a href="/project/${row.slug}">${data}</a>`;
                 }
             },
+            {
+                data: 'creator',
+                name: 'manager',
+                title: 'Manager',
+                render: function(data) {
+                    return data ? `${data.firstName} ${data.lastName}` : 'Unassigned';
+                }
+            },
             { data: 'slug', name: 'slug', title: 'Slug' },
             { data: 'startDate', name: 'start', title: 'Start Date', defaultContent: "N/A" },
             { data: 'endDate', name: 'end', title: 'End Date', defaultContent: "N/A" },
+            {
+                data: 'statId', name: 'status', title: 'Status',
+                render: function(data) {
+                    if (data === 1) return '<span class="badge badge-success">Actif</span>';
+                    if (data === 4) return '<span class="badge badge-secondary">Clôturé</span>';
+                    return `<span class="badge badge-warning">Statut ${data}</span>`;
+                }
+            },
+            {
+                data: 'createdAt', name: 'createdAt', title: 'Created At',
+                render: function(data) { return data ? new Date(data).toLocaleDateString() : "-"; }
+            },
             {
                 // Colonne générée dynamiquement pour les actions
                 data: null, name: 'actions', title: 'Actions', orderable: false,

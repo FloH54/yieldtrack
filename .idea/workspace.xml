@@ -1,19 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="Création et formulaire de modification pour les users">
-      <change afterPath="$PROJECT_DIR$/src/controllers/directorController.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rootes/directorRoutes.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/Pages/director-projects.ejs" afterDir="false" />
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="Sécurisation des routes, ajout du remaining work">
+      <change afterPath="$PROJECT_DIR$/src/rootes/unitRoutes.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/modals/add-rw.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/modals/assign-user-unit.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/modals/create-unit.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/modals/rw-history.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/modals/wp-template.ejjs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/doc/creation_db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/doc/creation_db.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/doc/data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/bcrypt/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/bcrypt/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/body-parser/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/body-parser/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/connect/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/connect/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/cookie-parser/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/cookie-parser/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/debug/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/debug/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/express-serve-static-core/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/express-serve-static-core/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/express/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/express/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/geojson/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/geojson/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/http-errors/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/http-errors/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/jsonwebtoken/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/jsonwebtoken/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/ms/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/ms/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/node/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/node/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/qs/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/qs/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/range-parser/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/range-parser/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/send/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/send/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/serve-static/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/serve-static/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/strip-bom/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/strip-bom/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/strip-bom/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/strip-bom/index.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/strip-json-comments/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/strip-json-comments/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/@types/validator/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/@types/validator/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/mariadb/node_modules/@types/node/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/mariadb/node_modules/@types/node/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/typescript/LICENSE.txt" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/typescript/LICENSE.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/typescript/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/typescript/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/typescript/ThirdPartyNoticeText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/typescript/ThirdPartyNoticeText.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/validator/es/lib/isVAT.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/validator/es/lib/isVAT.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/validator/lib/isVAT.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/validator/lib/isVAT.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/validator/validator.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/validator/validator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/LICENSE.txt" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/LICENSE.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/dist/wkx.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/dist/wkx.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/binaryreader.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/binaryreader.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/binarywriter.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/binarywriter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/geometry.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/geometry.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/geometrycollection.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/geometrycollection.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/linestring.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/linestring.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/multilinestring.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/multilinestring.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/multipoint.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/multipoint.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/multipolygon.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/multipolygon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/point.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/point.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/polygon.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/polygon.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/types.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/types.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/wktparser.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/wktparser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/wkx.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/wkx.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/wkx.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/wkx.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/lib/zigzag.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/lib/zigzag.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/wkx/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/wkx/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/vendor/chart.js/Chart.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/vendor/chart.js/Chart.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/vendor/chart.js/Chart.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/vendor/chart.js/Chart.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/directorController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/directorController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/projectController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/projectController.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/tasksController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/tasksController.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/unitsController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/unitsController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/userController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/userController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/wpControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/wpControllers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middlewares/roleMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/roleMiddleware.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/Index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/class/Project.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/class/Project.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/class/WorkPackage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/class/WorkPackage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/class/RWs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/class/RWs.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rootes/directorRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/directorRoutes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rootes/userRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/userRoutes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/allocation.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/allocation.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/director-projects.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/director-projects.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/projects.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projects.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/remaining.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/remaining.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/users.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/users.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/wpDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/wpDetails.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/create-user.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/create-user.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/edit-project.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/edit-project.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/edit-user.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/edit-user.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/edit-wp.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/edit-wp.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/projects.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/projects.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/wp-custom.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/wp-custom.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/sidebar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/sidebar.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,29 +131,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;JavaScript Debug.localhost:3000.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Node.js.app.ts.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;22.22.0&quot;,
-    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;22.19.11&quot;,
-    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/floflow/dev/yieldtrack/views/Pages&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/home/floflow/dev/yieldtrack/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "JavaScript Debug.localhost:3000.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Node.js.app.ts.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "javascript.nodejs.core.library.configured.version": "22.22.1",
+    "javascript.nodejs.core.library.typings.version": "22.19.15",
+    "javascript.preferred.runtime.type.id": "node",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/home/flofloz/dev/yieldtrack",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "/home/flofloz/dev/yieldtrack/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/views/Pages" />
@@ -112,6 +193,9 @@
         <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-WS-253.32098.39" />
       </set>
     </attachedChunks>
+  </component>
+  <component name="StructureViewState">
+    <option name="selectedTab" value="HTML" />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -162,7 +246,13 @@
       <workItem from="1773733294838" duration="18042000" />
       <workItem from="1773760946345" duration="2274000" />
       <workItem from="1773821331419" duration="14698000" />
-      <workItem from="1773912610140" duration="3276000" />
+      <workItem from="1773912610140" duration="3404000" />
+      <workItem from="1773939585862" duration="1687000" />
+      <workItem from="1773995419530" duration="1564000" />
+      <workItem from="1773997010837" duration="351000" />
+      <workItem from="1774009334792" duration="696000" />
+      <workItem from="1774010474248" duration="6682000" />
+      <workItem from="1774336728590" duration="28325000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -380,7 +470,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773830073864</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Backup">
+      <option name="closed" value="true" />
+      <created>1773917954897</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1773917954897</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -398,8 +496,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Push de base" />
-    <MESSAGE value="[mod] Gestion du logout (suppression des cookies)" />
     <MESSAGE value="[mod] Affichage du nom de l'utilisateur dans la top bar" />
     <MESSAGE value="[update] factorisation des composant graphique" />
     <MESSAGE value="[update] partition de création" />
@@ -423,6 +519,20 @@
     <MESSAGE value="Fin de la page d'attribution" />
     <MESSAGE value="Formulaire de modification" />
     <MESSAGE value="Création et formulaire de modification pour les users" />
-    <option name="LAST_COMMIT_MESSAGE" value="Création et formulaire de modification pour les users" />
+    <MESSAGE value="Backup" />
+    <MESSAGE value="Sécurisation des routes, ajout du remaining work" />
+    <option name="LAST_COMMIT_MESSAGE" value="Sécurisation des routes, ajout du remaining work" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/controllers/tasksController.ts</url>
+          <line>31</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

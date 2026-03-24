@@ -235,14 +235,18 @@ CREATE TABLE IF NOT EXISTS TaskComments (
 
 -- Temps réalisé (Timesheet)
 CREATE TABLE IF NOT EXISTS RWs (
-                                   RWId INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                                   TaskId INT UNSIGNED NOT NULL,
-                                   UserId INT UNSIGNED NOT NULL,
-                                   RWDate DATE NOT NULL,
-                                   RWHours INT UNSIGNED NOT NULL,
-                                   PRIMARY KEY (RWId),
-    UNIQUE KEY UK_RWs_Task_User_Date (TaskId, UserId, RWDate),
+    RWId INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    TaskId INT UNSIGNED NOT NULL,
+    UserId INT UNSIGNED NOT NULL,
+    RWDate DATETIME NOT NULL,            -- Modifié : DATE -> DATETIME pour inclure l'heure
+    RWHours INT UNSIGNED NOT NULL,
+    CodeId INT UNSIGNED NULL,            -- Correction de la structure
+    Comment TEXT NULL,                   -- Correction de la structure
+    PRIMARY KEY (RWId),
+    -- UNIQUE KEY UK_RWs_Task_User_Date SUPPRIMÉE pour permettre plusieurs saisies/jour
+    KEY IX_RWs_TaskId (TaskId),
     KEY IX_RWs_UserId (UserId),
     CONSTRAINT FK_RWs_Task FOREIGN KEY (TaskId) REFERENCES Tasks (TaskId) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT FK_RWs_User FOREIGN KEY (UserId) REFERENCES Users (UserId) ON DELETE CASCADE ON UPDATE CASCADE
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    CONSTRAINT FK_RWs_User FOREIGN KEY (UserId) REFERENCES Users (UserId) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FK_RWs_Code FOREIGN KEY (CodeId) REFERENCES Codes (CodeId) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

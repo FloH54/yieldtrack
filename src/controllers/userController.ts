@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { User, Profiles } from "../models/Index";
+import {User, Profiles, Units} from "../models/Index";
+import {UserToUnits} from "../models/class/UserToUnits";
 
 export const USER_COLUMNS = [
     { id: 'id', label: "ID" },
@@ -8,7 +9,10 @@ export const USER_COLUMNS = [
     { id: 'lastName', label: "Last Name" },
     { id: 'email', label: "Email" },
     { id: 'profiles', label: "Profiles" },
-    { id: 'status', label: "Status" }
+    { id: 'units', label: "Units" },
+    { id: 'status', label: "Status" },
+    { id: 'createdAt', label: "Created At" },
+    { id: 'lastLogin', label: "Last Login" }
 ];
 
 export const renderUsersPage = async (req: Request, res: Response) => {
@@ -17,7 +21,15 @@ export const renderUsersPage = async (req: Request, res: Response) => {
     const selectedColumns = (req as any).tablePreferences[TABLE_ID] || ['firstName', 'lastName', 'email', 'profiles', 'status'];
 
     // On récupère les profils pour le menu déroulant multiple de la modale
-    const allProfiles = await Profiles.findAll();
+    const isAdmin = user.profiles.some((p: any) => ['Administrateur'].includes(p.profileName || p.ProfileName || p.name));
+
+// Filtrer les profils à envoyer à la vue
+    let allProfiles = await Profiles.findAll();
+    if (!isAdmin) {
+        // ID 1 correspond à l'Admin d'après votre data.sql
+        allProfiles = allProfiles.filter(p => p.id !== 1 && p.ProfileId !== 1);
+    }
+    const allUnits = await Units.findAll();
 
     res.render('Pages/users', {
         user,
@@ -26,6 +38,7 @@ export const renderUsersPage = async (req: Request, res: Response) => {
         allColumns: USER_COLUMNS,
         selectedColumns,
         allProfiles,
+        allUnits,
         currentUrl: req.originalUrl,
         createAction: { label: "New User", icon: "fas fa-user-plus", modalTarget: "#createUserModal" }
     });
@@ -34,7 +47,10 @@ export const renderUsersPage = async (req: Request, res: Response) => {
 export const getUsersData = async (req: Request, res: Response) => {
     try {
         const users = await User.findAll({
-            include: [{ model: Profiles, as: 'profiles' }]
+            include: [
+                { model: Profiles, as: 'profiles' },
+                { model: Units }
+            ]
         });
         res.json({ data: users });
     } catch (error) {
@@ -44,7 +60,7 @@ export const getUsersData = async (req: Request, res: Response) => {
 
 export const createUser = async (req: Request, res: Response) => {
     try {
-        const { firstName, lastName, email, password, profiles } = req.body;
+        const { firstName, lastName, email, password, profiles, units } = req.body;
 
         // Vérification si l'email existe déjà
         const existingUser = await User.findOne({ where: { email } });
@@ -65,6 +81,17 @@ export const createUser = async (req: Request, res: Response) => {
         // Attribution des profils (profiles provient d'un select multiple, c'est donc un tableau d'IDs)
         if (profiles && profiles.length > 0) {
             await (newUser as any).setProfiles(profiles);
+        }
+        // Attribution des units (//)
+        if (units && units.length > 0) {
+            const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
+            const unitAssignments = units.map((uId: string) => ({
+                userId: newUser.id,
+                unitId: parseInt(uId),
+                startDate: today,
+                weeklyHours: 0
+            }));
+            await UserToUnits.bulkCreate(unitAssignments);
         }
 
         res.status(200).json({ redirect: '/users' });
@@ -96,7 +123,7 @@ export const toggleUserStatus = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
     try {
-        const { id, firstName, lastName, email, profiles } = req.body;
+        const { id, firstName, lastName, email, profiles, units } = req.body;
 
         const targetUser = await User.findByPk(id);
         if (!targetUser) return res.status(404).json({ error: "User not found" });
@@ -122,6 +149,19 @@ export const updateUser = async (req: Request, res: Response) => {
         } else {
             // Si l'admin a tout désélectionné, on vide les profils
             await (targetUser as any).setProfiles([]);
+        }
+
+        await UserToUnits.destroy({ where: { userId: targetUser.id } }); // On supprime les anciennes
+        if (units) {
+            const unitIds = Array.isArray(units) ? units : [units];
+            const today = new Date().toISOString().split('T')[0];
+            const unitAssignments = unitIds.map((uId: string) => ({
+                userId: targetUser.id,
+                unitId: parseInt(uId),
+                startDate: today,
+                weeklyHours: 0
+            }));
+            await UserToUnits.bulkCreate(unitAssignments); // On insère les nouvelles
         }
 
         res.status(200).json({ success: true });

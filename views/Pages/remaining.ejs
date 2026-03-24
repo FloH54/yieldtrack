@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('../partials/header')%>
+<style>
+    /* Met en surbrillance les lignes modifiées non sauvegardées */
+    .row-modified { background-color: #e8f4f8 !important; }
+</style>
 <body id="page-top">
 <div id="wrapper">
     <%- include('../partials/sidebar')%>
@@ -8,6 +12,13 @@
         <div id="content">
             <%- include('../partials/topbar')%>
             <div class="container-fluid">
+
+                <div class="d-flex justify-content-end mb-3">
+                    <button id="btn-validate-all" class="btn btn-success font-weight-bold shadow" style="display: none;">
+                        <i class="fas fa-check-double"></i> Valider les Remaining Works (<span id="rw-count">0</span>)
+                    </button>
+                </div>
+
                 <%- include('../partials/dynamic_table')%>
             </div>
         </div>
@@ -18,45 +29,161 @@
 <%- include('../modals/logout')%>
 <%- include('../modals/archive-task.ejs')%>
 <%- include('../modals/task.ejs')%>
-
+<%- include('../modals/add-rw.ejs')%>
 <script>
     $(document).ready(function() {
         const prefs = <%- JSON.stringify(selectedColumns) %>;
+        let pendingRWUpdates = {};
+
+        // Helper function to get the latest RW safely
+        function getLatestRW(rws) {
+            if (!rws || rws.length === 0) return null;
+            return rws.reduce((prev, current) => (prev.rwId > current.rwId) ? prev : current);
+        }
 
         const columnsDefinition = [
             { data: 'id', name: 'id', title: 'ID' },
             { data: 'workPackage.project.projectName', name: 'project', title: 'Project', defaultContent: "N/A" },
             { data: 'workPackage.wpName', name: 'wpName', title: 'Work Package', defaultContent: "N/A" },
             { data: 'taskName', name: 'taskName', title: 'Task Name' },
-            { data: 'status.statName', name: 'status', title: 'Statut', defaultContent: "N/A" },
-            { data: 'Priority', name: 'priority', title: 'Priority', defaultContent: "N/A" },
+            { data: 'status.statName', name: 'status', title: 'Status', defaultContent: "N/A" },
             { data: 'taskBudgetHours', name: 'budget', title: 'Budget (h)', defaultContent: "0" },
-            { data: 'unit.unitName', name: 'unit', title: 'Unit', defaultContent: "N/A" },
-            // COLONNE DES ACTIONS AVEC VOS BOUTONS
+
+            // ==========================================
+            // RW-1 COLUMNS (Static History)
+            // ==========================================
             {
-                data: null, name: 'actions', title: 'Actions', orderable: false,
+                data: null, name: 'rw1Hours', title: 'RW-1 (Hours)',
+                render: function(data, type, row) {
+                    const latestRW = getLatestRW(row.RWs);
+                    return latestRW ? `<span class="font-weight-bold text-primary">${latestRW.rwHours} h</span>`
+                        : `<span class="text-muted">${row.taskBudgetHours || 0} h (Budget)</span>`;
+                }
+            },
+
+
+            // ==========================================
+            // CURRENT RW COLUMNS (Dynamic)
+            // ==========================================
+            {
+                data: null, name: 'rwCurrentHours', title: 'Current RW (Hours)',
+                render: function(data, type, row) {
+                    const latestRW = getLatestRW(row.RWs);
+                    const val = latestRW ? `<span class="font-weight-bold text-primary">${latestRW.rwHours} h</span>` : `<span class="text-muted">${row.taskBudgetHours || 0} h</span>`;
+                    return `<div id="rw-current-hours-${row.id}">${val}</div>`;
+                }
+            },
+            {
+                data: null, name: 'rwCurrentCode', title: 'Current RW (Code)',
+                render: function(data, type, row) {
+                    const latestRW = getLatestRW(row.RWs);
+                    const val = (latestRW && latestRW.code) ? `<span class="badge badge-secondary">${latestRW.code.codeName}</span>` : '-';
+                    return `<div id="rw-current-code-${row.id}">${val}</div>`;
+                }
+            },
+            {
+                data: null, name: 'rwCurrentComment', title: 'Current RW (Comment)',
+                render: function(data, type, row) {
+                    const latestRW = getLatestRW(row.RWs);
+                    const val = (latestRW && latestRW.comment) ? `<small class="text-muted">${latestRW.comment}</small>` : '-';
+                    return `<div id="rw-current-comment-${row.id}">${val}</div>`;
+                }
+            },
+
+            // ==========================================
+            // ACTION COLUMN
+            // ==========================================
+            {
+                data: null, name: 'addrw', title: 'Action', orderable: false,
                 render: function(data, type, row) {
                     return `
-                        <div class="dropdown no-arrow d-inline">
-                            <a class="btn btn-link btn-sm dropdown-toggle" href="#" data-toggle="dropdown">
-                                <i class="fas fa-pen text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow">
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#editModal" data-id="${row.id}" data-name="${row.taskName}">
-                                    <i class="fas fa-pen fa-fw mr-2"></i> Edit
-                                </a>
-                                <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#archiveTaskModal" data-id="${row.id}" data-name="${row.taskName}">
-                                    <i class="fas fa-trash fa-fw mr-2"></i> Archive It
-                                </a>
-                            </div>
-                        </div>
+                        <button class="btn btn-sm btn-info btn-open-rw"
+                                data-id="${row.id}" data-name="${row.taskName}"
+                                data-toggle="modal" data-target="#addRWModal">
+                            <i class="fas fa-upload"></i> Update
+                        </button>
                     `;
                 }
             }
         ];
 
-        // Lancement !
         initYieldtrackTable('<%= tableId %>', '/remaining/api/data', columnsDefinition, prefs);
+
+        // OUVRE LA MODALE ET PRÉ-REMPLI LES INFOS
+        $('#addRWModal').on('show.bs.modal', function (event) {
+            const button = $(event.relatedTarget);
+            $('#rw-task-id').val(button.data('id'));
+            $('#rw-task-name').text(button.data('name'));
+
+            $('#rw-hours').val('');
+            $('#rw-code-id').val('');
+            $('#rw-comment').val('');
+        });
+
+        // SOUMISSION DE LA MODALE (SAUVEGARDE TEMPORAIRE EN JS)
+        $('#form-add-rw').on('submit', function(e) {
+            e.preventDefault();
+            const taskId = $('#rw-task-id').val();
+            const hours = $('#rw-hours').val();
+            const codeId = $('#rw-code-id').val();
+            const comment = $('#rw-comment').val();
+
+            const codeName = codeId ? $('#rw-code-id option:selected').text() : null;
+            const nowStr = new Date().toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+            // Stocke la saisie
+            pendingRWUpdates[taskId] = {
+                taskId: taskId,
+                rwHours: hours,
+                codeId: codeId,
+                comment: comment
+            };
+
+            // Mise à jour de CHAQUE cellule individuellement
+            $(`#rw-current-hours-${taskId}`).html(`<span class="font-weight-bold text-success">${hours} h</span> <span class="badge badge-warning ml-1">Pending</span>`);
+            $(`#rw-current-date-${taskId}`).html(`<span class="text-success">${nowStr}</span>`);
+            $(`#rw-current-code-${taskId}`).html(codeName ? `<span class="badge badge-info">${codeName}</span>` : '-');
+            $(`#rw-current-comment-${taskId}`).html(comment ? `<small class="text-muted">${comment}</small>` : '-');
+
+            // Met la ligne en surbrillance
+            $(`#rw-current-hours-${taskId}`).closest('tr').addClass('row-modified');
+
+            // Affiche le bouton global
+            $('#btn-validate-all').fadeIn();
+            $('#rw-count').text(Object.keys(pendingRWUpdates).length);
+
+            $('#addRWModal').modal('hide');
+        });
+
+        // CLIC SUR LE BOUTON VERT GLOBAL "VALIDER"
+        $('#btn-validate-all').on('click', async function() {
+            const updatesArray = Object.values(pendingRWUpdates);
+            if(updatesArray.length === 0) return;
+
+            const btn = $(this);
+            btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Saving...');
+
+            try {
+                const response = await fetch('/remaining/bulk-rw', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ updates: updatesArray })
+                });
+
+                if (response.ok) {
+                    pendingRWUpdates = {};
+                    btn.hide().prop('disabled', false).html('<i class="fas fa-check-double"></i> Validate Remaining Works (<span id="rw-count">0</span>)');
+                    $('#<%= tableId %>').DataTable().ajax.reload(null, false);
+                } else {
+                    alert("Error while saving data.");
+                    btn.prop('disabled', false);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Network error");
+                btn.prop('disabled', false);
+            }
+        });
     });
 </script>
 </body>

@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <h1 class="h3 mb-4 text-gray-800">Work Package : <%- wp.wpName %></h1>
                 <%- include('../partials/dynamic_table') %>
-                <a href="/project/<%= projectSlug %>" class="btn btn-secondary mt-3"> Back to Work Packages</a>
+                <a href="/project/<%= projectSlug %>" class="btn btn-secondary mt-3"> Retour aux Work Packages</a>
             </div>
         </div>
         <%- include('../partials/footer')%>
@@ -21,36 +21,182 @@
 <%- include('../modals/task.ejs') %>
 <%- include('../modals/archive-task.ejs')%>
 <%- include('../modals/edit-task.ejs')%>
-
+<%- include('../modals/rw-history.ejs')%>
 <script>
     $(document).ready(function() {
         const prefs = <%- JSON.stringify(selectedColumns) %>;
+        let pendingRWUpdates = {};
+
+        // Fonction utilitaire pour générer le HTML complet d'un Remaining Work
+        function formatRWCell(rwData, isPending = false) {
+            if (!rwData) return '<em class="text-muted">Aucune saisie</em>';
+
+            const dateObj = new Date(rwData.rwDate);
+            const dateStr = dateObj.toLocaleString('fr-FR', {
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+
+            const codeStr = rwData.codeName ? `<span class="badge badge-info ml-1">${rwData.codeName}</span>` : '';
+            const commentStr = rwData.comment ? `<br><small class="text-muted"><i class="fas fa-comment"></i> ${rwData.comment}</small>` : '';
+
+            // Si c'est une saisie en attente (non validée), on change les couleurs
+            const colorClass = isPending ? 'text-success' : 'text-primary';
+            const pendingBadge = isPending ? '<span class="badge badge-warning ml-1">Non Validé</span>' : '';
+
+            return `
+                <div>
+                    <span class="font-weight-bold ${colorClass}">${rwData.rwHours} h</span>
+                    <small class="text-muted ml-1">${dateStr}</small>
+                    ${codeStr} ${pendingBadge}
+                    ${commentStr}
+                </div>
+            `;
+        }
 
         const columnsDefinition = [
             { data: 'id', name: 'id', title: 'ID' },
+            { data: 'workPackage.project.projectName', name: 'project', title: 'Project', defaultContent: "N/A" },
+            { data: 'workPackage.wpName', name: 'wpName', title: 'Work Package', defaultContent: "N/A" },
             { data: 'taskName', name: 'taskName', title: 'Task Name' },
             { data: 'status.statName', name: 'status', title: 'Statut', defaultContent: "N/A" },
-            { data: 'Priority', name: 'priority', title: 'Priority', defaultContent: "N/A" },
             { data: 'taskBudgetHours', name: 'budget', title: 'Budget (h)', defaultContent: "0" },
+
+            // --- COLONNE : RW-1 (Historique validé) ---
             {
-                data: null, name: 'actions', title: 'Actions', orderable: false,
+                data: null, name: 'rw1', title: 'RW-1',
+                render: function(data, type, row) {
+                    if (row.RWs && row.RWs.length > 0) {
+                        const latestRW = row.RWs.reduce((prev, current) => (prev.rwId > current.rwId) ? prev : current);
+                        // On formate les données pour la fonction utilitaire
+                        const formattedData = {
+                            rwHours: latestRW.rwHours,
+                            rwDate: latestRW.rwDate,
+                            codeName: latestRW.code ? latestRW.code.codeName : null,
+                            comment: latestRW.comment
+                        };
+                        return formatRWCell(formattedData);
+                    }
+                    return `<span class="text-muted">${row.taskBudgetHours || 0} h (Budget initial)</span>`;
+                }
+            },
+
+            // --- COLONNE : RW ACTUEL (Dynamique) ---
+            {
+                data: null, name: 'rwCurrent', title: 'RW Actuel',
+                render: function(data, type, row) {
+                    // Par défaut, le RW Actuel est identique au RW-1
+                    let htmlContent = '';
+                    if (row.RWs && row.RWs.length > 0) {
+                        const latestRW = row.RWs.reduce((prev, current) => (prev.rwId > current.rwId) ? prev : current);
+                        htmlContent = formatRWCell({
+                            rwHours: latestRW.rwHours,
+                            rwDate: latestRW.rwDate,
+                            codeName: latestRW.code ? latestRW.code.codeName : null,
+                            comment: latestRW.comment
+                        });
+                    } else {
+                        htmlContent = `<span class="text-muted">${row.taskBudgetHours || 0} h (Budget initial)</span>`;
+                    }
+                    // On enveloppe dans une div avec un ID unique pour pouvoir la cibler en jQuery
+                    return `<div id="rw-current-cell-${row.id}">${htmlContent}</div>`;
+                }
+            },
+
+            // --- COLONNE : BOUTON ADD RW ---
+            {
+                data: null, name: 'addrw', title: 'Action', orderable: false,
                 render: function(data, type, row) {
                     return `
-                        <div class="dropdown no-arrow d-inline">
-                            <a class="btn btn-link btn-sm dropdown-toggle" href="#" data-toggle="dropdown">
-                                <i class="fas fa-pen text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow">
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#archiveTaskModal" data-id="${row.id}" data-name="${row.taskName}">
-                                    <i class="fas fa-trash fa-fw mr-2"></i> Archive
-                                </a>
-                            </div>
-                        </div>`;
+                        <button class="btn btn-sm btn-info btn-open-rw"
+                                data-id="${row.id}" data-name="${row.taskName}"
+                                data-toggle="modal" data-target="#addRWModal">
+                            <i class="fas fa-edit"></i> Saisir
+                        </button>
+                    `;
                 }
             }
         ];
 
-        initYieldtrackTable('<%= tableId %>', '/project/<%= projectSlug %>/wp/<%= wp.slug %>/api/tasks', columnsDefinition, prefs);
+        initYieldtrackTable('<%= tableId %>', '/remaining/api/data', columnsDefinition, prefs);
+
+        // OUVRE LA MODALE ET PRÉ-REMPLI LES INFOS
+        $('#addRWModal').on('show.bs.modal', function (event) {
+            const button = $(event.relatedTarget);
+            $('#rw-task-id').val(button.data('id'));
+            $('#rw-task-name').text(button.data('name'));
+
+            $('#rw-hours').val('');
+            $('#rw-code-id').val('');
+            $('#rw-comment').val('');
+        });
+
+        // SOUMISSION DE LA MODALE (SAUVEGARDE TEMPORAIRE EN JS)
+        $('#form-add-rw').on('submit', function(e) {
+            e.preventDefault();
+            const taskId = $('#rw-task-id').val();
+            const hours = $('#rw-hours').val();
+            const codeId = $('#rw-code-id').val();
+            const comment = $('#rw-comment').val();
+
+            // Récupère le texte du code caisse s'il y en a un
+            const codeName = codeId ? $('#rw-code-id option:selected').text() : null;
+
+            // Stocke la saisie
+            pendingRWUpdates[taskId] = {
+                taskId: taskId,
+                rwHours: hours,
+                codeId: codeId,
+                comment: comment
+            };
+
+            // Met à jour la cellule "RW Actuel" de cette ligne
+            const pendingData = {
+                rwHours: hours,
+                rwDate: new Date().toISOString(), // Date et heure de l'instant T
+                codeName: codeName,
+                comment: comment
+            };
+
+            $(`#rw-current-cell-${taskId}`).html(formatRWCell(pendingData, true));
+            $(`#rw-current-cell-${taskId}`).closest('tr').addClass('row-modified');
+
+            // Affiche le bouton global
+            $('#btn-validate-all').fadeIn();
+            $('#rw-count').text(Object.keys(pendingRWUpdates).length);
+
+            $('#addRWModal').modal('hide');
+        });
+
+        // CLIC SUR LE BOUTON VERT GLOBAL "VALIDER"
+        $('#btn-validate-all').on('click', async function() {
+            const updatesArray = Object.values(pendingRWUpdates);
+            if(updatesArray.length === 0) return;
+
+            const btn = $(this);
+            btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Sauvegarde...');
+
+            try {
+                const response = await fetch('/remaining/bulk-rw', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ updates: updatesArray })
+                });
+
+                if (response.ok) {
+                    pendingRWUpdates = {};
+                    btn.hide().prop('disabled', false).html('<i class="fas fa-check-double"></i> Valider les Remaining Works (<span id="rw-count">0</span>)');
+                    $('#<%= tableId %>').DataTable().ajax.reload(null, false);
+                } else {
+                    alert("Erreur lors de la sauvegarde.");
+                    btn.prop('disabled', false);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Erreur réseau");
+                btn.prop('disabled', false);
+            }
+        });
     });
 </script>
 </body>

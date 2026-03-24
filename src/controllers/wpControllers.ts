@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { WorkPackage, Task, Status, Project, Units } from "../models/Index";
+import {WorkPackage, Task, Status, Project, Units, RWs, Codes} from "../models/Index";
 import { AVAILABLE_COLUMNS } from "./tasksController";
 import {Op} from "sequelize";
 
@@ -25,77 +25,99 @@ export const renderWPDetails = async (req: Request, res: Response) => {
 };
 
 export const getWPTasksData = async (req: Request, res: Response) => {
-    const wp = await WorkPackage.findOne({
-        where: { slug: req.params.wpSlug },
-        include: [{ model: Task, as: 'tasks', include: [{ model: Status, as: 'status' }, { model: Units, as: 'unit' }] }]
-    });
-    res.json({ data: (wp as any)?.tasks || [] });
+    try {
+        // 1. Trouver le WP correspondant
+        const wp = await WorkPackage.findOne({ where: { slug: req.params.wpSlug } });
+        if (!wp) return res.json({ data: [] });
+
+        // 2. Trouver strictement les tâches de CE wpId
+        const tasks = await Task.findAll({
+            where: { wpId: (wp as any).id }, // Le filtre strict est ici
+            include: [
+                { model: Status, as: 'status' },
+                { model: Units, as: 'unit' }
+                // Ajoutez l'include RWs ici si vous l'aviez mis en place précédemment
+            ]
+        });
+
+        res.json({ data: tasks });
+    } catch (error) {
+        res.status(500).json({ error: "Server Error" });
+    }
+};
+
+const generateSlug = (text: string) => {
+    return text.toString().toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
 };
 
 export const createWP = async (req: Request, res: Response) => {
     try {
-        // On récupère projectId et fatherWPId depuis le corps de la requête
-        const { wpName, slug, startDate, endDate, projectId,projectSlug, fatherWPId } = req.body;
+        const { wpName, startDate, endDate, projectId, projectSlug, fatherWPId } = req.body;
 
-        // Validation des dates
-        if (new Date(endDate) < new Date(startDate)) {
-            return res.status(400).json({ error: "La date de fin est invalide." });
+        if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
+            return res.status(400).json({ error: "The end date cannot be earlier than the start date." });
         }
 
-        // Vérifier si le Nom ou le Slug existe déjà dans CE projet
+        const generatedSlug = generateSlug(wpName);
+
+        // Vérifier si le Nom ou le Slug généré existe déjà dans CE projet
         const existingWP = await WorkPackage.findOne({
             where: {
                 projectId: projectId,
                 [Op.or]: [
                     { wpName: wpName },
-                    { slug: slug }
+                    { slug: generatedSlug }
                 ]
             }
         });
 
         if (existingWP) {
-            return res.status(400).json({ error: "Ce nom ou ce slug existe déjà pour ce projet." });
+            return res.status(400).json({ error: "This Work Package name (or its generated slug) is already used in this project." });
         }
 
-        // Création du Work Package
-        const newWP = await WorkPackage.create({
+        await WorkPackage.create({
             wpName: wpName,
-            slug: slug,
-            startDate: startDate,
-            endDate: endDate,
+            slug: generatedSlug,
+            startDate: startDate || null,
+            endDate: endDate || null,
             projectId: projectId,
             fatherWPId: fatherWPId || null,
             accountNumber: "Default",
             wpTypeId: 1
         });
 
-        const slugProject : String = projectSlug || "";
-        res.status(200).json({ redirect: `/project/` + slugProject});
+        const slugProject: String = projectSlug || "";
+        res.status(200).json({ redirect: `/project/` + slugProject });
 
     } catch (error) {
-        console.error("Erreur lors de la création du WP :", error);
-        res.status(500).json({ error: "Erreur lors de la création du Work Package" });
+        console.error("Erreur WP :", error);
+        res.status(500).json({ error: "Error while creating the Work Package." });
     }
 }
 
-
 export const updateWP = async (req: Request, res: Response) => {
     try {
-        const { id, wpName, slug, accountNumber, wpTypeId, fatherWPId } = req.body;
+        const { id, wpName, accountNumber, wpTypeId, fatherWPId, startDate, endDate } = req.body;
 
         const wp = await WorkPackage.findByPk(id);
-        if (!wp) return res.status(404).json({ error: "Work Package not found" });
+        if (!wp) return res.status(404).json({ error: "Work Package not found." });
 
         await wp.update({
             wpName,
-            slug,
             accountNumber,
+            startDate: startDate || null,
+            endDate: endDate || null,
             wpTypeId: parseInt(wpTypeId),
             fatherWPId: fatherWPId ? parseInt(fatherWPId) : null
         });
 
         res.status(200).json({ success: true });
     } catch (error) {
-        res.status(500).json({ error: "Error while updating Work Package" });
+        res.status(500).json({ error: "Error while updating the Work Package." });
     }
 };

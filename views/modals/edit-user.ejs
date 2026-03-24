@@ -60,6 +60,9 @@
             const profileIds = String(button.data('profiles')).split(',');
             // JQuery gère automatiquement la sélection multiple si on lui passe un tableau de valeurs
             $('#edit_user_profiles').val(profileIds);
+            // Pareil pour les units
+            const unitIds = String(button.data('units')).split(',');
+            $('#edit_user_units').val(unitIds);
         });
 
         // Soumission du formulaire en AJAX
@@ -71,6 +74,7 @@
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
             data.profiles = formData.getAll('profiles'); // On récupère bien le tableau des choix multiples
+            data.units = formData.getAll('units');
 
             try {
                 const response = await fetch(this.action, {

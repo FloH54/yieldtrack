@@ -1,0 +1,41 @@
+<div class="modal fade" id="addRWModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Input Remaining Work: <span id="rw-task-name" class="text-primary"></span></h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="form-add-rw">
+                <input type="hidden" id="rw-task-id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Estimated Remaining Hours</label>
+                        <input type="number" id="rw-hours" class="form-control" required min="0" step="1">
+                        <small class="text-muted">Setting this to 0 will automatically complete the task.</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Cost Code (Optional)</label>
+                        <select id="rw-code-id" class="form-control">
+                            <option value="">-- None --</option>
+                            <% if (typeof allCodes !== 'undefined') { %>
+                                <% allCodes.forEach(code => { %>
+                                    <option value="<%= code.codeId %>"><%= code.codeName %></option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Comment</label>
+                        <textarea id="rw-comment" class="form-control" rows="3" placeholder="Enter a comment..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" type="submit">Add to pending</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

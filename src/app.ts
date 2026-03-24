@@ -12,6 +12,7 @@ import preferenceRoutes from "./rootes/preferenceRoutes";
 import {renderUnitTasksPage, getUnitTasks, updateAsigneeUser} from "./controllers/unitsController";
 import userRoutes from "./rootes/userRoutes";
 import directorRoutes from "./rootes/directorRoutes";
+import unitRoutes from "./rootes/unitRoutes";
 
 
 const app = express();
@@ -45,8 +46,7 @@ app.use('/task', taskRoutes);           // Tout ce qui touche aux tâches
 app.use('/remaining', taskRoutes);      // On garde l'accès pour la page "Reste à faire"
 app.use('/preferences', preferenceRoutes); // Un unique point d'entrée pour les colonnes
 app.get('/allocation', renderUnitTasksPage); // Rendu de la page HTML
-app.get('/units/api/data', getUnitTasks);
-app.post('/units/update-assignee', updateAsigneeUser)
+app.use('/units', unitRoutes);
 app.use('/users', userRoutes);
 app.use('/director', directorRoutes);
 

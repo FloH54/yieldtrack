@@ -44,6 +44,14 @@
             { data: 'accountNumber', name: 'account', title: 'Account Number', defaultContent: "N/A" },
             { data: 'slug', name: 'slug', title: 'Slug' },
             {
+                data: 'statId', name: 'status', title: 'Status',
+                render: function(data) {
+                    if (data === 1) return '<span class="badge badge-success">Actif</span>';
+                    if (data === 4) return '<span class="badge badge-secondary">Clôturé</span>';
+                    return `<span class="badge badge-warning">Statut ${data}</span>`;
+                }
+            },
+            {
                 data: null, name: 'actions', title: 'Actions', orderable: false,
                 render: function(data, type, row) {
                     return `

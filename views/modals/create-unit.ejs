@@ -1,0 +1,57 @@
+<div class="modal fade" id="createUnitModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog-centered modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Créer une nouvelle Unité</h4>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div id="create-unit-alert"></div>
+            <form action="/units/create" id="createUnitForm" method="POST">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <h6>Nom de l'unité</h6>
+                        <input type="text" name="unitName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <h6>Unité Parente (Optionnel)</h6>
+                        <select name="fatherUnitId" class="form-control">
+                            <option value="">-- Aucune (Racine) --</option>
+                            <% if (typeof allUnits !== 'undefined') { %>
+                                <% allUnits.forEach(unit => { %>
+                                    <option value="<%= unit.unitId %>"><%= unit.unitName %></option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Créer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('createUnitForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const alertContainer = document.getElementById('create-unit-alert');
+        const data = Object.fromEntries(new FormData(this).entries());
+
+        try {
+            const response = await fetch(this.action, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            if (response.ok) { window.location.reload(); }
+            else { alertContainer.innerHTML = `<div class="alert alert-danger m-3">${result.error}</div>`; }
+        } catch (err) {
+            alertContainer.innerHTML = `<div class="alert alert-danger m-3">Erreur réseau.</div>`;
+        }
+    });
+</script>

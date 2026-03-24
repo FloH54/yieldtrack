@@ -6,8 +6,10 @@ import { Task } from './class/Task';
 import { WPContributor } from './class/WPContributor';
 import { Status } from "./class/Status";
 import { RWs } from "./class/RWs";
-import {Units} from "./class/Units";
-import {WPTypes} from "./class/WPTypes";
+import { Units} from "./class/Units";
+import { WPTypes} from "./class/WPTypes";
+import { UserToUnits} from "./class/UserToUnits";
+import { Codes} from "./class/Codes";
 
 
 // 1. UTILISATEURS ET PROFILS (ROLES GLOBAUX)
@@ -61,8 +63,8 @@ Units.hasMany(Task, { foreignKey: 'unitId', as: 'tasks' });
 Task.belongsTo(Units, { foreignKey: 'unitId', as: 'unit' });
 
 // Relation entre users et units
-User.belongsToMany(Units, { through: 'UserToUnits', foreignKey: 'UserId' , timestamps: false});
-Units.belongsToMany(User, { through: 'UserToUnits', foreignKey: 'UnitId' , timestamps: false});
+User.belongsToMany(Units, { through: UserToUnits, foreignKey: 'UserId', timestamps: false });
+Units.belongsToMany(User, { through: UserToUnits, foreignKey: 'UnitId', timestamps: false });
 
 // Relation entre le statut et les projets
 Status.hasMany(Project, { foreignKey: 'statId', as: 'projects' });
@@ -71,6 +73,10 @@ Project.belongsTo(Status, { foreignKey: 'statId', as: 'status' });
 // Relation entre le statut et les workpackages
 Status.hasMany(WorkPackage, { foreignKey: 'statId', as: 'workPackages' });
 WorkPackage.belongsTo(Status, { foreignKey: 'statId', as: 'status' });
+
+// Relation entre Codes et RWs (Optionnel mais recommandé pour de futures requêtes)
+Codes.hasMany(RWs, { foreignKey: 'codeId', as: 'rws' });
+RWs.belongsTo(Codes, { foreignKey: 'codeId', as: 'code' });
 
 export {
     User,
@@ -81,5 +87,6 @@ export {
     Units,
     WPContributor,
     Status,
-    RWs
+    RWs,
+    Codes
 };

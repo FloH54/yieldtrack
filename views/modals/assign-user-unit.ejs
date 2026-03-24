@@ -1,0 +1,68 @@
+<div class="modal fade" id="assignUserUnitModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog-centered modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Affecter un profil métier (Unité)</h4>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div id="assign-unit-alert"></div>
+            <form action="/units/assign" id="assignUnitForm" method="POST">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <h6>Utilisateur</h6>
+                        <select name="userId" class="form-control" required>
+                            <option value="">-- Sélectionner un utilisateur --</option>
+                            <% if (typeof allUsers !== 'undefined') { %>
+                                <% allUsers.forEach(u => { %>
+                                    <option value="<%= u.id %>"><%= u.firstName %> <%= u.lastName %></option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <h6>Métier (Unité)</h6>
+                        <select name="unitId" class="form-control" required>
+                            <option value="">-- Sélectionner une unité --</option>
+                            <% if (typeof allUnits !== 'undefined') { %>
+                                <% allUnits.forEach(unit => { %>
+                                    <option value="<%= unit.unitId %>"><%= unit.unitName %></option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <h6>Heures Hebdomadaires</h6>
+                        <input type="number" name="weeklyHours" class="form-control" value="35" min="0" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Affecter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('assignUnitForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const alertContainer = document.getElementById('assign-unit-alert');
+        const data = Object.fromEntries(new FormData(this).entries());
+
+        try {
+            const response = await fetch(this.action, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            if (response.ok) { window.location.reload(); }
+            else { alertContainer.innerHTML = `<div class="alert alert-danger m-3">${result.error}</div>`; }
+        } catch (err) {
+            alertContainer.innerHTML = `<div class="alert alert-danger m-3">Erreur réseau.</div>`;
+        }
+    });
+</script>
