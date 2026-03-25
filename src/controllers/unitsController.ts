@@ -24,16 +24,23 @@ const isAdmin = (user: any) => {
     });
 };
 
-// Récupération des tâches sans user
 export const getUnitTasks = async (req: Request, res: Response) => {
     try {
         const user = (req as any).user;
+        const { status } = req.query; // NOUVEAU : On récupère le statut depuis l'URL
 
-        // Clause de base : Tâche non assignée et active
+        // Clause de base : Tâche active avec une Unité définie
         let whereClause: any = {
-            assigneeUserId: null,
-            statId: 1
+            statId: 1,
+            unitId : {[Op.ne] : null},
         };
+
+        // NOUVEAU : Filtre "Assigné" ou "Non assigné"
+        if (status === 'assigned') {
+            whereClause.assigneeUserId = { [Op.ne]: null }; // Tâches DÉJÀ assignées
+        } else {
+            whereClause.assigneeUserId = null; // Tâches NON assignées (par défaut)
+        }
 
         // Si l'utilisateur n'est PAS Administrateur, on filtre par ses Unités (Team Manager)
         if (!isAdmin(user)) {

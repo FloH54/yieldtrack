@@ -1,9 +1,9 @@
 SET NAMES utf8mb4;
 SET time_zone = '+00:00';
 
-CREATE DATABASE IF NOT EXISTS yieldtrack
+CREATE DATABASE IF NOT EXISTS yieldtrack[version]
 CHARACTER SET utf8mb4
-COLLATE utf8mb4_uca1400_ai_ci;
+COLLATE utf8mb4_unicode_ci;
 
 USE yieldtrack;
 

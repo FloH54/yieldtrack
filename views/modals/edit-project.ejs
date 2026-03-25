@@ -1,91 +1,97 @@
 <div class="modal fade" id="editProjectModal" tabindex="-1" aria-labelledby="editProjectModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editProjectModalLabel">Éditer le Projet</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-gray-800 text-white">
+                <h5 class="modal-title font-weight-bold" id="editProjectModalLabel">
+                    <i class="fas fa-edit mr-2"></i>Éditer le Projet
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body p-4">
                 <form id="editProjectForm">
                     <input type="hidden" id="editProjectId" name="id">
 
-                    <div class="mb-3">
-                        <label for="editProjectName" class="form-label">Nom du Projet</label>
-                        <input type="text" class="form-control" id="editProjectName" name="projectName" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editProjectType" class="form-label">Type de Projet</label>
-                        <select class="form-select" id="editProjectType" name="projectTypeId" required>
-                            <% allTypes.forEach(type => { %>
-                                <option value="<%= type.projectTypeId %>"><%= type.projectTypeName %></option>
-                            <% }) %>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editProjectLeaders" class="form-label">Program Leaders</label>
-                        <select class="form-select" id="editProjectLeaders" name="leaderIds" multiple>
-                            <% programLeaders.forEach(leader => { %>
-                                <option value="<%= leader.id %>"><%= leader.firstName %> <%= leader.lastName %></option>
-                            <% }) %>
-                        </select>
-                        <small class="text-muted">Maintenez Ctrl/Cmd pour sélectionner plusieurs leaders.</small>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editProjectStatus" class="form-label">Statut</label>
-                        <select class="form-select" id="editProjectStatus" name="statId" required>
-                            <% allStatus.forEach(stat => { %>
-                                <option value="<%= stat.StatId || stat.id || stat.statId %>"><%= stat.StatName || stat.name %></option>
-                            <% }) %>
-                        </select>
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label for="editProjectName" class="form-label font-weight-bold text-gray-800">Nom du Projet <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control bg-light border-0 small" id="editProjectName" name="projectName" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="editProjectStatus" class="form-label font-weight-bold text-gray-800">Statut</label>
+                            <select class="form-control bg-light border-0 small font-weight-bold" id="editProjectStatus" name="statId" required>
+                                <% allStatus.forEach(stat => { %>
+                                    <option value="<%= stat.statId || stat.id || stat.StatId %>"><%= stat.statName || stat.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="editStartDate" class="form-label">Date de début</label>
-                            <input type="date" class="form-control" id="editStartDate" name="startDate">
+                            <label for="editProjectType" class="form-label font-weight-bold text-gray-800">Type de Projet <span class="text-danger">*</span></label>
+                            <select class="form-control bg-light border-0 small" id="editProjectType" name="projectTypeId" required>
+                                <% allTypes.forEach(type => { %>
+                                    <option value="<%= type.projectTypeId || type.ProjectTypeId %>"><%= type.projectTypeName || type.ProjectTypeName %></option>
+                                <% }) %>
+                            </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="editEndDate" class="form-label">Date de fin</label>
-                            <input type="date" class="form-control" id="editEndDate" name="endDate">
+                            <label for="editProjectLeaders" class="form-label font-weight-bold text-gray-800">Program Leaders</label>
+                            <select class="form-control bg-light border-0 small" id="editProjectLeaders" name="leaderIds" multiple>
+                                <% programLeaders.forEach(leader => { %>
+                                    <option value="<%= leader.id %>"><%= leader.firstName %> <%= leader.lastName %></option>
+                                <% }) %>
+                            </select>
+                            <small class="text-muted form-text mt-1"><i class="fas fa-info-circle"></i> Maintenez Ctrl/Cmd pour sélection multiple.</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="editStartDate" class="form-label font-weight-bold text-gray-800"><i class="far fa-calendar-alt mr-1"></i>Date de début</label>
+                            <input type="date" class="form-control bg-light border-0 small" id="editStartDate" name="startDate">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editEndDate" class="form-label font-weight-bold text-gray-800"><i class="far fa-calendar-check mr-1"></i>Date de fin</label>
+                            <input type="date" class="form-control bg-light border-0 small" id="editEndDate" name="endDate">
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                <button type="button" class="btn btn-primary" id="updateProjectBtn">Sauvegarder</button>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-dark px-4 shadow-sm" id="updateProjectBtn">Sauvegarder</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    function openEditProjectModal(projectData) {
-        document.getElementById('editProjectId').value = projectData.id;
-        document.getElementById('editProjectName').value = projectData.projectName;
+    // Nouveau script plus robuste basé sur les data-attributes pour peupler la modale
+    $('#editProjectModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
 
-        // Remplissage du Type et du Statut
-        if (projectData.type) document.getElementById('editProjectType').value = projectData.type.projectTypeId;
-        if (projectData.status) document.getElementById('editProjectStatus').value = projectData.status.StatId;
+        var id = button.data('id');
+        var name = button.data('name');
+        var typeId = button.data('type');
+        var statusId = button.data('status');
+        var leaderIds = button.data('leaders') ? button.data('leaders').toString().split(',') : [];
+        var start = button.data('start');
+        var end = button.data('end');
 
-        // Remplissage des Leaders (Select Multiple)
-        const leaderSelect = document.getElementById('editProjectLeaders');
-        const leaderIds = projectData.leaders ? projectData.leaders.map(l => l.id.toString()) : [];
-        Array.from(leaderSelect.options).forEach(opt => {
-            opt.selected = leaderIds.includes(opt.value);
-        });
+        var modal = $(this);
+        modal.find('#editProjectId').val(id);
+        modal.find('#editProjectName').val(name);
+        modal.find('#editProjectType').val(typeId);
+        modal.find('#editProjectStatus').val(statusId);
+        modal.find('#editProjectLeaders').val(leaderIds);
+        modal.find('#editStartDate').val(start);
+        modal.find('#editEndDate').val(end);
+    });
 
-        // Dates
-        document.getElementById('editStartDate').value = projectData.startDate ? projectData.startDate.split('T')[0] : '';
-        document.getElementById('editEndDate').value = projectData.endDate ? projectData.endDate.split('T')[0] : '';
-
-        const modal = new bootstrap.Modal(document.getElementById('editProjectModal'));
-        modal.show();
-    }
-
+    // Envoi de l'update au serveur
     document.getElementById('updateProjectBtn').addEventListener('click', async () => {
         const form = document.getElementById('editProjectForm');
         if (!form.checkValidity()) { form.reportValidity(); return; }
@@ -97,7 +103,7 @@
         data.leaderIds = Array.from(leaderSelect.selectedOptions).map(opt => opt.value);
 
         try {
-            const response = await fetch('/project/updtate', { // Remarque : J'ai gardé votre typo "updtate" issue des routes
+            const response = await fetch('/project/updtate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)

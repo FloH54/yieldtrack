@@ -62,6 +62,8 @@ Units.belongsToMany(User, { through: UserToUnits, foreignKey: 'UnitId', timestam
 Codes.hasMany(RWs, { foreignKey: 'codeId', as: 'rws' });
 RWs.belongsTo(Codes, { foreignKey: 'codeId', as: 'code' });
 
+
+
 export {
     User,
     Profiles,

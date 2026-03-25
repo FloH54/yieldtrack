@@ -1,51 +1,58 @@
 <div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="projectModalLabel">Nouveau Projet</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-lg"> <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title font-weight-bold" id="projectModalLabel">
+                    <i class="fas fa-folder-plus mr-2"></i>Nouveau Projet
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body p-4">
                 <form id="createProjectForm">
-                    <div class="mb-3">
-                        <label for="projectName" class="form-label">Nom du Projet</label>
-                        <input type="text" class="form-control" id="projectName" name="projectName" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="projectType" class="form-label">Type de Projet</label>
-                        <select class="form-select" id="projectType" name="projectTypeId" required>
-                            <option value="" disabled selected>Sélectionnez un type...</option>
-                            <% allTypes.forEach(type => { %>
-                                <option value="<%= type.projectTypeId %>"><%= type.projectTypeName %></option>
-                            <% }) %>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="projectLeaders" class="form-label">Program Leaders</label>
-                        <select class="form-select" id="projectLeaders" name="leaderIds" multiple>
-                            <% programLeaders.forEach(leader => { %>
-                                <option value="<%= leader.id %>"><%= leader.firstName %> <%= leader.lastName %></option>
-                            <% }) %>
-                        </select>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="projectName" class="form-label font-weight-bold text-gray-800">Nom du Projet <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control bg-light border-0 small" id="projectName" name="projectName" placeholder="Ex: YieldTrack ERP v2" required>
+                        </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="startDate" class="form-label">Date de début</label>
-                            <input type="date" class="form-control" id="startDate" name="startDate">
+                            <label for="projectType" class="form-label font-weight-bold text-gray-800">Type de Projet <span class="text-danger">*</span></label>
+                            <select class="form-control bg-light border-0 small" id="projectType" name="projectTypeId" required>
+                                <option value="" disabled selected>Sélectionnez un type...</option>
+                                <% allTypes.forEach(type => { %>
+                                    <option value="<%= type.projectTypeId || type.ProjectTypeId %>"><%= type.projectTypeName || type.ProjectTypeName %></option>
+                                <% }) %>
+                            </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="endDate" class="form-label">Date de fin</label>
-                            <input type="date" class="form-control" id="endDate" name="endDate">
+                            <label for="projectLeaders" class="form-label font-weight-bold text-gray-800">Program Leaders</label>
+                            <select class="form-control bg-light border-0 small" id="projectLeaders" name="leaderIds" multiple>
+                                <% programLeaders.forEach(leader => { %>
+                                    <option value="<%= leader.id %>"><%= leader.firstName %> <%= leader.lastName %></option>
+                                <% }) %>
+                            </select>
+                            <small class="text-muted form-text mt-1"><i class="fas fa-info-circle"></i> Maintenez Ctrl/Cmd pour sélection multiple.</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="startDate" class="form-label font-weight-bold text-gray-800"><i class="far fa-calendar-alt mr-1"></i>Date de début</label>
+                            <input type="date" class="form-control bg-light border-0 small" id="startDate" name="startDate">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="endDate" class="form-label font-weight-bold text-gray-800"><i class="far fa-calendar-check mr-1"></i>Date de fin</label>
+                            <input type="date" class="form-control bg-light border-0 small" id="endDate" name="endDate">
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                <button type="button" class="btn btn-primary" id="saveProjectBtn">Créer le projet</button>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary px-4 shadow-sm" id="saveProjectBtn">Créer le projet</button>
             </div>
         </div>
     </div>
@@ -54,15 +61,11 @@
 <script>
     document.getElementById('saveProjectBtn').addEventListener('click', async () => {
         const form = document.getElementById('createProjectForm');
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
+        if (!form.checkValidity()) { form.reportValidity(); return; }
 
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
 
-        // Gérer la récupération du tableau des leaders sélectionnés
         const leaderSelect = document.getElementById('projectLeaders');
         data.leaderIds = Array.from(leaderSelect.selectedOptions).map(opt => opt.value);
 
@@ -74,14 +77,8 @@
             });
 
             const result = await response.json();
-            if (response.ok) {
-                window.location.href = result.redirect || '/project';
-            } else {
-                alert('Erreur: ' + result.error);
-            }
-        } catch (error) {
-            console.error('Erreur:', error);
-            alert('Erreur serveur.');
-        }
+            if (response.ok) { window.location.href = result.redirect || '/project'; }
+            else { alert('Erreur: ' + result.error); }
+        } catch (error) { alert('Erreur serveur.'); }
     });
 </script>

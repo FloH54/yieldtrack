@@ -59,6 +59,12 @@ export const renderRemainingPage = async (req: Request, res: Response) => {
     }
 };
 
+const isManagerOrAdmin = (user: any) => {
+    if (!user || !user.profiles) return false;
+    return user.profiles.some((p: any) =>
+        ['Administrateur', 'Program Manager'].includes(p.profileName || p.ProfileName || p.name)
+    );
+};
 
 export const getRemainingTasksData = async (req: Request, res: Response) => {
     try {
@@ -94,9 +100,8 @@ export const getRemainingTasksData = async (req: Request, res: Response) => {
 
 export const createTask = async (req: Request, res: Response) => {
     try {
-        // On ne récupère plus taskFUPTypeId depuis req.body
         const { wpId, assigneeUserId, taskName, unitId, taskStart, taskEnd, taskBudgetHours, codeId, priority } = req.body;
-
+        const currentUser = (req as any).user;
         const safeInt = (val: any) => {
             if (!val) return null;
             const parsed = parseInt(val, 10);
@@ -104,8 +109,13 @@ export const createTask = async (req: Request, res: Response) => {
         };
 
         const parsedWpId = safeInt(wpId);
-
         if (!parsedWpId) return res.status(400).json({ error: "L'ID du Work Package est manquant." });
+
+        // VÉRIFICATION DE SÉCURITÉ : Le WP parent appartient-il à un Corporate Template ?
+        const parentWp = await WorkPackage.findByPk(parsedWpId, { include: [{ model: Project, as: 'project' }] });
+        if (parentWp && (parentWp as any).project.projectTypeId === 1 && !isManagerOrAdmin(currentUser)) {
+            return res.status(403).json({ error: "Modification bloquée : Ce Work Package fait partie d'un Corporate Template." });
+        }
 
         const newTask = await Task.create({
             wpId: parsedWpId,
@@ -142,16 +152,34 @@ export const archiveTask = async (req: Request, res: Response) => {
 
 export const updateTask = async (req: Request, res: Response) => {
     try {
-        const { taskId, userId } = req.body;
-        const task = await Task.findByPk(taskId);
+        const { id, taskId, taskName, budget, startDate, endDate, userId, statId, unitId } = req.body;
+
+        const targetId = id || taskId;
+        const task = await Task.findByPk(targetId);
+
         if (!task) return res.status(404).json({ error: "Task not found" });
 
-        // Mise à jour de la tâche (si userId est vide, on met null)
-        await task.update({ assigneeUserId: userId || null });
+        // Si on vient de la modale d'édition (editTaskModal)
+        if (taskName) {
+            await task.update({
+                taskName: taskName,
+                taskBudgetHours: budget ? parseInt(budget) : null,
+                taskStart: startDate || null,
+                taskEnd: endDate || null,
+                statId: statId ? parseInt(statId) : task.statId, // Mise à jour du statut
+                unitId: unitId ? parseInt(unitId) : null         // Mise à jour de l'unité
+            });
+        }
+
+        // Si on vient de la page d'allocation
+        if (userId !== undefined) {
+            await task.update({ assigneeUserId: userId || null });
+        }
 
         res.status(200).json({ success: true });
     } catch (error) {
-        res.status(500).json({ error: "Error updating assignee" });
+        console.error("Erreur updateTask:", error);
+        res.status(500).json({ error: "Error updating task" });
     }
 };
 

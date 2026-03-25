@@ -11,66 +11,61 @@
             <%- include('../partials/topbar')%>
 
             <div class="container-fluid">
+
                 <%- include('../partials/dynamic_table')%>
+
+                <div class="card shadow mb-4 mt-4">
+                    <div class="card-header py-3">
+                        <h4 class="m-0 font-weight-bold text-success">Tasks already assigned</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="assignedTasksTable" width="100%" cellspacing="0">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
         <%- include('../partials/footer')%>
     </div>
 </div>
 
-<%- include('../modals/logout')%>$
+<%- include('../modals/logout')%>
 <%- include('../modals/create-unit')%>
-<%- include('../modals/assign-user-unit')%>
 
 <script>
     $(document).ready(function(){
-        // 1. Récupération des préférences et de la liste des utilisateurs injectée par le controller
         const prefs = <%- JSON.stringify(selectedColumns) %>;
-        const allUsers = <%- JSON.stringify(allUsers) %>; //
+        const allUsers = <%- JSON.stringify(allUsers) %>;
 
-        // 2. Définition des colonnes pour DataTables
+        // Définition des colonnes pour DataTables
         const columnsDefinition = [
             { data: 'id', name: 'id', title: 'ID' },
-            {
-                data: 'unit.unitName', // Chemin vers le nom de l'unité via la jointure
-                name: 'name',
-                title: 'Unit Name',
-                defaultContent: "N/A"
-            },
-            {
-                data: 'workPackage.project.projectName',
-                name: 'project',
-                title: 'Project',
-                defaultContent: "N/A"
-            },
-            {
-                data: 'workPackage.wpName',
-                name: 'workPackage',
-                title: 'Work Package',
-                defaultContent: "N/A"
-            },
+            { data: 'unit.unitName', name: 'name', title: 'Unit Name', defaultContent: "N/A" },
+            { data: 'workPackage.project.projectName', name: 'project', title: 'Project', defaultContent: "N/A" },
+            { data: 'workPackage.wpName', name: 'workPackage', title: 'Work Package', defaultContent: "N/A" },
             { data: 'taskName', name: 'taskName', title: 'Task Name' },
             { data: 'taskBudgetHours', name: 'budget', title: 'Budget (h)', defaultContent: "0" },
 
-            // 3. LA COLONNE AVEC LE MENU DÉROULANT (USER)
+            // COLONNE DU SELECT USER
             {
-                data: 'assigneeUserId', //
+                data: 'assigneeUserId',
                 name: 'user',
                 title: 'Assigné à',
                 render: function(data, type, row) {
-                    // On crée le début du select
                     let select = `<select class="form-control select-assignee" data-taskid="${row.id}">`;
-                    select += `<option value="">-- Choisir un utilisateur --</option>`;
+
+                    // L'option vide permet de "désassigner" la tâche et de la renvoyer dans le 1er tableau !
+                    select += `<option value="">-- Non assigné --</option>`;
 
                     const taskUnitId = row.unitId;
-
                     const eligibleUsers = allUsers.filter(u => {
-                        // Sequelize renvoie l'association sous 'Units' (ou 'units')
                         const userUnits = u.Units || u.units || [];
                         return userUnits.some(unit => unit.unitId === taskUnitId);
                     });
 
-                    // On boucle sur la liste des users récupérée plus haut
                     eligibleUsers.forEach(user => {
                         const isSelected = (user.id == data) ? 'selected' : '';
                         select += `<option value="${user.id}" ${isSelected}>${user.firstName} ${user.lastName}</option>`;
@@ -80,21 +75,24 @@
                     return select;
                 }
             },
-            { data: 'Priority', name: 'priority', title: 'Priority', defaultContent: "-" },
+            { data: 'priority', name: 'priority', title: 'Priority', defaultContent: "-" },
             { data: 'startDate', name: 'startDate', title: 'Start Date', defaultContent: "N/A" },
             { data: 'endDate', name: 'endDate', title: 'End Date', defaultContent: "N/A" }
         ];
 
-        // 4. Initialisation du tableau avec la fonction universelle
-        initYieldtrackTable('<%= tableId %>', '/units/api/data', columnsDefinition, prefs); //
+        // INITIALISATION DES DEUX TABLEAUX
+        // 1. Tableau par défaut (Non assigné)
+        initYieldtrackTable('<%= tableId %>', '/units/api/data?status=unassigned', columnsDefinition, prefs);
+
+        // 2. Nouveau tableau (Assigné)
+        initYieldtrackTable('assignedTasksTable', '/units/api/data?status=assigned', columnsDefinition, prefs);
     });
 
-    // 5. Script pour sauvegarder le changement d'utilisateur en temps réel
+    // Script pour sauvegarder le changement d'utilisateur
     $(document).on('change', '.select-assignee', function() {
         const taskId = $(this).data('taskid');
         const userId = $(this).val();
 
-        // Appel API pour mettre à jour la tâche (à implémenter dans votre taskController)
         fetch('/units/update-assignee', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -102,10 +100,14 @@
         })
             .then(response => {
                 if (response.ok) {
-                    $(this).css('border-color', '#1cc88a'); // Petit flash vert en cas de succès
+                    // On recharge les DEUX tableaux en arrière-plan pour faire transvaser la tâche
+                    $('#<%= tableId %>').DataTable().ajax.reload(null, false);
+                    $('#assignedTasksTable').DataTable().ajax.reload(null, false);
                 } else {
                     alert("Erreur lors de l'assignation");
                 }
             });
     });
 </script>
+</body>
+</html>

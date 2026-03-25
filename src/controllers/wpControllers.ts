@@ -20,9 +20,18 @@ export const renderWPDetails = async (req: Request, res: Response) => {
     res.render('Pages/wpDetails', {
         user, wp, projectSlug: (wp as any).project.slug,
         tableId: TABLE_ID, tableTitle: "Tasks List",
-        allColumns: AVAILABLE_COLUMNS, selectedColumns, allUnits: await Units.findAll(),
+        allColumns: AVAILABLE_COLUMNS, selectedColumns,
+        allUnits: await Units.findAll(),
+        allStatus: await Status.findAll(),
         createAction: { label: "New Task", icon: "fas fa-plus", modalTarget: "#taskModal" }
     });
+};
+
+const isManagerOrAdmin = (user: any) => {
+    if (!user || !user.profiles) return false;
+    return user.profiles.some((p: any) =>
+        ['Administrateur', 'Program Manager'].includes(p.profileName || p.ProfileName || p.name)
+    );
 };
 
 export const getWPTasksData = async (req: Request, res: Response) => {
@@ -56,6 +65,15 @@ const generateSlug = (text: string) => {
 export const createWP = async (req: Request, res: Response) => {
     try {
         const { wpName, startDate, endDate, projectId, projectSlug, fatherWPId } = req.body;
+        const currentUser = (req as any).user;
+
+        // VÉRIFICATION DE SÉCURITÉ
+        const project = await Project.findByPk(projectId);
+        if (!project) return res.status(404).json({ error: "Project not found." });
+
+        if ((project as any).projectTypeId === 1 && !isManagerOrAdmin(currentUser)) {
+            return res.status(403).json({ error: "Seuls les Program Managers peuvent créer un WP dans un Corporate Template." });
+        }
 
         if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
             return res.status(400).json({ error: "The end date cannot be earlier than the start date." });
@@ -101,9 +119,16 @@ export const createWP = async (req: Request, res: Response) => {
 export const updateWP = async (req: Request, res: Response) => {
     try {
         const { id, wpName, accountNumber, fatherWPId, startDate, endDate } = req.body;
+        const currentUser = (req as any).user;
 
-        const wp = await WorkPackage.findByPk(id);
+        // On inclut le projet pour connaître son type
+        const wp = await WorkPackage.findByPk(id, { include: [{ model: Project, as: 'project' }] });
         if (!wp) return res.status(404).json({ error: "Work Package not found." });
+
+        // VÉRIFICATION DE SÉCURITÉ
+        if ((wp as any).project.projectTypeId === 1 && !isManagerOrAdmin(currentUser)) {
+            return res.status(403).json({ error: "Vous n'avez pas l'autorisation de modifier un Corporate Template." });
+        }
 
         await wp.update({
             wpName,
@@ -111,7 +136,6 @@ export const updateWP = async (req: Request, res: Response) => {
             startDate: startDate || null,
             endDate: endDate || null,
             fatherWPId: fatherWPId ? parseInt(fatherWPId) : null
-            // wpTypeId a été supprimé !
         });
 
         res.status(200).json({ success: true });

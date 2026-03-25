@@ -148,29 +148,39 @@ export const renderProjectDetails = async (req: Request, res: Response) => {
 
         const project = await Project.findOne({
             where: { slug },
-            include: [{ model: User, as: 'leaders' }] // Vérifier si l'utilisateur y a accès
+            include: [{ model: User, as: 'leaders' }]
         });
 
-        if (!project) return res.status(404).render('404');
+        if (!project) return res.status(404).render('404', { user });
 
         const isManagerOrAdmin = hasRole(user, ['Administrateur', 'Program Manager']);
         const isAssignedLeader = (project as any).leaders.some((l: any) => l.id === user.id);
 
-        // Sécurité d'accès à la page de détails du projet
         if (!isManagerOrAdmin && !isAssignedLeader) {
             return res.status(403).send("Accès refusé : vous n'êtes pas assigné à ce projet.");
         }
 
         const projectWPs = await WorkPackage.findAll({ where: { projectId: (project as any).id } });
 
+        // --- On récupère TOUS les types de projets (1=Corporate, 2=Template, 3=Production) ---
+        const templateProjects = await Project.findAll({
+            where: { projectTypeId: [1, 2, 3] },
+            include: [{ model: WorkPackage, as: 'workPackages', where: { statId: 1 }, required: false }]
+        });
+
+        // Définition des boutons (Principal = Vide, Secondaire = Template)
+        const createAction = { label: "Empty Wokrpackage", icon: "fas fa-plus", modalTarget: "#customWPModal" };
+        const secondaryAction = { label: "Depuis un Template", icon: "fas fa-copy", modalTarget: "#createWpFromTemplateModal", btnClass: "btn-info" };
+
         res.render('Pages/projectsDetails', {
             user, project, tableId: TABLE_ID, tableTitle: "Work Packages",
             allColumns: WP_COLUMNS, selectedColumns,
             units: await Units.findAll(),
             projectWPs,
+            templateProjects,
             currentUrl: req.originalUrl,
-            // Les Program Leaders et Managers peuvent créer des WP
-            createAction: { label: "New Work Package", icon: "fas fa-plus", modalTarget: "#createWPModal" }
+            createAction,      // On passe le bouton principal
+            secondaryAction    // On passe le bouton pour la modale Template !
         });
     } catch (error) {
         console.error("Erreur details projet:", error);

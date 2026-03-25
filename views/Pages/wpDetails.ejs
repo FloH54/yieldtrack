@@ -62,57 +62,41 @@
             { data: 'status.statName', name: 'status', title: 'Statut', defaultContent: "N/A" },
             { data: 'taskBudgetHours', name: 'budget', title: 'Budget (h)', defaultContent: "0" },
 
-            // --- COLONNE : RW-1 (Historique validé) ---
             {
-                data: null, name: 'rw1', title: 'RW-1',
+                // COLONNE ACTIONS COMPLÈTE
+                data: null, name: 'actions', title: 'Actions', orderable: false,
                 render: function(data, type, row) {
-                    if (row.RWs && row.RWs.length > 0) {
-                        const latestRW = row.RWs.reduce((prev, current) => (prev.rwId > current.rwId) ? prev : current);
-                        // On formate les données pour la fonction utilitaire
-                        const formattedData = {
-                            rwHours: latestRW.rwHours,
-                            rwDate: latestRW.rwDate,
-                            codeName: latestRW.code ? latestRW.code.codeName : null,
-                            comment: latestRW.comment
-                        };
-                        return formatRWCell(formattedData);
-                    }
-                    return `<span class="text-muted">${row.taskBudgetHours || 0} h (Budget initial)</span>`;
-                }
-            },
+                    // Sécurisation des données pour les attributs HTML
+                    const safeName = row.taskName ? row.taskName.replace(/"/g, '&quot;') : '';
+                    const start = row.taskStart ? row.taskStart.split('T')[0] : '';
+                    const end = row.taskEnd ? row.taskEnd.split('T')[0] : '';
 
-            // --- COLONNE : RW ACTUEL (Dynamique) ---
-            {
-                data: null, name: 'rwCurrent', title: 'RW Actuel',
-                render: function(data, type, row) {
-                    // Par défaut, le RW Actuel est identique au RW-1
-                    let htmlContent = '';
-                    if (row.RWs && row.RWs.length > 0) {
-                        const latestRW = row.RWs.reduce((prev, current) => (prev.rwId > current.rwId) ? prev : current);
-                        htmlContent = formatRWCell({
-                            rwHours: latestRW.rwHours,
-                            rwDate: latestRW.rwDate,
-                            codeName: latestRW.code ? latestRW.code.codeName : null,
-                            comment: latestRW.comment
-                        });
-                    } else {
-                        htmlContent = `<span class="text-muted">${row.taskBudgetHours || 0} h (Budget initial)</span>`;
-                    }
-                    // On enveloppe dans une div avec un ID unique pour pouvoir la cibler en jQuery
-                    return `<div id="rw-current-cell-${row.id}">${htmlContent}</div>`;
-                }
-            },
-
-            // --- COLONNE : BOUTON ADD RW ---
-            {
-                data: null, name: 'addrw', title: 'Action', orderable: false,
-                render: function(data, type, row) {
                     return `
-                        <button class="btn btn-sm btn-info btn-open-rw"
-                                data-id="${row.id}" data-name="${row.taskName}"
-                                data-toggle="modal" data-target="#addRWModal">
-                            <i class="fas fa-edit"></i> Saisir
-                        </button>
+                        <div class="d-flex align-items-center" style="gap: 8px">
+
+                            <button class="btn btn-sm btn-secondary shadow-sm"
+                                    data-toggle="modal" data-target="#rwHistoryModal"
+                                    data-id="${row.id}" data-name="${safeName}" title="Historique RW">
+                                <i class="fas fa-history"></i>
+                            </button>
+
+                            <button class="btn btn-sm btn-primary shadow-sm"
+                                    data-toggle="modal" data-target="#editTaskModal"
+                                    data-id="${row.id}"
+                                    data-name="${safeName}"
+                                    data-budget="${row.taskBudgetHours || ''}"
+                                    data-start="${start}"
+                                    data-end="${end}"
+                                    data-status="${row.statId || ''}"  data-unit="${row.unitId || ''}"    title="Modifier la tâche">
+                                <i class="fas fa-pen"></i>
+                            </button>
+
+                            <button class="btn btn-sm btn-danger shadow-sm"
+                                    data-toggle="modal" data-target="#archiveTaskModal"
+                                    data-id="${row.id}" data-name="${safeName}" title="Archiver la tâche">
+                                <i class="fas fa-archive"></i>
+                            </button>
+                        </div>
                     `;
                 }
             }
@@ -125,6 +109,48 @@
             prefs
         );
 
+        // CHARGEMENT DE L'HISTORIQUE RW LORS DE L'OUVERTURE DE LA MODALE
+        $('#rwHistoryModal').on('show.bs.modal', async function (event) {
+            const button = $(event.relatedTarget);
+            const taskId = button.data('id');
+            const taskName = button.data('name');
+
+            $('#hist-task-name').text(taskName);
+            const tbody = $('#hist-table-body');
+
+            // On affiche un loader en attendant la réponse du serveur
+            tbody.html('<tr><td colspan="4" class="text-center py-4"><i class="fas fa-spinner fa-spin fa-2x text-primary"></i><p class="mt-2">Chargement...</p></td></tr>');
+
+            try {
+                // Appel à votre route définie dans taskRoutes.ts
+                const response = await fetch(`/remaining/api/history/${taskId}`);
+                const result = await response.json();
+
+                if (response.ok && result.data && result.data.length > 0) {
+                    tbody.empty();
+                    result.data.forEach(rw => {
+                        const dateObj = new Date(rw.rwDate);
+                        const dateStr = dateObj.toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                        const codeStr = rw.code ? `<span class="badge badge-info">${rw.code.codeName}</span>` : '-';
+                        const commentStr = rw.comment ? rw.comment : '-';
+
+                        tbody.append(`
+                            <tr>
+                                <td class="align-middle">${dateStr}</td>
+                                <td class="align-middle"><span class="font-weight-bold text-primary">${rw.rwHours} h</span></td>
+                                <td class="align-middle">${codeStr}</td>
+                                <td class="align-middle">${commentStr}</td>
+                            </tr>
+                        `);
+                    });
+                } else {
+                    tbody.html('<tr><td colspan="4" class="text-center text-muted py-4">Aucun historique de saisie pour le moment.</td></tr>');
+                }
+            } catch (error) {
+                tbody.html('<tr><td colspan="4" class="text-center text-danger py-4">Erreur lors du chargement de l\'historique.</td></tr>');
+            }
+        });
+
         // OUVRE LA MODALE ET PRÉ-REMPLI LES INFOS
         $('#addRWModal').on('show.bs.modal', function (event) {
             const button = $(event.relatedTarget);
@@ -134,73 +160,6 @@
             $('#rw-hours').val('');
             $('#rw-code-id').val('');
             $('#rw-comment').val('');
-        });
-
-        // SOUMISSION DE LA MODALE (SAUVEGARDE TEMPORAIRE EN JS)
-        $('#form-add-rw').on('submit', function(e) {
-            e.preventDefault();
-            const taskId = $('#rw-task-id').val();
-            const hours = $('#rw-hours').val();
-            const codeId = $('#rw-code-id').val();
-            const comment = $('#rw-comment').val();
-
-            // Récupère le texte du code caisse s'il y en a un
-            const codeName = codeId ? $('#rw-code-id option:selected').text() : null;
-
-            // Stocke la saisie
-            pendingRWUpdates[taskId] = {
-                taskId: taskId,
-                rwHours: hours,
-                codeId: codeId,
-                comment: comment
-            };
-
-            // Met à jour la cellule "RW Actuel" de cette ligne
-            const pendingData = {
-                rwHours: hours,
-                rwDate: new Date().toISOString(), // Date et heure de l'instant T
-                codeName: codeName,
-                comment: comment
-            };
-
-            $(`#rw-current-cell-${taskId}`).html(formatRWCell(pendingData, true));
-            $(`#rw-current-cell-${taskId}`).closest('tr').addClass('row-modified');
-
-            // Affiche le bouton global
-            $('#btn-validate-all').fadeIn();
-            $('#rw-count').text(Object.keys(pendingRWUpdates).length);
-
-            $('#addRWModal').modal('hide');
-        });
-
-        // CLIC SUR LE BOUTON VERT GLOBAL "VALIDER"
-        $('#btn-validate-all').on('click', async function() {
-            const updatesArray = Object.values(pendingRWUpdates);
-            if(updatesArray.length === 0) return;
-
-            const btn = $(this);
-            btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Sauvegarde...');
-
-            try {
-                const response = await fetch('/remaining/bulk-rw', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ updates: updatesArray })
-                });
-
-                if (response.ok) {
-                    pendingRWUpdates = {};
-                    btn.hide().prop('disabled', false).html('<i class="fas fa-check-double"></i> Valider les Remaining Works (<span id="rw-count">0</span>)');
-                    $('#<%= tableId %>').DataTable().ajax.reload(null, false);
-                } else {
-                    alert("Erreur lors de la sauvegarde.");
-                    btn.prop('disabled', false);
-                }
-            } catch (err) {
-                console.error(err);
-                alert("Erreur réseau");
-                btn.prop('disabled', false);
-            }
         });
     });
 </script>

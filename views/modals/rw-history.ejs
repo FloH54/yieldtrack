@@ -29,3 +29,38 @@
         </div>
     </div>
 </div>
+<script>
+    // CHARGEMENT DE L'HISTORIQUE RW DANS LA MODALE
+    $('#rwHistoryModal').on('show.bs.modal', async function (event) {
+        const button = $(event.relatedTarget);
+        const taskId = button.data('id');
+        const tbody = $(this).find('tbody'); // On cible le tableau dans la modale
+
+        tbody.html('<tr><td colspan="4" class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement...</td></tr>');
+
+        try {
+            // Adapte l'URL si ta route d'historique est légèrement différente
+            const response = await fetch(`/remaining/api/history/${taskId}`);
+            const result = await response.json();
+
+            if (response.ok && result.data && result.data.length > 0) {
+                let rows = '';
+                result.data.forEach(rw => {
+                    const dateStr = new Date(rw.rwDate).toLocaleString('fr-FR');
+                    const codeStr = rw.code ? `<span class="badge badge-info">${rw.code.codeName}</span>` : '-';
+                    rows += `<tr>
+                            <td>${dateStr}</td>
+                            <td class="font-weight-bold text-primary">${rw.rwHours} h</td>
+                            <td>${codeStr}</td>
+                            <td>${rw.comment || '-'}</td>
+                        </tr>`;
+                });
+                tbody.html(rows);
+            } else {
+                tbody.html('<tr><td colspan="4" class="text-center text-muted">Aucun historique pour cette tâche.</td></tr>');
+            }
+        } catch (error) {
+            tbody.html('<tr><td colspan="4" class="text-center text-danger">Erreur lors du chargement.</td></tr>');
+        }
+    });
+</script>

@@ -32,7 +32,7 @@ export const renderUsersPage = async (req: Request, res: Response) => {
     let secondaryAction = null;
     if (isAdmin) {
         secondaryAction = {
-            label: "Nouvelle Unité",
+            label: "New Unit",
             icon: "fas fa-plus",
             modalTarget: "#createUnitModal",
             btnClass: "btn-info" // Couleur bleu clair pour le différencier
