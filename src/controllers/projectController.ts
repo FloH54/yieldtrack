@@ -1,12 +1,21 @@
 import { Request, Response } from 'express';
-import {Project, WorkPackage, Units, WPContributor, User, Profiles, Status} from "../models/Index";
-import {WPTypes} from "../models/class/WPTypes";
-import {Op} from "sequelize";
+import { Project, WorkPackage, Units, User, Profiles, Status, ProjectTypes, ProjectLeaders } from "../models/Index";
+import { Op } from "sequelize";
+
+// Aide pour vérifier les rôles plus facilement
+const hasRole = (user: any, roles: string[]) => {
+    if (!user || !user.profiles) return false;
+    return user.profiles.some((profile: any) => {
+        const roleName = profile.profileName || profile.ProfileName || profile.name;
+        return roles.includes(roleName);
+    });
+};
 
 export const PROJECT_COLUMNS = [
     { id: 'id', label: "ID" },
     { id: 'name', label: "Project Name" },
-    { id: 'manager', label: "Manager" },
+    { id: 'type', label: "Type" },
+    { id: 'leaders', label: "Program Leaders" },
     { id: 'slug', label: "Slug" },
     { id: 'start', label: "Start Date" },
     { id: 'end', label: "End Date" },
@@ -17,7 +26,6 @@ export const PROJECT_COLUMNS = [
 export const WP_COLUMNS = [
     { id: 'id', label: "ID" },
     { id: 'name', label: "WP Name" },
-    { id: 'type', label: "Type" },
     { id: 'parent', label: "Parent WP" },
     { id: 'account', label: "Account Number" },
     { id: 'slug', label: "Slug" },
@@ -28,40 +36,39 @@ export const renderProjectsPage = async (req: Request, res: Response) => {
     try {
         const user = (req as any).user;
         const TABLE_ID = 'projectList';
-        const selectedColumns = (req as any).tablePreferences[TABLE_ID] || ['name', 'start', 'end', 'status']; // Ajout du statut par défaut
+        const selectedColumns = (req as any).tablePreferences[TABLE_ID] || ['name', 'type', 'start', 'end', 'status'];
 
-        // Récupérer uniquement les Chefs de projet (Program Manager) pour la liste déroulante
-        const managers = await User.findAll({
+        const isManagerOrAdmin = hasRole(user, ['Administrateur', 'Program Manager']);
+
+        // Récupération des données pour les listes déroulantes de création/édition
+        const allTypes = await ProjectTypes.findAll();
+        const allStatus = await Status.findAll();
+
+        // Récupérer uniquement les Program Leaders pour l'attribution
+        const programLeaders = await User.findAll({
             include: [{
                 model: Profiles,
                 as: 'profiles',
-                where: { ProfileName: 'Program Manager' } // Adaptez si la casse est différente dans votre BDD
+                where: { ProfileName: 'Program Leader' }
             }]
         });
 
-        // Récupérer les statuts pour la clôture
-        const allStatus = await Status.findAll();
-
-        const isGlobalViewer = user.profiles && user.profiles.some((profile: any) => {
-            const roleName = profile.profileName || profile.ProfileName || profile.name;
-            return ['Administrateur', 'Direction Générale'].includes(roleName);
-        });
-
-// S'il n'est pas Admin/Directeur, on ne lui passe pas l'action de création de projet
-        const createBtn = isGlobalViewer
+        // Seuls les Admins et Program Managers peuvent créer des projets
+        const createBtn = isManagerOrAdmin
             ? { label: "New Project", icon: "fas fa-plus", modalTarget: "#projectModal" }
             : null;
-
 
         res.render('Pages/projects', {
             user, tableId: TABLE_ID, tableTitle: "Projects List",
             allColumns: PROJECT_COLUMNS, selectedColumns,
             currentUrl: req.originalUrl,
-            managers, // On envoie les managers à la vue
-            allStatus, // On envoie les statuts
+            allTypes,
+            allStatus,
+            programLeaders,
             createAction: createBtn
         });
     } catch (error) {
+        console.error("Error rendering projects page:", error);
         res.status(500).send("Error rendering projects page.");
     }
 };
@@ -69,47 +76,63 @@ export const renderProjectsPage = async (req: Request, res: Response) => {
 export const getProjectsData = async (req: Request, res: Response) => {
     try {
         const user = (req as any).user;
+        const isManagerOrAdmin = hasRole(user, ['Administrateur', 'Program Manager']);
 
-        // 1. On vérifie si l'utilisateur a un rôle "Global" (Admin ou Directeur)
-        const isGlobalViewer = user.profiles && user.profiles.some((profile: any) => {
-            const roleName = profile.profileName || profile.ProfileName || profile.name;
-            return ['Administrateur', 'Direction Générale'].includes(roleName);
-        });
+        let includeLeaders: any = {
+            model: User,
+            as: 'leaders',
+            attributes: ['id', 'firstName', 'lastName'],
+            through: { attributes: [] },
+            required: false
+        };
 
-        if (isGlobalViewer) {
-            // S'il est Admin ou Directeur, on renvoie absolument TOUS les projets
-            const allProjects = await Project.findAll();
-            return res.json({ data: allProjects });
+        if (!isManagerOrAdmin) {
+            includeLeaders.required = true;
+            includeLeaders.where = { id: user.id };
         }
 
-        // 2. Sinon (ex: Program Manager), on applique le filtre de visibilité
-        const userProjects = await Project.findAll({
-            include: [{
-                model: User,
-                as: 'creator',
-                attributes: ['firstName', 'lastName'],
-            },
-                {
-                model: WorkPackage,
-                as: 'workPackages',
-                required: false,
-                include: [{
-                    model: WPContributor,
-                    as: 'contributors', // Vérifiez que cet alias correspond bien à votre Index.ts
-                    where: { userId: user.id },
-                    required: false
-                },
-                    ]
-            }],
-            where: {
-                [Op.or]: [
-                    { creatorUserId: user.id },
-                    { '$workPackages.contributors.userId$': user.id }
-                ]
-            }
+        const projects = await Project.findAll({
+            include: [
+                { model: ProjectTypes, as: 'type' },
+                { model: Status, as: 'status' },
+                { model: User, as: 'creator', attributes: ['firstName', 'lastName'] },
+                includeLeaders
+            ]
         });
 
-        res.json({ data: userProjects });
+        // ==========================================
+        // LA CORRECTION EST ICI : FORMATAGE DES DONNÉES
+        // ==========================================
+        const formattedData = projects.map((p: any) => {
+            const plain = p.get({ plain: true }); // Convertit en objet pur
+
+            return {
+                id: plain.id,
+                slug: plain.slug,
+                createdAt: plain.createdAt,
+
+                // Clés attendues par DataTables (définies dans PROJECT_COLUMNS)
+                name: plain.projectName,
+                type: plain.type ? plain.type.projectTypeName : 'N/A',
+                leaders: plain.leaders && plain.leaders.length > 0
+                    ? plain.leaders.map((l: any) => `${l.firstName} ${l.lastName}`).join(', ')
+                    : 'Aucun',
+                start: plain.startDate ? plain.startDate.toString().split('T')[0] : 'N/A',
+                end: plain.endDate ? plain.endDate.toString().split('T')[0] : 'N/A',
+
+                // On extrait juste la chaîne de caractère pour le statut
+                status: plain.status ? (plain.status.StatName || plain.status.statName) : 'N/A',
+
+                // On garde les données brutes cachées pour que la modale d'édition fonctionne
+                rawType: plain.type,
+                rawStatus: plain.status,
+                rawLeaders: plain.leaders,
+                projectName: plain.projectName
+            };
+        });
+
+        // On renvoie les données formatées, pas les données brutes
+        res.json({ data: formattedData });
     } catch (error) {
         console.error("Erreur lors de la récupération des projets:", error);
         res.status(500).json({ error: "Server Error" });
@@ -117,43 +140,42 @@ export const getProjectsData = async (req: Request, res: Response) => {
 };
 
 export const renderProjectDetails = async (req: Request, res: Response) => {
-    const user = (req as any).user;
-    const { slug } = req.params;
-    const TABLE_ID = 'wpList';
-    const selectedColumns = (req as any).tablePreferences[TABLE_ID] || ['name', 'type', 'account'];
+    try {
+        const user = (req as any).user;
+        const { slug } = req.params;
+        const TABLE_ID = 'wpList';
+        const selectedColumns = (req as any).tablePreferences[TABLE_ID] || ['name', 'account', 'status'];
 
-    const project = await Project.findOne({ where: { slug } });
-    if (!project) return res.status(404).render('404');
+        const project = await Project.findOne({
+            where: { slug },
+            include: [{ model: User, as: 'leaders' }] // Vérifier si l'utilisateur y a accès
+        });
 
-    // On récupère les données pour les listes déroulantes de la modale d'édition
-    const allWPTypes = await WPTypes.findAll();
-    const projectWPs = await WorkPackage.findAll({ where: { projectId: project.id } });
+        if (!project) return res.status(404).render('404');
 
-    const templateWPs = await WorkPackage.findAll({
-        include: [
-            {
-                model: WPContributor,
-                as: 'contributors',
-                where: { userId: user.id }, // Seulement les WPs où il contribue
-                required: true
-            },
-            {
-                model: Project,
-                as: 'project', // Pour afficher le nom du projet source dans le select
-                attributes: ['projectName']
-            }
-        ]
-    });
+        const isManagerOrAdmin = hasRole(user, ['Administrateur', 'Program Manager']);
+        const isAssignedLeader = (project as any).leaders.some((l: any) => l.id === user.id);
 
-    res.render('Pages/projectsDetails', {
-        user, project, tableId: TABLE_ID, tableTitle: "Work Packages",
-        allColumns: WP_COLUMNS, selectedColumns,
-        units: await Units.findAll(),
-        allWPTypes, projectWPs,
-        templateWPs,
-        currentUrl: req.originalUrl,
-        createAction: { label: "New Work Package", icon: "fas fa-plus", modalTarget: "#createWPModal" }
-    });
+        // Sécurité d'accès à la page de détails du projet
+        if (!isManagerOrAdmin && !isAssignedLeader) {
+            return res.status(403).send("Accès refusé : vous n'êtes pas assigné à ce projet.");
+        }
+
+        const projectWPs = await WorkPackage.findAll({ where: { projectId: (project as any).id } });
+
+        res.render('Pages/projectsDetails', {
+            user, project, tableId: TABLE_ID, tableTitle: "Work Packages",
+            allColumns: WP_COLUMNS, selectedColumns,
+            units: await Units.findAll(),
+            projectWPs,
+            currentUrl: req.originalUrl,
+            // Les Program Leaders et Managers peuvent créer des WP
+            createAction: { label: "New Work Package", icon: "fas fa-plus", modalTarget: "#createWPModal" }
+        });
+    } catch (error) {
+        console.error("Erreur details projet:", error);
+        res.status(500).send("Server Error");
+    }
 };
 
 export const getProjectWPsData = async (req: Request, res: Response) => {
@@ -164,30 +186,62 @@ export const getProjectWPsData = async (req: Request, res: Response) => {
                 model: WorkPackage,
                 as: 'workPackages',
                 include: [
-                    { model: WPTypes, as: 'type' },    // Inclure le nom du type
-                    { model: WorkPackage, as: 'father' } // Inclure le parent
+                    { model: WorkPackage, as: 'father' }, // Inclure le parent
+                    { model: Status, as: 'status' }       // Inclure le statut
                 ]
             }]
         });
-        res.json({ data: (project as any)?.workPackages || [] });
+
+        if (!project || !(project as any).workPackages) {
+            return res.json({ data: [] });
+        }
+
+        // FORMATAGE DES DONNÉES DU WP POUR LE DATATABLE
+        const formattedWPs = (project as any).workPackages.map((wp: any) => {
+            const plainWp = wp.get({ plain: true });
+
+            return {
+                id: plainWp.id,
+                slug: plainWp.slug,
+                // On passe le slug du projet pour pouvoir construire l'URL /project/monprojet/wp/monslug
+                projectSlug: (project as any).slug,
+
+                name: plainWp.wpName,
+                account: plainWp.accountNumber,
+                parent: plainWp.father ? plainWp.father.wpName : 'Aucun',
+                status: plainWp.status ? (plainWp.status.StatName || plainWp.status.statName) : 'N/A',
+
+                // Données brutes pour la modale d'édition
+                rawFatherId: plainWp.fatherWPId,
+                rawStatus: plainWp.status
+            };
+        });
+
+        res.json({ data: formattedWPs });
     } catch (error) {
+        console.error("Erreur getProjectWPsData:", error);
         res.status(500).json({ error: "Server Error" });
     }
 };
 
 const generateSlug = (text: string) => {
     return text.toString().toLowerCase()
-        .replace(/\s+/g, '-')           // Remplace les espaces par des tirets
-        .replace(/[^\w\-]+/g, '')       // Supprime les caractères spéciaux
-        .replace(/\-\-+/g, '-')         // Évite les doubles tirets
-        .replace(/^-+/, '')             // Trim début
-        .replace(/-+$/, '');            // Trim fin
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
 };
 
 export const createProject = async (req: Request, res: Response) => {
     try {
-        const { projectName, startDate, endDate, managerId } = req.body;
-        const currentUser = (req as any).user; // On récupère l'utilisateur qui fait l'action
+        const { projectName, projectTypeId, startDate, endDate, leaderIds } = req.body;
+        const currentUser = (req as any).user;
+
+        const isManagerOrAdmin = hasRole(currentUser, ['Administrateur', 'Program Manager']);
+        if (!isManagerOrAdmin) {
+            return res.status(403).json({ error: "Action non autorisée." });
+        }
 
         if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
             return res.status(400).json({ error: "The end date cannot be earlier than the start date." });
@@ -200,55 +254,63 @@ export const createProject = async (req: Request, res: Response) => {
             return res.status(400).json({ error: "This project name generates a slug that is already in use." });
         }
 
-        // CORRECTION MAJEURE ICI :
-        // Si managerId est vide (""), on assigne le projet au Directeur (currentUser.id)
-        // Sinon, on le convertit proprement en nombre entier (parseInt)
-        const finalManagerId = managerId ? parseInt(managerId) : currentUser.id;
-
-        await Project.create({
+        const newProject = await Project.create({
             projectName,
             slug: generatedSlug,
+            projectTypeId,
             startDate: startDate || null,
             endDate: endDate || null,
-            creatorUserId: finalManagerId,
-            statId: 1 // Actif par défaut à la création
+            creatorUserId: currentUser.id,
+            statId: 1 // Actif par défaut
         });
+
+        // Assignation des Program Leaders via la table de liaison
+        if (leaderIds && Array.isArray(leaderIds) && leaderIds.length > 0) {
+            const plData = leaderIds.map((id: string) => ({ projectId: (newProject as any).id, userId: parseInt(id) }));
+            await ProjectLeaders.bulkCreate(plData);
+        }
 
         res.status(200).json({ redirect: '/project' });
     } catch (error) {
-        // NOUVEAU LOG : Pour voir exactement pourquoi MariaDB refuse l'insertion
-        console.error("🔴 Erreur Backend lors de la création du projet :", error);
+        console.error("Erreur Backend lors de la création du projet :", error);
         res.status(500).json({ error: "Error while creating the project. Check server console." });
     }
 };
 
 export const updateProject = async (req: Request, res: Response) => {
     try {
-        const { id, projectName, startDate, endDate, managerId, statId } = req.body;
+        const { id, projectName, projectTypeId, startDate, endDate, statId, leaderIds } = req.body;
         const currentUser = (req as any).user;
 
-        const isDirector = currentUser.profiles.some((p: any) =>
-            ['Direction Générale', 'Administrateur'].includes(p.profileName || p.ProfileName)
-        );
+        const isManagerOrAdmin = hasRole(currentUser, ['Administrateur', 'Program Manager']);
+        if (!isManagerOrAdmin) {
+            return res.status(403).json({ error: "Seuls les Program Managers ou Administrateurs peuvent modifier un projet." });
+        }
 
         const project = await Project.findByPk(id);
         if (!project) return res.status(404).json({ error: "Project not found." });
 
-        // Si l'utilisateur essaie de clôturer le projet (statId = 4) mais n'est pas directeur
-        if (statId && parseInt(statId) === 4 && !isDirector) {
-            return res.status(403).json({ error: "Seul la Direction Générale peut clôturer un projet." });
-        }
-
+        // Mise à jour des informations de base du projet
         await project.update({
-            projectName,
-            startDate: startDate || null,
-            endDate: endDate || null,
-            creatorUserId: isDirector && managerId ? managerId : project.creatorUserId, // Seul le dir/admin peut changer le manager
-            statId: statId || project.statId
+            projectName: projectName || (project as any).projectName,
+            projectTypeId: projectTypeId || (project as any).projectTypeId,
+            startDate: startDate || (project as any).startDate,
+            endDate: endDate || (project as any).endDate,
+            statId: statId || (project as any).statId
         });
+
+        // Mise à jour des Leaders (on supprime les anciens et on insère les nouveaux)
+        if (leaderIds && Array.isArray(leaderIds)) {
+            await ProjectLeaders.destroy({ where: { projectId: (project as any).id } });
+            if (leaderIds.length > 0) {
+                const plData = leaderIds.map((userId: string) => ({ projectId: (project as any).id, userId: parseInt(userId) }));
+                await ProjectLeaders.bulkCreate(plData);
+            }
+        }
 
         res.status(200).json({ success: true });
     } catch (error) {
+        console.error("Erreur update projet:", error);
         res.status(500).json({ error: "Error while updating the project." });
     }
 };

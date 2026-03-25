@@ -6,8 +6,7 @@ class WorkPackage extends Model {
     public projectId!: number;
     public wpName!: string;
     public slug!: string;
-    public accountNumber!: string;
-    public wpTypeId!: number;
+    public accountNumber!: string
     public fatherWPId!: number | null;
     public statId!: number;
 }
@@ -19,7 +18,6 @@ WorkPackage.init(
         wpName: { type: DataTypes.STRING(255), allowNull: false, field: 'WPName' },
         slug: { type: DataTypes.STRING(255), allowNull: false, unique: true, field: 'Slug' },
         accountNumber: { type: DataTypes.STRING(50), allowNull: false, field: 'AccountNumber' },
-        wpTypeId: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false, field: 'WPTypeId' },
         fatherWPId: { type: DataTypes.INTEGER.UNSIGNED, allowNull: true, field: 'FatherWPId' },
         statId: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false, defaultValue: 1, field: 'StatId' }
     },

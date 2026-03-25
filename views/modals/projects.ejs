@@ -1,66 +1,70 @@
-<div class="modal fade" id="projectModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog-centered modal-dialog modal-lg" role="document">
+<div class="modal fade" id="projectModal" tabindex="-1" aria-labelledby="projectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">New Project</h4>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
+                <h5 class="modal-title" id="projectModalLabel">Nouveau Projet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="alert-container"></div>
-            <form id="projectForm">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6 form-group">
-                            <h6>Project Name</h6>
-                            <input type="text" name="projectName" id="proj_name" class="form-control" required>
-                        </div>
+            <div class="modal-body">
+                <form id="createProjectForm">
+                    <div class="mb-3">
+                        <label for="projectName" class="form-label">Nom du Projet</label>
+                        <input type="text" class="form-control" id="projectName" name="projectName" required>
                     </div>
 
-                    <div class="form-group">
-                        <label>Project Manager</label>
-                        <select id="project-manager" class="form-control" >
-                            <option value="">-- Select a Manager --</option>
-                            <% if (typeof managers !== 'undefined') { %>
-                                <% managers.forEach(manager => { %>
-                                    <option value="<%= manager.id || manager.userId %>"><%= manager.firstName || manager.UserFirstName %> <%= manager.lastName || manager.UserLastName %></option>
-                                <% }) %>
-                            <% } %>
+                    <div class="mb-3">
+                        <label for="projectType" class="form-label">Type de Projet</label>
+                        <select class="form-select" id="projectType" name="projectTypeId" required>
+                            <option value="" disabled selected>Sélectionnez un type...</option>
+                            <% allTypes.forEach(type => { %>
+                                <option value="<%= type.projectTypeId %>"><%= type.projectTypeName %></option>
+                            <% }) %>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <h6>Start Date</h6>
-                        <input type="date" name="startDate" id="start_date" class="form-control">
-                        <br>
-                        <h6>End Date</h6>
-                        <input type="date" name="endDate" id="end_date" class="form-control">
+                    <div class="mb-3">
+                        <label for="projectLeaders" class="form-label">Program Leaders</label>
+                        <select class="form-select" id="projectLeaders" name="leaderIds" multiple>
+                            <% programLeaders.forEach(leader => { %>
+                                <option value="<%= leader.id %>"><%= leader.firstName %> <%= leader.lastName %></option>
+                            <% }) %>
+                        </select>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Create Project</button>
-                </div>
-            </form>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="startDate" class="form-label">Date de début</label>
+                            <input type="date" class="form-control" id="startDate" name="startDate">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="endDate" class="form-label">Date de fin</label>
+                            <input type="date" class="form-control" id="endDate" name="endDate">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" id="saveProjectBtn">Créer le projet</button>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    // On cible le bon ID de formulaire : #projectForm
-    $('#projectForm').on('submit', async function(e) {
-        e.preventDefault();
+    document.getElementById('saveProjectBtn').addEventListener('click', async () => {
+        const form = document.getElementById('createProjectForm');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
 
-        // On cible les bons IDs des inputs définis dans votre HTML
-        const data = {
-            projectName: $('#proj_name').val(),
-            managerId: $('#project-manager').val(),
-            startDate: $('#start_date').val(),
-            endDate: $('#end_date').val()
-        };
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
 
-        const submitBtn = $(this).find('button[type="submit"]');
-        submitBtn.prop('disabled', true).text('Creating...');
+        // Gérer la récupération du tableau des leaders sélectionnés
+        const leaderSelect = document.getElementById('projectLeaders');
+        data.leaderIds = Array.from(leaderSelect.selectedOptions).map(opt => opt.value);
 
         try {
             const response = await fetch('/project/create', {
@@ -70,17 +74,14 @@
             });
 
             const result = await response.json();
-
             if (response.ok) {
                 window.location.href = result.redirect || '/project';
             } else {
-                alert("Error: " + (result.error || "Unknown error occurred."));
-                submitBtn.prop('disabled', false).text('Create Project');
+                alert('Erreur: ' + result.error);
             }
-        } catch (err) {
-            console.error(err);
-            alert("Network error or Server unreachable.");
-            submitBtn.prop('disabled', false).text('Create Project');
+        } catch (error) {
+            console.error('Erreur:', error);
+            alert('Erreur serveur.');
         }
     });
 </script>

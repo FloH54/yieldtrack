@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import {Task, Status, WorkPackage, Project, RWs, Units, WPContributor, Codes} from '../models/Index';
+import {Task, Status, WorkPackage, Project, RWs, Units, Codes} from '../models/Index';
 import { Op } from "sequelize";
 
 export const AVAILABLE_COLUMNS = [
@@ -94,41 +94,40 @@ export const getRemainingTasksData = async (req: Request, res: Response) => {
 
 export const createTask = async (req: Request, res: Response) => {
     try {
-        const { taskName, budget, unitId, startDate, endDate, wpId, wpSlug, projectSlug, assigneeUser } = req.body;
+        // On ne récupère plus taskFUPTypeId depuis req.body
+        const { wpId, assigneeUserId, taskName, unitId, taskStart, taskEnd, taskBudgetHours, codeId, priority } = req.body;
 
-        // Sécurité : Vérifier que le WP est actif
-        const wp = await WorkPackage.findByPk(wpId, { include: ['project'] });
-        if (!wp || wp.statId !== 1 || (wp as any).project.statId !== 1) {
-            return res.status(400).json({ error: "Impossible de créer une tâche : Le projet ou le lot est clôturé." });
-        }
+        const safeInt = (val: any) => {
+            if (!val) return null;
+            const parsed = parseInt(val, 10);
+            return isNaN(parsed) ? null : parsed;
+        };
 
-        const existingTask = await Task.findOne({
-            where: { wpId : wpId, [Op.or]: [{ taskName: taskName}] }
-        });
-        if (existingTask) { return res.status(400).json({"error": "This task name is already used"}); }
+        const parsedWpId = safeInt(wpId);
+
+        if (!parsedWpId) return res.status(400).json({ error: "L'ID du Work Package est manquant." });
 
         const newTask = await Task.create({
-            taskName: taskName, wpId: wpId, taskBudgetHours: budget, startDate: startDate,
-            endDate: endDate, assigneeUserId: assigneeUser || null, statId: 1, createdAt: new Date(),
-            updatedAt: new Date(), taskFUPTypeId: 1, codeId: 0, unitId: unitId
+            wpId: parsedWpId,
+            assigneeUserId: safeInt(assigneeUserId),
+            taskFUPTypeId: 2, // 2 = 'Heures restant à faire' (Forcé par défaut)
+            taskName: taskName,
+            unitId: safeInt(unitId),
+            taskStart: taskStart || null,
+            taskEnd: taskEnd || null,
+            taskBudgetHours: safeInt(taskBudgetHours),
+            codeId: safeInt(codeId),
+            priority: safeInt(priority),
+            statId: 1 // 1 = Actif par défaut
         });
 
-        if (assigneeUser) {
-            const existingContributor = await WPContributor.findOne({
-                where: { wpId: wpId, userId: assigneeUser }
-            });
-            if (!existingContributor) {
-                await WPContributor.create({ wpId: wpId, userId: assigneeUser, profileId: 6 });
-            }
-        }
-
-        const slug : String = "/project/" + projectSlug + "/wp/" + wpSlug;
-        res.status(200).json({ redirect: slug });
-    } catch (error){
+        // En renvoyant simplement "success: true", le frontend saura qu'il doit recharger la page courante
+        res.status(200).json({ success: true });
+    } catch (error) {
         console.error("Erreur création tâche:", error);
-        res.status(500).json({ error: "Error while creating the task" });
+        res.status(500).json({ error: "Erreur lors de la création de la tâche." });
     }
-}
+};
 
 // Fonction d'archivage
 export const archiveTask = async (req: Request, res: Response) => {
@@ -149,16 +148,6 @@ export const updateTask = async (req: Request, res: Response) => {
 
         // Mise à jour de la tâche (si userId est vide, on met null)
         await task.update({ assigneeUserId: userId || null });
-
-        // NOUVEAU : Ajouter le nouvel utilisateur comme contributeur
-        if (userId) {
-            const existingContributor = await WPContributor.findOne({
-                where: { wpId: task.wpId, userId: userId }
-            });
-            if (!existingContributor) {
-                await WPContributor.create({ wpId: task.wpId, userId: userId, profileId: 6 });
-            }
-        }
 
         res.status(200).json({ success: true });
     } catch (error) {

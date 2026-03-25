@@ -109,7 +109,7 @@
             const data = Object.fromEntries(formData.entries());
 
             try {
-                const response = await fetch(this.action, {
+                const response = await fetch('/task/create', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
@@ -119,7 +119,7 @@
 
                 if (response.ok) {
                     // Si succès (200), on redirige via JS
-                    window.location.href = result.redirect;
+                    window.location.reload()
                 } else {
                     // Si erreur (400, 500), on affiche l'alerte sans quitter la modale
                     alertContainer.innerHTML = `

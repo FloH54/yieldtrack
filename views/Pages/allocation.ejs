@@ -12,17 +12,6 @@
 
             <div class="container-fluid">
                 <%- include('../partials/dynamic_table')%>
-                <div class="d-flex justify-content-end mb-4">
-                    <% if(user.profiles && user.profiles.some(p => p.ProfileName === 'Administrateur' || p.name === 'Administrateur')) { %>
-                        <button class="btn btn-primary mr-3 shadow-sm" data-toggle="modal" data-target="#createUnitModal">
-                            <i class="fas fa-plus"></i> Nouvelle Unité
-                        </button>
-                    <% } %>
-
-                    <button class="btn btn-info shadow-sm" data-toggle="modal" data-target="#assignUserUnitModal">
-                        <i class="fas fa-user-tag"></i> Affecter Utilisateur (Métier)
-                    </button>
-                </div>
             </div>
         </div>
         <%- include('../partials/footer')%>

@@ -20,16 +20,24 @@ export const renderUsersPage = async (req: Request, res: Response) => {
     const TABLE_ID = 'usersList';
     const selectedColumns = (req as any).tablePreferences[TABLE_ID] || ['firstName', 'lastName', 'email', 'profiles', 'status'];
 
-    // On récupère les profils pour le menu déroulant multiple de la modale
     const isAdmin = user.profiles.some((p: any) => ['Administrateur'].includes(p.profileName || p.ProfileName || p.name));
 
-// Filtrer les profils à envoyer à la vue
     let allProfiles = await Profiles.findAll();
     if (!isAdmin) {
-        // ID 1 correspond à l'Admin d'après votre data.sql
         allProfiles = allProfiles.filter(p => p.id !== 1 && p.ProfileId !== 1);
     }
     const allUnits = await Units.findAll();
+
+    // 1. Définition du 2ème bouton (uniquement pour les admins)
+    let secondaryAction = null;
+    if (isAdmin) {
+        secondaryAction = {
+            label: "Nouvelle Unité",
+            icon: "fas fa-plus",
+            modalTarget: "#createUnitModal",
+            btnClass: "btn-info" // Couleur bleu clair pour le différencier
+        };
+    }
 
     res.render('Pages/users', {
         user,
@@ -40,7 +48,8 @@ export const renderUsersPage = async (req: Request, res: Response) => {
         allProfiles,
         allUnits,
         currentUrl: req.originalUrl,
-        createAction: { label: "New User", icon: "fas fa-user-plus", modalTarget: "#createUserModal" }
+        createAction: { label: "New User", icon: "fas fa-user-plus", modalTarget: "#createUserModal" },
+        secondaryAction // 2. On passe la variable à la vue
     });
 };
 
@@ -168,5 +177,32 @@ export const updateUser = async (req: Request, res: Response) => {
     } catch (error) {
         console.error("Erreur modification utilisateur :", error);
         res.status(500).json({ error: "Error while updating user" });
+    }
+};
+
+export const createUnit = async (req: Request, res: Response) => {
+    try {
+        const { unitName, fatherUnitId } = req.body;
+        const user = (req as any).user;
+
+        // Vérification stricte du rôle Administrateur
+        const isAdmin = user.profiles.some((p: any) =>
+            ['Administrateur'].includes(p.profileName || p.ProfileName || p.name)
+        );
+
+        if (!isAdmin) {
+            return res.status(403).json({ error: "Seul un Administrateur peut créer une unité." });
+        }
+
+        await Units.create({
+            unitName,
+            fatherUnitId: fatherUnitId ? parseInt(fatherUnitId) : null
+        });
+
+        // Redirection vers la page users après création
+        res.status(200).json({ success: true, redirect: '/users' });
+    } catch (error) {
+        console.error("Erreur création unité :", error);
+        res.status(500).json({ error: "Erreur lors de la création de l'unité." });
     }
 };

@@ -35,9 +35,9 @@
         const columnsDefinition = [
             { data: 'id', name: 'id', title: 'ID' },
             {
-                data: 'wpName', name: 'name', title: 'WP Name',
+                data: 'name', name: 'name', title: 'WP Name',
                 render: function(data, type, row) {
-                    return `<a href="/project/<%= project.slug %>/wp/${row.slug}">${data}</a>`;
+                    return `<a href="/project/${row.projectSlug}/wp/${row.slug}">${data}</a>`;
                 }
             },
             { data: 'type.wpTypeName', name: 'type', title: 'Type', defaultContent: 'N/A' },

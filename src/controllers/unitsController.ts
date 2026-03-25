@@ -108,7 +108,7 @@ export const renderUnitTasksPage = async (req: Request, res: Response) => {
         console.error("Erreur de rendu de la page allocation :", err);
         res.status(500).json({ error: "Error while loading the page" });
     }
-}
+};
 
 // Mise à jour de l'assignation
 export const updateAsigneeUser = async (req: Request, res: Response) => {
@@ -142,62 +142,4 @@ export const updateAsigneeUser = async (req: Request, res: Response) => {
         console.error("Erreur lors du changement de user :", err);
         res.status(500).json({ error: "Error while associating the task" });
     }
-}
-
-export const createUnit = async (req: Request, res: Response) => {
-    try {
-        const { unitName, fatherUnitId } = req.body;
-        const user = (req as any).user;
-
-        if (!isAdmin(user)) {
-            return res.status(403).json({ error: "Seul un Administrateur peut créer une unité." });
-        }
-
-        await Units.create({
-            unitName,
-            fatherUnitId: fatherUnitId ? parseInt(fatherUnitId) : null
-        });
-
-        res.status(200).json({ success: true, redirect: '/allocation' }); // Ou vers une page dédiée aux unités
-    } catch (error) {
-        console.error("Erreur création unité :", error);
-        res.status(500).json({ error: "Erreur lors de la création de l'unité." });
-    }
 };
-
-export const assignUserToUnit = async (req: Request, res: Response) => {
-    try {
-        const { userId, unitId, weeklyHours } = req.body;
-        const user = (req as any).user;
-
-        // Vérification si le Team Manager gère bien cette unité (optionnel mais recommandé)
-        if (!isAdmin(user)) {
-            const managerUnits = await UserToUnits.findAll({ where: { userId: user.id } });
-            const managerUnitIds = managerUnits.map(mu => mu.unitId || (mu as any).UnitId);
-            if (!managerUnitIds.includes(parseInt(unitId))) {
-                return res.status(403).json({ error: "Vous ne gérez pas cette unité." });
-            }
-        }
-
-        // Vérifie si l'affectation existe déjà
-        const existing = await UserToUnits.findOne({ where: { userId, unitId } });
-        if (existing) {
-            return res.status(400).json({ error: "L'utilisateur est déjà dans cette unité." });
-        }
-
-        const today = new Date().toISOString().split('T')[0];
-
-        await UserToUnits.create({
-            userId,
-            unitId,
-            weeklyHours: weeklyHours || 35, // ou 0 par défaut
-            startDate: today
-        });
-
-        res.status(200).json({ success: true });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Erreur lors de l'affectation à l'unité." });
-    }
-};
-

@@ -9,6 +9,12 @@
                 </button>
             <% } %>
 
+            <% if (typeof secondaryAction !== 'undefined' && secondaryAction) { %>
+                <button class="btn <%= secondaryAction.btnClass || 'btn-secondary' %> shadow-sm" data-toggle="modal" data-target="<%= secondaryAction.modalTarget %>">
+                    <i class="<%= secondaryAction.icon %>"></i> <%= secondaryAction.label %>
+                </button>
+            <% } %>
+
             <div class="dropdown no-arrow">
                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownColumns" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-columns"></i> Colonnes

@@ -27,33 +27,28 @@
         // Récupération des préférences de colonnes envoyées par le serveur
         const prefs = <%- JSON.stringify(selectedColumns) %>;
 
-        // Définition des colonnes pour DataTables
+        // Définition des colonnes pour DataTables (MISE À JOUR)
         const columnsDefinition = [
             { data: 'id', name: 'id', title: 'ID' },
             {
-                data: 'projectName', name: 'name', title: 'Project Name',
-                // On rend le nom du projet cliquable pour aller vers ses détails
+                data: 'name', name: 'name', title: 'Project Name',
                 render: function(data, type, row) {
                     return `<a href="/project/${row.slug}">${data}</a>`;
                 }
             },
-            {
-                data: 'creator',
-                name: 'manager',
-                title: 'Manager',
-                render: function(data) {
-                    return data ? `${data.firstName} ${data.lastName}` : 'Unassigned';
-                }
-            },
+            { data: 'type', name: 'type', title: 'Type', defaultContent: 'N/A' },
+            { data: 'leaders', name: 'leaders', title: 'Program Leaders', defaultContent: 'Aucun' },
             { data: 'slug', name: 'slug', title: 'Slug' },
-            { data: 'startDate', name: 'start', title: 'Start Date', defaultContent: "N/A" },
-            { data: 'endDate', name: 'end', title: 'End Date', defaultContent: "N/A" },
+            { data: 'start', name: 'start', title: 'Start Date', defaultContent: "N/A" },
+            { data: 'end', name: 'end', title: 'End Date', defaultContent: "N/A" },
             {
-                data: 'statId', name: 'status', title: 'Status',
+                data: 'status', name: 'status', title: 'Status',
                 render: function(data) {
-                    if (data === 1) return '<span class="badge badge-success">Actif</span>';
-                    if (data === 4) return '<span class="badge badge-secondary">Clôturé</span>';
-                    return `<span class="badge badge-warning">Statut ${data}</span>`;
+                    if (!data) return "N/A";
+                    const statusLower = data.toLowerCase();
+                    if (statusLower === 'actif') return '<span class="badge badge-success">Actif</span>';
+                    if (statusLower === 'completed' || statusLower === 'clôturé') return '<span class="badge badge-secondary">Clôturé</span>';
+                    return `<span class="badge badge-warning">${data}</span>`;
                 }
             },
             {
@@ -61,18 +56,18 @@
                 render: function(data) { return data ? new Date(data).toLocaleDateString() : "-"; }
             },
             {
-                // Colonne générée dynamiquement pour les actions
+                // Colonne d'actions
                 data: null, name: 'actions', title: 'Actions', orderable: false,
                 render: function(data, type, row) {
-                    // Vous pourrez ajouter ici un menu déroulant similaire à la page remaining.ejs si besoin
+                    // On passe l'objet `row` entier à la fonction de la modale d'édition
+                    // L'échappement HTML est géré pour éviter de casser le JSON stringifié
+                    const rowData = JSON.stringify(row).replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+
                     return `
-                            <button class="btn btn-link btn-sm" data-toggle="modal" data-target="#editProjectModal"
-                                    data-id="${row.id}" data-name="${row.projectName}" data-slug="${row.slug}"
-                                    data-start="${row.startDate || ''}" data-end="${row.endDate || ''}"
-                                    title="Modifier">
-                                <i class="fas fa-pen text-gray-400"></i>
-                            </button>
-                        `;;
+                        <button class="btn btn-link btn-sm" onclick="openEditProjectModal(${rowData})" title="Modifier">
+                            <i class="fas fa-pen text-gray-400"></i>
+                        </button>
+                    `;
                 }
             }
         ];

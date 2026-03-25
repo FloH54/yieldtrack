@@ -118,7 +118,12 @@
             }
         ];
 
-        initYieldtrackTable('<%= tableId %>', '/remaining/api/data', columnsDefinition, prefs);
+        initYieldtrackTable(
+            '<%= tableId %>',
+            '/project/<%= projectSlug %>/wp/<%= wp.slug %>/api/tasks', // <-- La bonne URL est ici
+            columnsDefinition,
+            prefs
+        );
 
         // OUVRE LA MODALE ET PRÉ-REMPLI LES INFOS
         $('#addRWModal').on('show.bs.modal', function (event) {

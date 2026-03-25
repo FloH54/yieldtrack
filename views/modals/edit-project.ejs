@@ -1,76 +1,113 @@
-<div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog-centered modal-dialog modal-lg" role="document">
+<div class="modal fade" id="editProjectModal" tabindex="-1" aria-labelledby="editProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Edit Project</h4>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
+                <h5 class="modal-title" id="editProjectModalLabel">Éditer le Projet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="edit-project-alert"></div>
-            <form  id="editProjectForm" >
-                <input type="hidden" name="id" id="edit_proj_id">
-                <div class="modal-body">
+            <div class="modal-body">
+                <form id="editProjectForm">
+                    <input type="hidden" id="editProjectId" name="id">
+
+                    <div class="mb-3">
+                        <label for="editProjectName" class="form-label">Nom du Projet</label>
+                        <input type="text" class="form-control" id="editProjectName" name="projectName" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editProjectType" class="form-label">Type de Projet</label>
+                        <select class="form-select" id="editProjectType" name="projectTypeId" required>
+                            <% allTypes.forEach(type => { %>
+                                <option value="<%= type.projectTypeId %>"><%= type.projectTypeName %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editProjectLeaders" class="form-label">Program Leaders</label>
+                        <select class="form-select" id="editProjectLeaders" name="leaderIds" multiple>
+                            <% programLeaders.forEach(leader => { %>
+                                <option value="<%= leader.id %>"><%= leader.firstName %> <%= leader.lastName %></option>
+                            <% }) %>
+                        </select>
+                        <small class="text-muted">Maintenez Ctrl/Cmd pour sélectionner plusieurs leaders.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editProjectStatus" class="form-label">Statut</label>
+                        <select class="form-select" id="editProjectStatus" name="statId" required>
+                            <% allStatus.forEach(stat => { %>
+                                <option value="<%= stat.StatId || stat.id || stat.statId %>"><%= stat.StatName || stat.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+
                     <div class="row">
-                        <div class="col-md-6 form-group">
-                            <h6>Project Name</h6>
-                            <input type="text" name="projectName" id="edit_proj_name" class="form-control" required>
+                        <div class="col-md-6 mb-3">
+                            <label for="editStartDate" class="form-label">Date de début</label>
+                            <input type="date" class="form-control" id="editStartDate" name="startDate">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="editEndDate" class="form-label">Date de fin</label>
+                            <input type="date" class="form-control" id="editEndDate" name="endDate">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <h6>Start Date</h6>
-                        <input type="date" name="startDate" id="edit_proj_start" class="form-control">
-                        <br>
-                        <h6>End Date</h6>
-                        <input type="date" name="endDate" id="edit_proj_end" class="form-control">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </form>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" id="updateProjectBtn">Sauvegarder</button>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    // On cible le bon ID de formulaire : #editProjectForm
-    $('#editProjectForm').on('submit', async function(e) {
-        e.preventDefault();
+    function openEditProjectModal(projectData) {
+        document.getElementById('editProjectId').value = projectData.id;
+        document.getElementById('editProjectName').value = projectData.projectName;
 
-        // On cible les bons IDs et on N'OUBLIE PAS L'ID DU PROJET CACHÉ
-        const data = {
-            id: $('#edit_proj_id').val(), // Indispensable pour l'update !
-            projectName: $('#edit_proj_name').val(),
-            startDate: $('#edit_proj_start').val(),
-            endDate: $('#edit_proj_end').val()
-            // Ajoutez managerId et statId ici si vous les avez rajoutés dans le HTML de cette modale
-        };
+        // Remplissage du Type et du Statut
+        if (projectData.type) document.getElementById('editProjectType').value = projectData.type.projectTypeId;
+        if (projectData.status) document.getElementById('editProjectStatus').value = projectData.status.StatId;
 
-        const submitBtn = $(this).find('button[type="submit"]');
-        submitBtn.prop('disabled', true).text('Saving...');
+        // Remplissage des Leaders (Select Multiple)
+        const leaderSelect = document.getElementById('editProjectLeaders');
+        const leaderIds = projectData.leaders ? projectData.leaders.map(l => l.id.toString()) : [];
+        Array.from(leaderSelect.options).forEach(opt => {
+            opt.selected = leaderIds.includes(opt.value);
+        });
+
+        // Dates
+        document.getElementById('editStartDate').value = projectData.startDate ? projectData.startDate.split('T')[0] : '';
+        document.getElementById('editEndDate').value = projectData.endDate ? projectData.endDate.split('T')[0] : '';
+
+        const modal = new bootstrap.Modal(document.getElementById('editProjectModal'));
+        modal.show();
+    }
+
+    document.getElementById('updateProjectBtn').addEventListener('click', async () => {
+        const form = document.getElementById('editProjectForm');
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        const leaderSelect = document.getElementById('editProjectLeaders');
+        data.leaderIds = Array.from(leaderSelect.selectedOptions).map(opt => opt.value);
 
         try {
-            const response = await fetch('/project/updtate', { // "updtate" correspond bien à la faute de frappe dans vos routes
+            const response = await fetch('/project/updtate', { // Remarque : J'ai gardé votre typo "updtate" issue des routes
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
 
             const result = await response.json();
-
-            if (response.ok) {
-                // Pour l'édition, on recharge juste la page pour voir les modifications
-                window.location.reload();
-            } else {
-                alert("Error: " + (result.error || "Unknown error occurred."));
-                submitBtn.prop('disabled', false).text('Save Changes');
-            }
-        } catch (err) {
-            console.error(err);
-            alert("Network error or Server unreachable.");
-            submitBtn.prop('disabled', false).text('Save Changes');
+            if (response.ok) { window.location.reload(); }
+            else { alert('Erreur: ' + result.error); }
+        } catch (error) {
+            alert('Erreur serveur.');
         }
     });
 </script>

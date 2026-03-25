@@ -11,7 +11,6 @@ import wpRoutes from "./rootes/wpRoutes";
 import preferenceRoutes from "./rootes/preferenceRoutes";
 import {renderUnitTasksPage, getUnitTasks, updateAsigneeUser} from "./controllers/unitsController";
 import userRoutes from "./rootes/userRoutes";
-import directorRoutes from "./rootes/directorRoutes";
 import unitRoutes from "./rootes/unitRoutes";
 
 
@@ -48,7 +47,6 @@ app.use('/preferences', preferenceRoutes); // Un unique point d'entrée pour les
 app.get('/allocation', renderUnitTasksPage); // Rendu de la page HTML
 app.use('/units', unitRoutes);
 app.use('/users', userRoutes);
-app.use('/director', directorRoutes);
 
 app.get('/', (req, res) => res.render('index', { user: (req as any).user }));
 

@@ -23,14 +23,6 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <h6>WP Type</h6>
-                            <select name="wpTypeId" id="edit_wp_type" class="form-control" required>
-                                <% allWPTypes.forEach(type => { %>
-                                    <option value="<%= type.wpTypeId %>"><%= type.wpTypeName %></option>
-                                <% }) %>
-                            </select>
-                        </div>
-                        <div class="col-md-6 form-group">
                             <h6>Parent Work Package</h6>
                             <select name="fatherWPId" id="edit_wp_father" class="form-control">
                                 <option value="">None (Root)</option>
