@@ -2,7 +2,7 @@
     <div class="modal-dialog-centered modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title font-weight-bold"><i class="fas fa-tasks mr-2"></i>Éditer la tâche</h5>
+                <h5 class="modal-title font-weight-bold"><i class="fas fa-tasks mr-2"></i>Edit Task</h5>
                 <button class="close text-white" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -13,11 +13,11 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-8 form-group">
-                            <label class="font-weight-bold">Nom de la tâche <span class="text-danger">*</span></label>
+                            <label class="font-weight-bold">Task Name <span class="text-danger">*</span></label>
                             <input type="text" name="taskName" id="edit_task_name" class="form-control bg-light" required>
                         </div>
                         <div class="col-md-4 form-group">
-                            <label class="font-weight-bold">Statut <span class="text-danger">*</span></label>
+                            <label class="font-weight-bold">Status <span class="text-danger">*</span></label>
                             <select name="statId" id="edit_task_status" class="form-control bg-light" required>
                                 <% if (typeof allStatus !== 'undefined') { allStatus.forEach(stat => { %>
                                     <option value="<%= stat.StatId || stat.id || stat.statId %>"><%= stat.StatName || stat.name || stat.statName %></option>
@@ -31,9 +31,9 @@
                             <input type="number" name="budget" id="edit_task_budget" class="form-control bg-light" required>
                         </div>
                         <div class="col-md-8 form-group">
-                            <label class="font-weight-bold">Unité (Métier)</label>
+                            <label class="font-weight-bold">Unit (Job)</label>
                             <select name="unitId" id="edit_task_unit" class="form-control bg-light">
-                                <option value="">-- Aucune unité --</option>
+                                <option value="">-- No unit --</option>
                                 <% if (typeof allUnits !== 'undefined') { allUnits.forEach(unit => { %>
                                     <option value="<%= unit.unitId || unit.id || unit.UnitId %>"><%= unit.unitName || unit.UnitName %></option>
                                 <% })} %>
@@ -42,18 +42,18 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label class="font-weight-bold">Date de début</label>
+                            <label class="font-weight-bold">Start Date</label>
                             <input type="date" name="startDate" id="edit_task_start" class="form-control bg-light">
                         </div>
                         <div class="col-md-6 form-group">
-                            <label class="font-weight-bold">Date de fin</label>
+                            <label class="font-weight-bold">End Date</label>
                             <input type="date" name="endDate" id="edit_task_end" class="form-control bg-light">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary shadow-sm"><i class="fas fa-save mr-1"></i> Sauvegarder</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary shadow-sm"><i class="fas fa-save mr-1"></i> Save</button>
                 </div>
             </form>
         </div>
@@ -69,7 +69,7 @@
         $('#edit_task_start').val(button.data('start'));
         $('#edit_task_end').val(button.data('end'));
 
-        // NOUVEAU : On pré-remplit les selects
+        // NEW: We pre-fill the selects
         $('#edit_task_status').val(button.data('status'));
         $('#edit_task_unit').val(button.data('unit'));
     });
@@ -90,7 +90,7 @@
             if (response.ok) { window.location.reload(); }
             else { alertContainer.innerHTML = `<div class="alert alert-danger m-3">${result.error}</div>`; }
         } catch (err) {
-            alertContainer.innerHTML = `<div class="alert alert-danger m-3">Erreur serveur.</div>`;
+            alertContainer.innerHTML = `<div class="alert alert-danger m-3">Server error.</div>`;
         }
     });
 </script>

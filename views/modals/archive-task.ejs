@@ -6,7 +6,7 @@
                 <input type="hidden" name="redirectUrl" value="<%= currentUrl %>">
 
                 <div class="modal-header">
-                    <h5 class="modal-title">Archive task</h5>
+                    <h5 class="modal-title">Archive Task</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -16,7 +16,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <button class="btn btn-warning" type="submit">Archive it</button>
+                    <button class="btn btn-warning" type="submit">Archive</button>
                 </div>
             </form>
         </div>
@@ -26,16 +26,16 @@
 <script>
     $(document).ready(function() {
         $('#archiveTaskModal').on('show.bs.modal', function (event) {
-            // Le bouton sur lequel on a cliqué
-            var boutonClique = $(event.relatedTarget);
+            // The button that was clicked
+            var clickedButton = $(event.relatedTarget);
 
-            // Extraction des données data-id et data-name
-            var idRecupere = boutonClique.data('id');
-            var nomRecupere = boutonClique.data('name');
+            // Extracting data-id and data-name
+            var retrievedId = clickedButton.data('id');
+            var retrievedName = clickedButton.data('name');
 
-            // Remplissage des champs de la modale
-            $('#modal-item-id').val(idRecupere);
-            $('#modal-item-name').text(nomRecupere);
+            // Filling the modal fields
+            $('#modal-item-id').val(retrievedId);
+            $('#modal-item-name').text(retrievedName);
         });
     });
 </script>

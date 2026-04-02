@@ -53,7 +53,7 @@
             $('#edit_wp_father').val(button.data('father'));
         });
 
-        // NOUVEAU : Auto-génération du slug lors de l'édition
+        // NEW: Auto-generation of the slug during editing
         document.getElementById('edit_wp_name').addEventListener('input', function() {
             const slug = this.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
             document.getElementById('edit_wp_slug').value = slug;
@@ -76,7 +76,7 @@
                     alertContainer.innerHTML = `<div class="alert alert-danger m-3">${res.error}</div>`;
                 }
             } catch (err) {
-                // Traduit en anglais
+                // Translated to English
                 alertContainer.innerHTML = `<div class="alert alert-danger m-3">Server connection error.</div>`;
             }
         });

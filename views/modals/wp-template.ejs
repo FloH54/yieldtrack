@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-info text-white">
-                <h5 class="modal-title font-weight-bold"><i class="fas fa-copy mr-2"></i>Charger un Template</h5>
+                <h5 class="modal-title font-weight-bold"><i class="fas fa-copy mr-2"></i>Load a Template</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -13,14 +13,14 @@
                     <input type="hidden" name="projectSlug" value="<%= project.slug %>">
 
                     <div class="mb-4">
-                        <label class="form-label font-weight-bold text-gray-800">Nom du nouveau WP <span class="text-danger">*</span></label>
+                        <label class="form-label font-weight-bold text-gray-800">New WP Name <span class="text-danger">*</span></label>
                         <input type="text" class="form-control bg-light border-0" name="wpName" required>
                     </div>
 
                     <div class="mb-3 p-3 bg-white border-left-primary shadow-sm rounded">
-                        <label class="form-label font-weight-bold text-primary"><i class="fas fa-building mr-1"></i> Corporate Templates (Officiels)</label>
+                        <label class="form-label font-weight-bold text-primary"><i class="fas fa-building mr-1"></i> Corporate Templates (Official)</label>
                         <select class="form-control bg-light border-0" id="corporateSelect">
-                            <option value="" selected>-- Aucun --</option>
+                            <option value="" selected>-- None --</option>
                             <% templateProjects.filter(p => p.projectTypeId === 1).forEach(proj => { %>
                                 <optgroup label="<%= proj.projectName %>">
                                     <% if(proj.workPackages && proj.workPackages.length > 0) { %>
@@ -33,14 +33,28 @@
                         </select>
                     </div>
 
-                    <div class="text-center font-weight-bold text-gray-500 mb-3">OU</div>
+                    <div class="mb-3 p-3 bg-white border-left-success shadow-sm rounded">
+                        <label class="form-label font-weight-bold text-success"><i class="fas fa-copy mr-1"></i> Team Templates</label>
+                        <select class="form-control bg-light border-0" id="templateSelect">
+                            <option value="" selected>-- None --</option>
+                            <% templateProjects.filter(p => p.projectTypeId === 2).forEach(proj => { %>
+                                <optgroup label="<%= proj.projectName %>">
+                                    <% if(proj.workPackages && proj.workPackages.length > 0) { %>
+                                        <% proj.workPackages.forEach(wp => { %>
+                                            <option value="<%= wp.id %>"><%= wp.wpName %></option>
+                                        <% }) %>
+                                    <% } %>
+                                </optgroup>
+                            <% }) %>
+                        </select>
+                    </div>
 
-                    <div class="mb-4 p-3 bg-white border-left-success shadow-sm rounded">
-                        <label class="form-label font-weight-bold text-success"><i class="fas fa-users mr-1"></i> Templates & Productions (Équipes)</label>
-                        <select class="form-control bg-light border-0" id="standardSelect">
-                            <option value="" selected>-- Aucun --</option>
-                            <% templateProjects.filter(p => p.projectTypeId === 2 || p.projectTypeId === 3).forEach(proj => { %>
-                                <optgroup label="<%= proj.projectName %> (<%= proj.projectTypeId === 2 ? 'Template' : 'Production' %>)">
+                    <div class="mb-4 p-3 bg-white border-left-warning shadow-sm rounded">
+                        <label class="form-label font-weight-bold text-warning"><i class="fas fa-industry mr-1"></i> Projects in Production</label>
+                        <select class="form-control bg-light border-0" id="productionSelect">
+                            <option value="" selected>-- None --</option>
+                            <% templateProjects.filter(p => p.projectTypeId === 3).forEach(proj => { %>
+                                <optgroup label="<%= proj.projectName %>">
                                     <% if(proj.workPackages && proj.workPackages.length > 0) { %>
                                         <% proj.workPackages.forEach(wp => { %>
                                             <option value="<%= wp.id %>"><%= wp.wpName %></option>
@@ -53,19 +67,19 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label font-weight-bold text-gray-800">Date de début</label>
+                            <label class="form-label font-weight-bold text-gray-800">Start Date</label>
                             <input type="date" class="form-control bg-light border-0" name="startDate">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label font-weight-bold text-gray-800">Date de fin</label>
+                            <label class="form-label font-weight-bold text-gray-800">End Date</label>
                             <input type="date" class="form-control bg-light border-0" name="endDate">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer bg-light">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                <button type="button" class="btn btn-info px-4 shadow-sm" id="saveWpTemplateBtn">Générer le WP</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-info px-4 shadow-sm" id="saveWpTemplateBtn">Generate WP</button>
             </div>
         </div>
     </div>
@@ -73,34 +87,37 @@
 
 <script>
     const corpSelect = document.getElementById('corporateSelect');
-    const stdSelect = document.getElementById('standardSelect');
+    const tmplSelect = document.getElementById('templateSelect');
+    const prodSelect = document.getElementById('productionSelect');
 
-    // Si on choisit un Corporate, on vide le standard
+    // Mutual exclusion logic: if we choose from one list, we empty the other two
     corpSelect.addEventListener('change', function() {
-        if (this.value !== "") stdSelect.value = "";
+        if (this.value !== "") { tmplSelect.value = ""; prodSelect.value = ""; }
+    });
+    tmplSelect.addEventListener('change', function() {
+        if (this.value !== "") { corpSelect.value = ""; prodSelect.value = ""; }
+    });
+    prodSelect.addEventListener('change', function() {
+        if (this.value !== "") { corpSelect.value = ""; tmplSelect.value = ""; }
     });
 
-    // Si on choisit un Standard/Production, on vide le corporate
-    stdSelect.addEventListener('change', function() {
-        if (this.value !== "") corpSelect.value = "";
-    });
-
-    // À la soumission
+    // On submission
     document.getElementById('saveWpTemplateBtn').addEventListener('click', async () => {
         const form = document.getElementById('templateWpForm');
         if (!form.checkValidity()) { form.reportValidity(); return; }
 
-        // Vérification : L'utilisateur doit avoir sélectionné au moins un template
-        const selectedWpId = corpSelect.value || stdSelect.value;
+        // Dynamic retrieval of the value chosen from the 3 fields
+        const selectedWpId = corpSelect.value || tmplSelect.value || prodSelect.value;
+
         if (!selectedWpId) {
-            alert("Veuillez choisir un template source (Corporate OU Standard).");
+            alert("Please choose a source template from Corporate, Template OR Production.");
             return;
         }
 
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
 
-        // On ajoute manuellement l'ID du template sélectionné
+        // We manually assign the ID of the selected source WP to the Payload
         data.sourceWpId = selectedWpId;
 
         try {
@@ -112,7 +129,7 @@
 
             const result = await response.json();
             if (response.ok) { window.location.reload(); }
-            else { alert('Erreur: ' + result.error); }
-        } catch (error) { alert('Erreur serveur.'); }
+            else { alert('Error: ' + result.error); }
+        } catch (error) { alert('Server error.'); }
     });
 </script>

@@ -40,7 +40,7 @@
         const prefs = <%- JSON.stringify(selectedColumns) %>;
         const allUsers = <%- JSON.stringify(allUsers) %>;
 
-        // Définition des colonnes pour DataTables
+        // Definition of columns for DataTables
         const columnsDefinition = [
             { data: 'id', name: 'id', title: 'ID' },
             { data: 'unit.unitName', name: 'name', title: 'Unit Name', defaultContent: "N/A" },
@@ -49,16 +49,16 @@
             { data: 'taskName', name: 'taskName', title: 'Task Name' },
             { data: 'taskBudgetHours', name: 'budget', title: 'Budget (h)', defaultContent: "0" },
 
-            // COLONNE DU SELECT USER
+            // USER SELECT COLUMN
             {
                 data: 'assigneeUserId',
                 name: 'user',
-                title: 'Assigné à',
+                title: 'Assigned to',
                 render: function(data, type, row) {
                     let select = `<select class="form-control select-assignee" data-taskid="${row.id}">`;
 
-                    // L'option vide permet de "désassigner" la tâche et de la renvoyer dans le 1er tableau !
-                    select += `<option value="">-- Non assigné --</option>`;
+                    // The empty option allows to "unassign" the task and return it to the 1st table!
+                    select += `<option value="">-- Not assigned --</option>`;
 
                     const taskUnitId = row.unitId;
                     const eligibleUsers = allUsers.filter(u => {
@@ -80,15 +80,15 @@
             { data: 'endDate', name: 'endDate', title: 'End Date', defaultContent: "N/A" }
         ];
 
-        // INITIALISATION DES DEUX TABLEAUX
-        // 1. Tableau par défaut (Non assigné)
+        // INITIALIZATION OF THE TWO TABLES
+        // 1. Default table (Unassigned)
         initYieldtrackTable('<%= tableId %>', '/units/api/data?status=unassigned', columnsDefinition, prefs);
 
-        // 2. Nouveau tableau (Assigné)
+        // 2. New table (Assigned)
         initYieldtrackTable('assignedTasksTable', '/units/api/data?status=assigned', columnsDefinition, prefs);
     });
 
-    // Script pour sauvegarder le changement d'utilisateur
+    // Script to save the user change
     $(document).on('change', '.select-assignee', function() {
         const taskId = $(this).data('taskid');
         const userId = $(this).val();
@@ -100,11 +100,11 @@
         })
             .then(response => {
                 if (response.ok) {
-                    // On recharge les DEUX tableaux en arrière-plan pour faire transvaser la tâche
+                    // We reload the TWO tables in the background to transfer the task
                     $('#<%= tableId %>').DataTable().ajax.reload(null, false);
                     $('#assignedTasksTable').DataTable().ajax.reload(null, false);
                 } else {
-                    alert("Erreur lors de l'assignation");
+                    alert("Error during assignment");
                 }
             });
     });

@@ -4,30 +4,47 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="Déplacement du create-unit.ejs, rectification etc">
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="routes non commmit">
+      <change afterPath="$PROJECT_DIR$/views/Pages/change-password.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/reset-password.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/creation_db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/doc/creation_db.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/projectController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/projectController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/authControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/authControllers.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/tasksController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/tasksController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/unitsController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/unitsController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/userController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/userController.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/wpControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/wpControllers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/Pages/allocation.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/allocation.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/Pages/projects.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projects.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/remaining.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/remaining.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/Pages/wpDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/wpDetails.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/login.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/login.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/add-rw.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/add-rw.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/archive-task.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/archive-task.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/assign-user-unit.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/assign-user-unit.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/create-unit.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/create-unit.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/create-user.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/create-user.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/modals/edit-project.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/edit-project.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/modals/edit-task.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/edit-task.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/edit-user.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/edit-user.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/edit-wp.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/edit-wp.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/modals/projects.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/projects.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/modals/rw-history.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/rw-history.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/modals/wp-selection.ejs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/task.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/task.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/wp-custom.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/wp-custom.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/modals/wp-template.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/wp-template.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/sidebar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/sidebar.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partials/topbar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/topbar.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="1917" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -49,9 +66,13 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/FloH54/yieldtrack.git&quot;,
-    &quot;accountId&quot;: &quot;341537b5-cd72-46e2-872a-fd78d6ac34e1&quot;
+    &quot;accountId&quot;: &quot;7f72ea95-ea61-479a-9155-cddddd2b5bb5&quot;
   }
 }</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -72,6 +93,7 @@
     &quot;JavaScript Debug.localhost:3000.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;Node.js.app.ts.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
@@ -190,6 +212,19 @@
       <workItem from="1774336728590" duration="29978000" />
       <workItem from="1774422892635" duration="22919000" />
       <workItem from="1774450569967" duration="11144000" />
+      <workItem from="1774539124507" duration="33000" />
+      <workItem from="1774539302440" duration="18000" />
+      <workItem from="1774539380621" duration="110000" />
+      <workItem from="1774539505345" duration="190000" />
+      <workItem from="1774605120065" duration="3183000" />
+      <workItem from="1774947063773" duration="224000" />
+      <workItem from="1774947307412" duration="53000" />
+      <workItem from="1774947373935" duration="4326000" />
+      <workItem from="1774962902689" duration="2246000" />
+      <workItem from="1775024641035" duration="1426000" />
+      <workItem from="1775032727045" duration="12546000" />
+      <workItem from="1775057452631" duration="2732000" />
+      <workItem from="1775112022226" duration="3149000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -431,7 +466,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774440142705</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="routes non commmit">
+      <option name="closed" value="true" />
+      <created>1774538240186</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1774538240187</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -449,7 +492,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[update] factorisation des composant graphique" />
     <MESSAGE value="[update] partition de création" />
     <MESSAGE value="[modify] rétractation de la barre latérale" />
     <MESSAGE value="[modify] gestion du roles admin" />
@@ -474,6 +516,7 @@
     <MESSAGE value="Backup" />
     <MESSAGE value="Sécurisation des routes, ajout du remaining work" />
     <MESSAGE value="Déplacement du create-unit.ejs, rectification etc" />
-    <option name="LAST_COMMIT_MESSAGE" value="Déplacement du create-unit.ejs, rectification etc" />
+    <MESSAGE value="routes non commmit" />
+    <option name="LAST_COMMIT_MESSAGE" value="routes non commmit" />
   </component>
 </project>

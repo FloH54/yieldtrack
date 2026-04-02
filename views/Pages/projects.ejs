@@ -24,10 +24,10 @@
 
 <script>
     $(document).ready(function() {
-        // Récupération des préférences de colonnes envoyées par le serveur
+        // Retrieving column preferences sent by the server
         const prefs = <%- JSON.stringify(selectedColumns) %>;
 
-        // Définition des colonnes pour DataTables (MISE À JOUR)
+        // Definition of columns for DataTables (UPDATE)
         const columnsDefinition = [
             { data: 'id', name: 'id', title: 'ID' },
             {
@@ -37,7 +37,7 @@
                 }
             },
             { data: 'type', name: 'type', title: 'Type', defaultContent: 'N/A' },
-            { data: 'leaders', name: 'leaders', title: 'Program Leaders', defaultContent: 'Aucun' },
+            { data: 'leaders', name: 'leaders', title: 'Program Leaders', defaultContent: 'None' },
             { data: 'slug', name: 'slug', title: 'Slug' },
             { data: 'start', name: 'start', title: 'Start Date', defaultContent: "N/A" },
             { data: 'end', name: 'end', title: 'End Date', defaultContent: "N/A" },
@@ -46,8 +46,8 @@
                 render: function(data) {
                     if (!data) return "N/A";
                     const statusLower = data.toLowerCase();
-                    if (statusLower === 'actif') return '<span class="badge badge-success">Active</span>';
-                    if (statusLower === 'completed' || statusLower === 'clôturé') return '<span class="badge badge-secondary">Close</span>';
+                    if (statusLower === 'active') return '<span class="badge badge-success">Active</span>';
+                    if (statusLower === 'completed' || statusLower === 'closed') return '<span class="badge badge-secondary">Close</span>';
                     return `<span class="badge badge-warning">${data}</span>`;
                 }
             },
@@ -56,10 +56,10 @@
                 render: function(data) { return data ? new Date(data).toLocaleDateString() : "-"; }
             },
             {
-                // Colonne d'actions
+                // Actions column
                 data: null, name: 'actions', title: 'Actions', orderable: false,
                 render: function(data, type, row) {
-                    // Extraction sécurisée des données brutes pour la modale
+                    // Secure extraction of raw data for the modal
                     const typeId = row.rawType ? (row.rawType.projectTypeId || row.rawType.ProjectTypeId) : '';
                     const statId = row.rawStatus ? (row.rawStatus.StatId || row.rawStatus.statId) : '';
                     const leaderIds = (row.rawLeaders && row.rawLeaders.length > 0) ? row.rawLeaders.map(l => l.id).join(',') : '';
@@ -77,7 +77,7 @@
                                 data-leaders="${leaderIds}"
                                 data-start="${start}"
                                 data-end="${end}"
-                                title="Modifier">
+                                title="Edit">
                             <i class="fas fa-pen text-gray-400"></i>
                         </button>
                     `;
@@ -85,7 +85,7 @@
             }
         ];
 
-        // Initialisation du tableau avec l'API JSON
+        // Initializing the table with the JSON API
         initYieldtrackTable('<%= tableId %>', '/project/api/data', columnsDefinition, prefs);
     });
 </script>

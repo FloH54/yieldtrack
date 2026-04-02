@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Historique : <span id="hist-task-name" class="text-primary font-weight-bold"></span></h5>
+                <h5 class="modal-title">History: <span id="hist-task-name" class="text-primary font-weight-bold"></span></h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -13,9 +13,9 @@
                         <thead class="thead-light">
                         <tr>
                             <th>Date</th>
-                            <th>Heures (RW)</th>
-                            <th>Code Caisse</th>
-                            <th>Commentaire</th>
+                            <th>Hours (RW)</th>
+                            <th>Cost Code</th>
+                            <th>Comment</th>
                         </tr>
                         </thead>
                         <tbody id="hist-table-body">
@@ -24,29 +24,29 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Fermer</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 <script>
-    // CHARGEMENT DE L'HISTORIQUE RW DANS LA MODALE
+    // LOADING RW HISTORY IN THE MODAL
     $('#rwHistoryModal').on('show.bs.modal', async function (event) {
         const button = $(event.relatedTarget);
         const taskId = button.data('id');
-        const tbody = $(this).find('tbody'); // On cible le tableau dans la modale
+        const tbody = $(this).find('tbody'); // We target the table in the modal
 
-        tbody.html('<tr><td colspan="4" class="text-center"><i class="fas fa-spinner fa-spin"></i> Chargement...</td></tr>');
+        tbody.html('<tr><td colspan="4" class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>');
 
         try {
-            // Adapte l'URL si ta route d'historique est légèrement différente
+            // Adapt the URL if your history route is slightly different
             const response = await fetch(`/remaining/api/history/${taskId}`);
             const result = await response.json();
 
             if (response.ok && result.data && result.data.length > 0) {
                 let rows = '';
                 result.data.forEach(rw => {
-                    const dateStr = new Date(rw.rwDate).toLocaleString('fr-FR');
+                    const dateStr = new Date(rw.rwDate).toLocaleString('en-US');
                     const codeStr = rw.code ? `<span class="badge badge-info">${rw.code.codeName}</span>` : '-';
                     rows += `<tr>
                             <td>${dateStr}</td>
@@ -57,10 +57,10 @@
                 });
                 tbody.html(rows);
             } else {
-                tbody.html('<tr><td colspan="4" class="text-center text-muted">Aucun historique pour cette tâche.</td></tr>');
+                tbody.html('<tr><td colspan="4" class="text-center text-muted">No history for this task.</td></tr>');
             }
         } catch (error) {
-            tbody.html('<tr><td colspan="4" class="text-center text-danger">Erreur lors du chargement.</td></tr>');
+            tbody.html('<tr><td colspan="4" class="text-center text-danger">Error during loading.</td></tr>');
         }
     });
 </script>

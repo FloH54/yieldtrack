@@ -80,7 +80,7 @@
                     body: JSON.stringify(data)
                 });
 
-                // On vérifie si le serveur a bien répondu avec du JSON
+                // We check if the server has responded with JSON
                 const contentType = response.headers.get("content-type");
                 if (contentType && contentType.indexOf("application/json") !== -1) {
                     const result = await response.json();
@@ -90,11 +90,11 @@
                         alertContainer.innerHTML = `<div class="alert alert-danger m-3">${result.error}</div>`;
                     }
                 } else {
-                    // Si on reçoit du HTML, c'est que la route est mauvaise (404) ou que le serveur a crashé
-                    alertContainer.innerHTML = `<div class="alert alert-danger m-3">Erreur Serveur : La route ${this.action} a renvoyé une page web (potentiellement 404 Not Found) au lieu de données. Vérifiez vos routes dans app.ts.</div>`;
+                    // If we receive HTML, it means the route is wrong (404) or the server has crashed
+                    alertContainer.innerHTML = `<div class="alert alert-danger m-3">Server Error: The route ${this.action} returned a web page (potentially 404 Not Found) instead of data. Check your routes in app.ts.</div>`;
                 }
             } catch (err) {
-                alertContainer.innerHTML = `<div class="alert alert-danger m-3">Erreur réseau critique : ${err.message}</div>`;
+                alertContainer.innerHTML = `<div class="alert alert-danger m-3">Critical network error: ${err.message}</div>`;
             }
         });
     });

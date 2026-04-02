@@ -27,31 +27,10 @@
         const prefs = <%- JSON.stringify(selectedColumns) %>;
         let pendingRWUpdates = {};
 
-        // Fonction utilitaire pour générer le HTML complet d'un Remaining Work
-        function formatRWCell(rwData, isPending = false) {
-            if (!rwData) return '<em class="text-muted">Aucune saisie</em>';
-
-            const dateObj = new Date(rwData.rwDate);
-            const dateStr = dateObj.toLocaleString('fr-FR', {
-                day: '2-digit', month: '2-digit', year: 'numeric',
-                hour: '2-digit', minute: '2-digit'
-            });
-
-            const codeStr = rwData.codeName ? `<span class="badge badge-info ml-1">${rwData.codeName}</span>` : '';
-            const commentStr = rwData.comment ? `<br><small class="text-muted"><i class="fas fa-comment"></i> ${rwData.comment}</small>` : '';
-
-            // Si c'est une saisie en attente (non validée), on change les couleurs
-            const colorClass = isPending ? 'text-success' : 'text-primary';
-            const pendingBadge = isPending ? '<span class="badge badge-warning ml-1">Non Validé</span>' : '';
-
-            return `
-                <div>
-                    <span class="font-weight-bold ${colorClass}">${rwData.rwHours} h</span>
-                    <small class="text-muted ml-1">${dateStr}</small>
-                    ${codeStr} ${pendingBadge}
-                    ${commentStr}
-                </div>
-            `;
+        // Fonction pour récupérer le dernier RW
+        function getLatestRW(rws) {
+            if (!rws || rws.length === 0) return null;
+            return rws.reduce((prev, current) => (prev.rwId > current.rwId) ? prev : current);
         }
 
         const columnsDefinition = [
@@ -60,44 +39,46 @@
             { data: 'workPackage.wpName', name: 'wpName', title: 'Work Package', defaultContent: "N/A" },
             { data: 'taskName', name: 'taskName', title: 'Task Name' },
             { data: 'status.statName', name: 'status', title: 'Statut', defaultContent: "N/A" },
+            { data: 'priority', name: 'priority', title: 'Priority', defaultContent: "-" },
             { data: 'taskBudgetHours', name: 'budget', title: 'Budget (h)', defaultContent: "0" },
-
+            { data: 'unit.unitName', name: 'unit', title: 'Unit', defaultContent: "N/A" },
             {
-                // COLONNE ACTIONS COMPLÈTE
+                data: 'startDate', name: 'startDate', title: 'Start Date',
+                render: function(data) { return data ? new Date(data).toLocaleDateString('fr-FR') : '-'; }
+            },
+            {
+                data: 'endDate', name: 'endDate', title: 'End Date',
+                render: function(data) { return data ? new Date(data).toLocaleDateString('fr-FR') : '-'; }
+            },
+            {
+                data: null, name: 'createdAt', title: 'Created At',
+                render: function(data, type, row) {
+                    const date = row.CreatedAt || row.createdAt;
+                    return date ? new Date(date).toLocaleDateString('fr-FR') : '-';
+                }
+            },
+            {
+                data: null, name: 'rwCurrentHours', title: 'RW (h)', defaultContent: "-",
+                render: function(data, type, row) {
+                    const latestRW = getLatestRW(row.RWs);
+                    if (latestRW) return `<span class="font-weight-bold text-primary">${latestRW.rwHours} h</span>`;
+                    return '<em class="text-muted">-</em>';
+                }
+            },
+            {
                 data: null, name: 'actions', title: 'Actions', orderable: false,
                 render: function(data, type, row) {
-                    // Sécurisation des données pour les attributs HTML
                     const safeName = row.taskName ? row.taskName.replace(/"/g, '&quot;') : '';
-                    const start = row.taskStart ? row.taskStart.split('T')[0] : '';
-                    const end = row.taskEnd ? row.taskEnd.split('T')[0] : '';
+                    const start = row.startDate ? row.startDate.split('T')[0] : '';
+                    const end = row.endDate ? row.endDate.split('T')[0] : '';
 
                     return `
-                        <div class="d-flex align-items-center" style="gap: 8px">
-
-                            <button class="btn btn-sm btn-secondary shadow-sm"
-                                    data-toggle="modal" data-target="#rwHistoryModal"
-                                    data-id="${row.id}" data-name="${safeName}" title="Historique RW">
-                                <i class="fas fa-history"></i>
-                            </button>
-
-                            <button class="btn btn-sm btn-primary shadow-sm"
-                                    data-toggle="modal" data-target="#editTaskModal"
-                                    data-id="${row.id}"
-                                    data-name="${safeName}"
-                                    data-budget="${row.taskBudgetHours || ''}"
-                                    data-start="${start}"
-                                    data-end="${end}"
-                                    data-status="${row.statId || ''}"  data-unit="${row.unitId || ''}"    title="Modifier la tâche">
-                                <i class="fas fa-pen"></i>
-                            </button>
-
-                            <button class="btn btn-sm btn-danger shadow-sm"
-                                    data-toggle="modal" data-target="#archiveTaskModal"
-                                    data-id="${row.id}" data-name="${safeName}" title="Archiver la tâche">
-                                <i class="fas fa-archive"></i>
-                            </button>
-                        </div>
-                    `;
+                <div class="d-flex align-items-center" style="gap: 8px">
+                    <button class="btn btn-sm btn-secondary shadow-sm" data-toggle="modal" data-target="#rwHistoryModal" data-id="${row.id}" data-name="${safeName}" title="Historique RW"><i class="fas fa-history"></i></button>
+                    <button class="btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#editTaskModal" data-id="${row.id}" data-name="${safeName}" data-budget="${row.taskBudgetHours || ''}" data-start="${start}" data-end="${end}" data-status="${row.statId || ''}" data-unit="${row.unitId || ''}" title="Modifier la tâche"><i class="fas fa-pen"></i></button>
+                    <button class="btn btn-sm btn-danger shadow-sm" data-toggle="modal" data-target="#archiveTaskModal" data-id="${row.id}" data-name="${safeName}" title="Archiver la tâche"><i class="fas fa-archive"></i></button>
+                </div>
+            `;
                 }
             }
         ];

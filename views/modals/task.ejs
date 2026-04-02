@@ -83,9 +83,9 @@
 
         unitSearch.addEventListener('input', function() {
             const val = this.value;
-            unitIdInput.value = ""; // Reset par défaut
+            unitIdInput.value = ""; // Reset by default
 
-            // On cherche si la valeur saisie correspond à une option pour récupérer l'ID
+            // We check if the entered value corresponds to an option to retrieve the ID
             options.forEach(option => {
                 if (option.value === val) {
                     unitIdInput.value = option.getAttribute('data-id');
@@ -100,10 +100,10 @@
             }
         });
 
-        // SOUMISSION AJAX (FETCH) ET ALERTES
+        // AJAX SUBMISSION (FETCH) AND ALERTS
         form.addEventListener('submit', async function(e) {
-            e.preventDefault(); // BLOQUE LE RECHARGEMENT DE PAGE
-            alertContainer.innerHTML = ''; // Nettoyer les anciennes erreurs
+            e.preventDefault(); // PREVENT PAGE RELOAD
+            alertContainer.innerHTML = ''; // Clean up old errors
 
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
@@ -118,10 +118,10 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    // Si succès (200), on redirige via JS
+                    // If successful (200), we redirect via JS
                     window.location.reload()
                 } else {
-                    // Si erreur (400, 500), on affiche l'alerte sans quitter la modale
+                    // If error (400, 500), we display the alert without leaving the modal
                     alertContainer.innerHTML = `
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <i class="fas fa-exclamation-triangle mr-2"></i> ${result.error}
@@ -132,8 +132,8 @@
                 `;
                 }
             } catch (err) {
-                console.log("Erreur réseau :", err);
-                alertContainer.innerHTML = `<div class="alert alert-danger">Erreur de connexion au serveur.</div>`;
+                console.log("Network error:", err);
+                alertContainer.innerHTML = `<div class="alert alert-danger">Server connection error.</div>`;
             }
         });
     });

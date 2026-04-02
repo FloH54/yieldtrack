@@ -3,7 +3,7 @@
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-gray-800 text-white">
                 <h5 class="modal-title font-weight-bold" id="editProjectModalLabel">
-                    <i class="fas fa-edit mr-2"></i>Éditer le Projet
+                    <i class="fas fa-edit mr-2"></i>Edit Project
                 </h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -15,11 +15,11 @@
 
                     <div class="row">
                         <div class="col-md-8 mb-3">
-                            <label for="editProjectName" class="form-label font-weight-bold text-gray-800">Nom du Projet <span class="text-danger">*</span></label>
+                            <label for="editProjectName" class="form-label font-weight-bold text-gray-800">Project Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control bg-light border-0 small" id="editProjectName" name="projectName" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="editProjectStatus" class="form-label font-weight-bold text-gray-800">Statut</label>
+                            <label for="editProjectStatus" class="form-label font-weight-bold text-gray-800">Status</label>
                             <select class="form-control bg-light border-0 small font-weight-bold" id="editProjectStatus" name="statId" required>
                                 <% allStatus.forEach(stat => { %>
                                     <option value="<%= stat.statId || stat.id || stat.StatId %>"><%= stat.statName || stat.name %></option>
@@ -30,7 +30,7 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="editProjectType" class="form-label font-weight-bold text-gray-800">Type de Projet <span class="text-danger">*</span></label>
+                            <label for="editProjectType" class="form-label font-weight-bold text-gray-800">Project Type <span class="text-danger">*</span></label>
                             <select class="form-control bg-light border-0 small" id="editProjectType" name="projectTypeId" required>
                                 <% allTypes.forEach(type => { %>
                                     <option value="<%= type.projectTypeId || type.ProjectTypeId %>"><%= type.projectTypeName || type.ProjectTypeName %></option>
@@ -44,32 +44,32 @@
                                     <option value="<%= leader.id %>"><%= leader.firstName %> <%= leader.lastName %></option>
                                 <% }) %>
                             </select>
-                            <small class="text-muted form-text mt-1"><i class="fas fa-info-circle"></i> Maintenez Ctrl/Cmd pour sélection multiple.</small>
+                            <small class="text-muted form-text mt-1"><i class="fas fa-info-circle"></i> Hold Ctrl/Cmd for multiple selection.</small>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="editStartDate" class="form-label font-weight-bold text-gray-800"><i class="far fa-calendar-alt mr-1"></i>Date de début</label>
+                            <label for="editStartDate" class="form-label font-weight-bold text-gray-800"><i class="far fa-calendar-alt mr-1"></i>Start Date</label>
                             <input type="date" class="form-control bg-light border-0 small" id="editStartDate" name="startDate">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="editEndDate" class="form-label font-weight-bold text-gray-800"><i class="far fa-calendar-check mr-1"></i>Date de fin</label>
+                            <label for="editEndDate" class="form-label font-weight-bold text-gray-800"><i class="far fa-calendar-check mr-1"></i>End Date</label>
                             <input type="date" class="form-control bg-light border-0 small" id="editEndDate" name="endDate">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer bg-light">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                <button type="button" class="btn btn-dark px-4 shadow-sm" id="updateProjectBtn">Sauvegarder</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-dark px-4 shadow-sm" id="updateProjectBtn">Save</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Nouveau script plus robuste basé sur les data-attributes pour peupler la modale
+    // New, more robust script based on data-attributes to populate the modal
     $('#editProjectModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
 
@@ -91,7 +91,7 @@
         modal.find('#editEndDate').val(end);
     });
 
-    // Envoi de l'update au serveur
+    // Sending the update to the server
     document.getElementById('updateProjectBtn').addEventListener('click', async () => {
         const form = document.getElementById('editProjectForm');
         if (!form.checkValidity()) { form.reportValidity(); return; }
@@ -111,9 +111,9 @@
 
             const result = await response.json();
             if (response.ok) { window.location.reload(); }
-            else { alert('Erreur: ' + result.error); }
+            else { alert('Error: ' + result.error); }
         } catch (error) {
-            alert('Erreur serveur.');
+            alert('Server error.');
         }
     });
 </script>

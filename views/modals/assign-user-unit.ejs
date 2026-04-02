@@ -2,7 +2,7 @@
     <div class="modal-dialog-centered modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Affecter un profil métier (Unité)</h4>
+                <h4 class="modal-title">Assign a Job Profile (Unit)</h4>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -11,9 +11,9 @@
             <form action="/units/assign" id="assignUnitForm" method="POST">
                 <div class="modal-body">
                     <div class="form-group">
-                        <h6>Utilisateur</h6>
+                        <h6>User</h6>
                         <select name="userId" class="form-control" required>
-                            <option value="">-- Sélectionner un utilisateur --</option>
+                            <option value="">-- Select a user --</option>
                             <% if (typeof allUsers !== 'undefined') { %>
                                 <% allUsers.forEach(u => { %>
                                     <option value="<%= u.id %>"><%= u.firstName %> <%= u.lastName %></option>
@@ -22,9 +22,9 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <h6>Métier (Unité)</h6>
+                        <h6>Job (Unit)</h6>
                         <select name="unitId" class="form-control" required>
-                            <option value="">-- Sélectionner une unité --</option>
+                            <option value="">-- Select a unit --</option>
                             <% if (typeof allUnits !== 'undefined') { %>
                                 <% allUnits.forEach(unit => { %>
                                     <option value="<%= unit.unitId %>"><%= unit.unitName %></option>
@@ -33,13 +33,13 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <h6>Heures Hebdomadaires</h6>
+                        <h6>Weekly Hours</h6>
                         <input type="number" name="weeklyHours" class="form-control" value="35" min="0" required>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Affecter</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Assign</button>
                 </div>
             </form>
         </div>
@@ -62,7 +62,7 @@
             if (response.ok) { window.location.reload(); }
             else { alertContainer.innerHTML = `<div class="alert alert-danger m-3">${result.error}</div>`; }
         } catch (err) {
-            alertContainer.innerHTML = `<div class="alert alert-danger m-3">Erreur réseau.</div>`;
+            alertContainer.innerHTML = `<div class="alert alert-danger m-3">Network error.</div>`;
         }
     });
 </script>

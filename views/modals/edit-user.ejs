@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editUserModalLabel">Éditer l'utilisateur</h5>
+                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -10,11 +10,11 @@
                     <input type="hidden" id="editUserId" name="id">
 
                     <div class="mb-3">
-                        <label for="editUserFirstName" class="form-label">Prénom</label>
+                        <label for="editUserFirstName" class="form-label">First Name</label>
                         <input type="text" class="form-control" id="editUserFirstName" name="firstName" required>
                     </div>
                     <div class="mb-3">
-                        <label for="editUserLastName" class="form-label">Nom</label>
+                        <label for="editUserLastName" class="form-label">Last Name</label>
                         <input type="text" class="form-control" id="editUserLastName" name="lastName" required>
                     </div>
                     <div class="mb-3">
@@ -23,62 +23,62 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="editUserProfiles" class="form-label">Profils</label>
+                        <label for="editUserProfiles" class="form-label">Profiles</label>
                         <select class="form-control" id="editUserProfiles" name="profiles" multiple>
                             <% allProfiles.forEach(profile => { %>
                                 <option value="<%= profile.id || profile.ProfileId || profile.profileId %>"><%= profile.ProfileName || profile.profileName || profile.name %></option>
                             <% }) %>
                         </select>
-                        <small class="text-muted">Maintenez Ctrl/Cmd pour sélectionner plusieurs profils.</small>
+                        <small class="text-muted">Hold Ctrl/Cmd to select multiple profiles.</small>
                     </div>
 
                     <div class="mb-3">
-                        <label for="editUserUnits" class="form-label">Unités (Métier)</label>
+                        <label for="editUserUnits" class="form-label">Units (Job)</label>
                         <select class="form-control" id="editUserUnits" name="units" multiple>
                             <% allUnits.forEach(unit => { %>
                                 <option value="<%= unit.id || unit.unitId || unit.UnitId %>"><%= unit.unitName || unit.UnitName %></option>
                             <% }) %>
                         </select>
-                        <small class="text-muted">Maintenez Ctrl/Cmd pour sélectionner plusieurs unités.</small>
+                        <small class="text-muted">Hold Ctrl/Cmd to select multiple units.</small>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                <button type="button" class="btn btn-primary" id="updateUserBtn">Sauvegarder</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="updateUserBtn">Save</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Pré-remplissage de la modale quand on clique sur le bouton (via jQuery/Bootstrap 4)
+    // Pre-filling the modal when clicking the button (via jQuery/Bootstrap 4)
     $('#editUserModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Le bouton qui a déclenché la modale
+        var button = $(event.relatedTarget); // The button that triggered the modal
 
-        // On récupère les données
+        // We retrieve the data
         var id = button.data('id');
         var firstname = button.data('firstname');
         var lastname = button.data('lastname');
         var email = button.data('email');
 
-        // On transforme les listes d'IDs (1,2,3) en tableaux (['1', '2', '3'])
+        // We transform the ID lists (1,2,3) into arrays (['1', '2', '3'])
         var profiles = button.data('profiles') ? button.data('profiles').toString().split(',') : [];
         var units = button.data('units') ? button.data('units').toString().split(',') : [];
 
-        // On peuple les champs
+        // We populate the fields
         var modal = $(this);
         modal.find('#editUserId').val(id);
         modal.find('#editUserFirstName').val(firstname);
         modal.find('#editUserLastName').val(lastname);
         modal.find('#editUserEmail').val(email);
 
-        // Remplissage automatique des sélections multiples
+        // Automatic filling of multiple selections
         modal.find('#editUserProfiles').val(profiles);
         modal.find('#editUserUnits').val(units);
     });
 
-    // Envoi des données modifiées au serveur
+    // Sending modified data to the server
     document.getElementById('updateUserBtn').addEventListener('click', async () => {
         const form = document.getElementById('editUserForm');
         if (!form.checkValidity()) { form.reportValidity(); return; }
@@ -86,7 +86,7 @@
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
 
-        // Récupérer proprement les valeurs des "Select Multiples"
+        // Properly retrieve the values of "Multiple Selects"
         const profileSelect = document.getElementById('editUserProfiles');
         data.profiles = Array.from(profileSelect.selectedOptions).map(opt => opt.value);
 
@@ -102,9 +102,9 @@
 
             const result = await response.json();
             if (response.ok) { window.location.reload(); }
-            else { alert('Erreur: ' + result.error); }
+            else { alert('Error: ' + result.error); }
         } catch (error) {
-            alert('Erreur serveur.');
+            alert('Server error.');
         }
     });
 </script>
