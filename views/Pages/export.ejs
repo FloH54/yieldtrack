@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/header')%>
+
+<body id="page-top">
+<div id="wrapper">
+    <%- include('../partials/sidebar')%>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <%- include('../partials/topbar')%>
+
+            <div class="container-fluid">
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Data Exports</h1>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-6 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Tasks Data (Last 5 Weeks)
+                                        </div>
+                                        <div class="mb-0 text-gray-800">
+                                            Exports all active and completed tasks updated in the last 35 days, including their latest remaining work comment.
+                                        </div>
+                                        <button class="btn btn-primary mt-3" onclick="triggerExport('/api/export/tasks', 'Tasks_Export.csv')">
+                                            <i class="fas fa-download fa-sm text-white-50"></i> Download Tasks CSV
+                                        </button>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-tasks fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            RW History Data
+                                        </div>
+                                        <div class="mb-0 text-gray-800">
+                                            Exports the complete Remaining Work (RW) history for the tasks filtered in the previous export.
+                                        </div>
+                                        <button class="btn btn-success mt-3" onclick="triggerExport('/api/export/rws', 'RWs_History_Export.csv')">
+                                            <i class="fas fa-download fa-sm text-white-50"></i> Download RWs CSV
+                                        </button>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-history fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <%- include('../partials/footer')%>
+    </div>
+</div>
+
+<%- include('../modals/logout')%>
+
+<script>
+    // Fonction qui lance l'appel API, convertit en CSV, et déclenche le téléchargement
+    function triggerExport(url, filename) {
+        // Optionnel : Changer le texte du bouton pendant le chargement
+        $.get(url, function(response) {
+            if (!response.data || response.data.length === 0) {
+                alert("No data found for the last 5 weeks.");
+                return;
+            }
+
+            const csvData = convertToCSV(response.data);
+            downloadFile(csvData, filename);
+        }).fail(function(err) {
+            alert("Error during export: " + (err.responseJSON?.error || "Server error"));
+        });
+    }
+
+    // Convertit un tableau d'objets JSON en texte CSV
+    function convertToCSV(objArray) {
+        const array = typeof objArray !== 'object' ? JSON.parse(objArray) : objArray;
+        let str = '';
+
+        // Création de la ligne d'en-tête
+        const headers = Object.keys(array[0]);
+        str += headers.join(',') + '\r\n';
+
+        // Création des lignes de données
+        for (let i = 0; i < array.length; i++) {
+            let line = '';
+            for (let index in array[i]) {
+                if (line !== '') line += ',';
+
+                let value = array[i][index];
+                if (value === null || value === undefined) value = '';
+
+                // Si la valeur contient une virgule, un saut de ligne ou des guillemets, on l'échappe pour le CSV
+                if (typeof value === 'string') {
+                    value = value.replace(/"/g, '""'); // Échappe les guillemets
+                    if (value.search(/("|,|\n)/g) >= 0) {
+                        value = `"${value}"`;
+                    }
+                }
+                line += value;
+            }
+            str += line + '\r\n';
+        }
+        return str;
+    }
+
+    // Crée un lien virtuel et force le téléchargement du fichier généré
+    function downloadFile(csvContent, filename) {
+        // Ajout du BOM (Byte Order Mark) pour que Excel lise l'UTF-8 correctement (Accents, etc.)
+        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement("a");
+
+        if (link.download !== undefined) {
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+</script>
+</body>
+</html>

@@ -10,6 +10,7 @@ import { ProjectTypes } from "./class/ProjectTypes";
 import { ProjectLeaders } from "./class/ProjectLeaders";
 import { UserToUnits } from "./class/UserToUnits";
 import { Codes } from "./class/Codes";
+import { ContractHours } from "./class/ContractHours";
 
 // 1. UTILISATEURS ET PROFILS
 User.belongsToMany(Profiles, { through: 'LinkUsersProfiles', foreignKey: 'UserId', otherKey: 'ProfileId', as: 'profiles', timestamps: false });
@@ -51,16 +52,20 @@ Status.hasMany(Task, { foreignKey: 'statId', as: 'tasks' });
 Task.belongsTo(Status, { foreignKey: 'statId', as: 'status' });
 
 Task.hasMany(RWs, { foreignKey: 'taskId', as: 'RWs' });
-RWs.belongsTo(Task, { foreignKey: 'taskId', as: 'task.ejs' });
+RWs.belongsTo(Task, { foreignKey: 'TaskId', as: 'Task' });
 
 Units.hasMany(Task, { foreignKey: 'unitId', as: 'tasks' });
 Task.belongsTo(Units, { foreignKey: 'unitId', as: 'unit' });
+
 
 User.belongsToMany(Units, { through: UserToUnits, foreignKey: 'UserId', timestamps: false });
 Units.belongsToMany(User, { through: UserToUnits, foreignKey: 'UnitId', timestamps: false });
 
 Codes.hasMany(RWs, { foreignKey: 'codeId', as: 'rws' });
 RWs.belongsTo(Codes, { foreignKey: 'codeId', as: 'code' });
+
+RWs.belongsTo(User, { foreignKey: 'UserId', as: 'User' }); // ou as: 'user'
+User.hasMany(RWs, { foreignKey: 'UserId', as: 'RWs' });
 
 
 
@@ -75,5 +80,7 @@ export {
     Units,
     Status,
     RWs,
-    Codes
+    Codes,
+    UserToUnits,
+    ContractHours
 };

@@ -13,14 +13,6 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-    <!-- Settings -->
-    <% if(user.profiles && user.profiles.some(profiles => profiles.id === 1)) { %>
-    <li class="nav-item active">
-        <a class="nav-link" href="index.html">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Settings</span></a>
-    </li>
-    <% } %>
 
     <!-- Resources -->
     <li class="nav-item">
@@ -33,26 +25,18 @@
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="dropdown-item" href="/users">People</a>
+                <a class="dropdown-item" href="/admin/units">Units</a>
+                <a class="dropdown-item" href="/admin/blocage-code">Blocage Code</a>
             </div>
+            
         </div>
     </li>
-
-
-    <!-- Projects -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-           aria-expanded="true" aria-controls="collapse">
+    <li class="nav-item active">
+        <a class="nav-link" href="/project">
             <i class="fas fa-fw fa-folder"></i>
-            <span>Projects</span>
-        </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="/project">Projects</a>
-                <a class="collapse-item" href="cards.html">Work Package</a>
-                <a class="collapse-item" href="buttons.html">Work Package Templates</a>
-            </div>
-        </div>
+            <span>Project</span></a>
     </li>
+
 
     <!-- Teams -->
     <li class="nav-item">

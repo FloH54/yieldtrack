@@ -1,8 +1,26 @@
 import { Request, Response } from 'express';
 import { WorkPackage, Task, Status, Project, Units, RWs, Codes } from "../models/Index";
-import { AVAILABLE_COLUMNS } from "./tasksController";
 import { Op } from "sequelize";
 import sequelize from "../config/database";
+
+export const AVAILABLE_COLUMNS = [
+    { id: 'id', label: "ID" },
+    { id: 'project', label: "Project" },
+    { id: 'wpName', label: "Work Package" },
+    { id: 'taskName', label: "Task Name" },
+    { id: 'status', label: "Status" },
+    { id: 'priority', label: "Priority" },
+    { id: 'budget', label: "Budget (h)" },
+    { id: 'unit', label: "Unit" },
+    { id: 'startDate', label: "Start Date" },
+    { id: 'endDate', label: "End Date" },
+    { id: 'createdAt', label: "Created At" },
+    { id: 'rwCurrentHours', label: "RW (h)" }, // Seulement les heures
+    { id: 'actions', label: "Actions" }
+];
+
+// Dans renderWPDetails, utilisez WP_DETAILS_COLUMNS :
+// allColumns: WP_DETAILS_COLUMNS,
 
 export const renderWPDetails = async (req: Request, res: Response) => {
     const user = (req as any).user;
@@ -192,8 +210,8 @@ export const createWPFromTemplate = async (req: Request, res: Response) => {
                 priority: task.priority,
                 statId: 1,
                 assigneeUserId: null,
-                taskStart: null,
-                taskEnd: null,
+                startDate: null,
+                endDate: null,
                 codeId: null
             }));
 

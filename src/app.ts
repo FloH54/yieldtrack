@@ -3,7 +3,7 @@ import { isAuthenticated } from "./middlewares/authMiddleware";
 import path from 'path';
 import sequelize from './config/database';
 import cookieParser from 'cookie-parser';
-import { login, logout } from "./controllers/authControllers";
+import {changePassword, login, logout, renderChangePassword} from "./controllers/authControllers";
 import {loadTablePreferences} from "./middlewares/preferencesMiddleware";
 import projectRoutes from "./rootes/projectRoutes";
 import taskRoutes from "./rootes/taskRoutes";
@@ -12,7 +12,8 @@ import preferenceRoutes from "./rootes/preferenceRoutes";
 import {renderUnitTasksPage, getUnitTasks, updateAsigneeUser} from "./controllers/unitsController";
 import userRoutes from "./rootes/userRoutes";
 import unitRoutes from "./rootes/unitRoutes";
-
+import adminRoutes from "./rootes/adminRoutes";
+import exportRoutes from "./rootes/exportRoutes";
 
 const app = express();
 const PORT = 3000;
@@ -39,14 +40,19 @@ app.get('/logout', logout);
 app.use(isAuthenticated);
 
 // --- ROUTES PROTÉGÉES (Groupées par entité) ---
+app.get('/change-password', renderChangePassword);
+app.post('/change-password', changePassword);
+
+// --- ROUTES PROTÉGÉES (Groupées par entité) ---
 app.use('/project', projectRoutes);     // Tout ce qui touche aux projets
 app.use('/wp', wpRoutes);               // Tout ce qui touche aux Work Packages
 app.use('/task', taskRoutes);           // Tout ce qui touche aux tâches
 app.use('/remaining', taskRoutes);      // On garde l'accès pour la page "Reste à faire"
 app.use('/preferences', preferenceRoutes); // Un unique point d'entrée pour les colonnes
-app.get('/allocation', renderUnitTasksPage); // Rendu de la page HTML
 app.use('/units', unitRoutes);
 app.use('/users', userRoutes);
+app.use('/admin', adminRoutes);
+app.use('/', exportRoutes);
 
 app.get('/', (req, res) => res.render('index', { user: (req as any).user }));
 

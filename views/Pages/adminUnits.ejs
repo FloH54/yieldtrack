@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/header')%>
+
+<body id="page-top">
+<div id="wrapper">
+    <%- include('../partials/sidebar')%>
+
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <%- include('../partials/topbar')%>
+
+            <div class="container-fluid">
+                <%- include('../partials/dynamic_table')%>
+            </div>
+        </div>
+        <%- include('../partials/footer')%>
+    </div>
+</div>
+
+<%- include('../modals/logout')%>
+
+<div class="modal fade" id="createUnitModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Unit</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <form id="createUnitForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Unit Name</label>
+                        <input type="text" class="form-control" name="unitName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Father Unit (Optional)</label>
+                        <select class="form-control" name="fatherUnitId">
+                            <option value="">-- None --</option>
+                            <% allUnits.forEach(function(u) { %>
+                                <option value="<%= u.unitId || u.UnitId %>"><%= u.unitName || u.UnitName %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" type="submit">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editUnitModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Unit</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <form id="editUnitForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="editUnitId">
+                    <div class="form-group">
+                        <label>Unit Name</label>
+                        <input type="text" class="form-control" name="unitName" id="editUnitName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Father Unit</label>
+                        <select class="form-control" name="fatherUnitId" id="editFatherUnitId">
+                            <option value="">-- None --</option>
+                            <% allUnits.forEach(function(u) { %>
+                                <option value="<%= u.unitId || u.UnitId %>"><%= u.unitName || u.UnitName %></option>
+                            <% }); %>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" type="submit">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteUnitModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this unit? All assigned tasks will be unassigned from this unit, and unit-related user allocations will be removed.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteUnit">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        const prefs = <%- JSON.stringify(selectedColumns) %>;
+
+        const columnsDefinition = [
+            { data: 'unitId', name: 'unitId', title: 'ID' },
+            { data: 'unitName', name: 'unitName', title: 'Unit Name' },
+            { data: 'fatherUnitName', name: 'fatherUnitName', title: 'Father Unit', defaultContent: 'None' },
+            {
+                data: null,
+                name: 'actions',
+                title: 'Actions',
+                orderable: false,
+                render: function(data, type, row) {
+                    return `
+                        <button class="btn btn-sm btn-warning btn-edit" data-id="${row.unitId}" data-name="${row.unitName}" data-father="${row.fatherUnitId || ''}" data-toggle="modal" data-target="#editUnitModal"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-danger btn-delete" data-id="${row.unitId}" data-toggle="modal" data-target="#deleteUnitModal"><i class="fas fa-trash"></i></button>
+                    `;
+                }
+            }
+        ];
+
+        // 1. Initialisation de DataTables avec votre fonction personnalisée
+        initYieldtrackTable('<%= tableId %>', '/admin/api/admin/units/data', columnsDefinition, prefs);
+
+        // 2. Gestion des clics sur les boutons générés dynamiquement par DataTables
+        $('#<%= tableId %>').on('click', '.btn-edit', function() {
+            $('#editUnitId').val($(this).data('id'));
+            $('#editUnitName').val($(this).data('name'));
+            $('#editFatherUnitId').val($(this).data('father'));
+        });
+
+        let deleteId = null;
+        $('#<%= tableId %>').on('click', '.btn-delete', function() {
+            deleteId = $(this).data('id');
+        });
+
+        // 3. Soumissions AJAX
+        $('#createUnitForm').submit(function(e) {
+            e.preventDefault();
+            $.post('/admin/api/admin/units', $(this).serialize(), function(res) {
+                location.reload();
+            }).fail(function(err) { alert(err.responseJSON?.error || "Error"); });
+        });
+
+        $('#editUnitForm').submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/admin/api/admin/units',
+                type: 'PUT',
+                data: $(this).serialize(),
+                success: function(res) { location.reload(); },
+                error: function(err) { alert(err.responseJSON?.error || "Error"); }
+            });
+        });
+
+        $('#confirmDeleteUnit').click(function() {
+            if(deleteId) {
+                $.ajax({
+                    url: '/admin/api/admin/units',
+                    type: 'DELETE',
+                    data: { id: deleteId },
+                    success: function(res) { location.reload(); },
+                    error: function(err) { alert(err.responseJSON?.error || "Error"); }
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

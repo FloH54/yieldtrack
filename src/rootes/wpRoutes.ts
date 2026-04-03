@@ -4,7 +4,7 @@ import {authorize} from "../middlewares/roleMiddleware";
 
 const router = Router();
 
-router.use(authorize(['Administrateur', 'Program Manager'])); // <-- AJOUT
+router.use(authorize(['Administrateur', 'Program Leader'])); // <-- AJOUT
 
 router.post('/create', createWP); // URL: /wp/create
 router.post('/update', updateWP);

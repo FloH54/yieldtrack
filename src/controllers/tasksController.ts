@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import {Task, Status, WorkPackage, Project, RWs, Units, Codes} from '../models/Index';
+import { Task, Status, WorkPackage, Project, RWs, Units, Codes } from '../models/Index';
 import { Op } from "sequelize";
 
 export const AVAILABLE_COLUMNS = [
@@ -14,26 +14,23 @@ export const AVAILABLE_COLUMNS = [
     { id: 'startDate', label: "Start Date" },
     { id: 'endDate', label: "End Date" },
     { id: 'createdAt', label: "Created At" },
-
-    // --- COLONNES RW-1 ---
     { id: 'rw1Hours', label: "RW-1 (Hours)" },
-
-    // --- COLONNES CURRENT RW ---
-    { id: 'rwCurrentHours', label: "Current RW (Hours)" },
-    { id: 'rwCurrentCode', label: "Current RW (Cost Code)" },
-    { id: 'rwCurrentComment', label: "Current RW (Comment)" },
-
+    { id: 'rwCurrentHours', label: "RW" },
+    { id: 'rwCurrentCode', label: "Code" },
+    { id: 'rwCurrentComment', label: "Comment" },
     { id: 'addrw', label: "Action" }
 ];
 
-// Rendu de la page HTML
+// Dans renderRemainingPage, utilisez REMAINING_COLUMNS :
+// allColumns: REMAINING_COLUMNS,
 
+// Rendu de la page HTML
 export const renderRemainingPage = async (req: Request, res: Response) => {
     try {
         const user = (req as any).user;
         const TABLE_ID = 'remainingTasks';
 
-        // Sélection par défaut (On met les heures et les actions par défaut pour ne pas trop surcharger l'écran initialement)
+        // Sélection par défaut
         const selectedColumns = (req as any).tablePreferences[TABLE_ID] || [
             'project', 'taskName', 'rw1Hours', 'rw1Date', 'rwCurrentHours', 'rwCurrentDate', 'addrw'
         ];
@@ -84,7 +81,6 @@ export const getRemainingTasksData = async (req: Request, res: Response) => {
                     }]
                 },
                 { model: Units, as: 'unit' },
-                // --- MODIFICATION ICI : On inclut les Codes avec les RWs ---
                 {
                     model: RWs,
                     as: 'RWs',
@@ -100,7 +96,7 @@ export const getRemainingTasksData = async (req: Request, res: Response) => {
 
 export const createTask = async (req: Request, res: Response) => {
     try {
-        const { wpId, assigneeUserId, taskName, unitId, taskStart, taskEnd, taskBudgetHours, codeId, priority } = req.body;
+        const { wpId, assigneeUserId, taskName, unitId, startDate, endDate, taskBudgetHours, codeId, priority } = req.body;
         const currentUser = (req as any).user;
         const safeInt = (val: any) => {
             if (!val) return null;
@@ -111,27 +107,25 @@ export const createTask = async (req: Request, res: Response) => {
         const parsedWpId = safeInt(wpId);
         if (!parsedWpId) return res.status(400).json({ error: "L'ID du Work Package est manquant." });
 
-        // VÉRIFICATION DE SÉCURITÉ : Le WP parent appartient-il à un Corporate Template ?
         const parentWp = await WorkPackage.findByPk(parsedWpId, { include: [{ model: Project, as: 'project' }] });
         if (parentWp && (parentWp as any).project.projectTypeId === 1 && !isManagerOrAdmin(currentUser)) {
             return res.status(403).json({ error: "Modification bloquée : Ce Work Package fait partie d'un Corporate Template." });
         }
 
-        const newTask = await Task.create({
+        await Task.create({
             wpId: parsedWpId,
             assigneeUserId: safeInt(assigneeUserId),
-            taskFUPTypeId: 2, // 2 = 'Heures restant à faire' (Forcé par défaut)
+            taskFUPTypeId: 2,
             taskName: taskName,
             unitId: safeInt(unitId),
-            taskStart: taskStart || null,
-            taskEnd: taskEnd || null,
+            startDate: startDate || null,
+            endDate: endDate || null,
             taskBudgetHours: safeInt(taskBudgetHours),
             codeId: safeInt(codeId),
             priority: safeInt(priority),
-            statId: 1 // 1 = Actif par défaut
+            statId: 1
         });
 
-        // En renvoyant simplement "success: true", le frontend saura qu'il doit recharger la page courante
         res.status(200).json({ success: true });
     } catch (error) {
         console.error("Erreur création tâche:", error);
@@ -139,7 +133,6 @@ export const createTask = async (req: Request, res: Response) => {
     }
 };
 
-// Fonction d'archivage
 export const archiveTask = async (req: Request, res: Response) => {
     try {
         const { id , redirectUrl } = req.body;
@@ -159,19 +152,17 @@ export const updateTask = async (req: Request, res: Response) => {
 
         if (!task) return res.status(404).json({ error: "Task not found" });
 
-        // Si on vient de la modale d'édition (editTaskModal)
         if (taskName) {
             await task.update({
                 taskName: taskName,
                 taskBudgetHours: budget ? parseInt(budget) : null,
-                taskStart: startDate || null,
-                taskEnd: endDate || null,
-                statId: statId ? parseInt(statId) : task.statId, // Mise à jour du statut
-                unitId: unitId ? parseInt(unitId) : null         // Mise à jour de l'unité
+                startDate: startDate || null,
+                endDate: endDate || null,
+                statId: statId ? parseInt(statId) : task.statId,
+                unitId: unitId ? parseInt(unitId) : null
             });
         }
 
-        // Si on vient de la page d'allocation
         if (userId !== undefined) {
             await task.update({ assigneeUserId: userId || null });
         }
@@ -187,8 +178,6 @@ export const bulkSubmitRW = async (req: Request, res: Response) => {
     try {
         const { updates } = req.body;
         const userId = (req as any).user.id;
-
-        // new Date() capture la date ET l'heure à la seconde près
         const now = new Date();
 
         if (!updates || updates.length === 0) {
@@ -198,17 +187,15 @@ export const bulkSubmitRW = async (req: Request, res: Response) => {
         for (const update of updates) {
             const { taskId, rwHours, codeId, comment } = update;
 
-            // On CRÉE toujours une nouvelle entrée dans l'historique
             await RWs.create({
                 taskId: taskId,
                 userId: userId,
-                rwDate: now, // Date et heure d'enregistrement
+                rwDate: now,
                 rwHours: parseInt(rwHours),
                 codeId: codeId ? parseInt(codeId) : null,
                 comment: comment || null
             });
 
-            // Si le RW est de 0, on clôture la tâche (StatId = 4)
             if (parseInt(rwHours) === 0) {
                 await Task.update({ statId: 4 }, { where: { id: taskId } });
             }
@@ -226,10 +213,10 @@ export const getTaskRWHistory = async (req: Request, res: Response) => {
         const { id } = req.params;
         const history = await RWs.findAll({
             where: { taskId: id },
-            include: [{ model: Codes, as: 'code' }], // Inclut le libellé du code caisse
+            include: [{ model: Codes, as: 'code' }],
             order: [
                 ['rwDate', 'DESC'],
-                ['rwId', 'DESC'] // Tri secondaire au cas où plusieurs saisies le même jour
+                ['rwId', 'DESC']
             ]
         });
         res.json({ data: history });
