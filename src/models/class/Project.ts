@@ -26,6 +26,7 @@ Project.init(
         createdAt: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW, field: 'CreatedAt' },
         updatedAt: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW, field: 'UpdatedAt' },
         statId: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false, defaultValue: 1, field: 'StatId' },
+        analyticalCode: { type: DataTypes.STRING(50), allowNull: false, field: 'AnalyticalCode' },
     },
     { sequelize, tableName: 'Projects', timestamps: false }
 );

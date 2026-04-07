@@ -81,6 +81,7 @@ export const exportTasksData = async (req: Request, res: Response) => {
 
             return {
                 "ID": t.id,
+                "Analytical Code": t.workPackage?.project?.analyticalCode || "N/A",
                 "Task Name": t.taskName,
                 "Status": t.status?.statName || t.statId,
                 "Priority": t.priority || '',
@@ -90,8 +91,8 @@ export const exportTasksData = async (req: Request, res: Response) => {
                 "End Date": formatDateForCSV(t.endDate),
                 "Created At": formatDateForCSV(t.CreatedAt || t.createdAt),
                 "Current RW (Hours)": latestRW ? (latestRW.rwHours || 0) : 0,
-                "Current RW (Code)": latestRW?.code?.codeName || 'None',
-                "Current RW (Comment)": latestRW?.comment || '',
+                "Code": latestRW?.code?.codeName || 'None',
+                "Comment": latestRW?.comment || '',
                 "Last Update": formatDateForCSV(t.UpdatedAt || t.updatedAt)
             };
         });
@@ -132,7 +133,16 @@ export const exportRWsData = async (req: Request, res: Response) => {
         const rws = await RWs.findAll({
             where: { taskId: { [Op.in]: taskIds } },
             include: [
-                { model: Task, as: 'Task' },
+                {
+                    model: Task,
+                    as: 'Task',
+                    // --- NEED TO INCLUDE WP AND PROJECT ---
+                    include: [{
+                        model: WorkPackage,
+                        as: 'workPackage',
+                        include: [{ model: Project, as: 'project' }]
+                    }]
+                },
                 { model: User, as: 'User' },
                 { model: Codes, as: 'code' }
             ],
@@ -143,11 +153,12 @@ export const exportRWsData = async (req: Request, res: Response) => {
 
         const data = plainRws.map(rw => ({
             "RW ID": rw.rwId,
+            "Analytical Code": rw.Task?.workPackage?.project?.analyticalCode || "N/A",
             "Task ID": rw.taskId,
             "Task Name": rw.Task?.taskName || '',
             "User": rw.User ? `${rw.User.firstName} ${rw.User.lastName}` : 'Unknown',
             "Date": formatDateForCSV(rw.rwDate), // Formatage appliqué ici !
-            "Hours": rw.rwHours || 0,
+            "Remaining Hours": rw.rwHours || 0,
             "Blockage Code": rw.code?.codeName || 'None',
             "Comment": rw.comment || ''
         }));

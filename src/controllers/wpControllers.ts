@@ -6,6 +6,7 @@ import sequelize from "../config/database";
 export const AVAILABLE_COLUMNS = [
     { id: 'id', label: "ID" },
     { id: 'project', label: "Project" },
+    { id: 'analyticalCode', label: "Analytical Code" },
     { id: 'wpName', label: "Work Package" },
     { id: 'taskName', label: "Task Name" },
     { id: 'status', label: "Status" },
@@ -61,7 +62,12 @@ export const getWPTasksData = async (req: Request, res: Response) => {
             where: { wpId: (wp as any).id },
             include: [
                 { model: Status, as: 'status' },
-                { model: Units, as: 'unit' }
+                { model: Units, as: 'unit' },
+                {
+                    model: WorkPackage,
+                    as: 'workPackage',
+                    include: [{ model: Project, as: 'project' }]
+                }
             ]
         });
 

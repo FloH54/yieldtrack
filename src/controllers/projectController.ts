@@ -13,6 +13,7 @@ const hasRole = (user: any, roles: string[]) => {
 
 export const PROJECT_COLUMNS = [
     { id: 'id', label: "ID" },
+    { id: 'analyticalCode', label: "Analytical Code" },
     { id: 'name', label: "Project Name" },
     { id: 'type', label: "Type" },
     { id: 'leaders', label: "Program Leaders" },
@@ -25,6 +26,7 @@ export const PROJECT_COLUMNS = [
 
 export const WP_COLUMNS = [
     { id: 'id', label: "ID" },
+    { id: 'analyticalCode', label: "Analytical Code" },
     { id: 'name', label: "WP Name" },
     { id: 'parent', label: "Parent WP" },
     { id: 'account', label: "Account Number" },
@@ -105,13 +107,11 @@ export const getProjectsData = async (req: Request, res: Response) => {
         // ==========================================
         const formattedData = projects.map((p: any) => {
             const plain = p.get({ plain: true }); // Convertit en objet pur
-
             return {
                 id: plain.id,
                 slug: plain.slug,
                 createdAt: plain.createdAt,
-
-                // Clés attendues par DataTables (définies dans PROJECT_COLUMNS)
+                analyticalCode: plain.analyticalCode,
                 name: plain.projectName,
                 type: plain.type ? plain.type.projectTypeName : 'N/A',
                 leaders: plain.leaders && plain.leaders.length > 0
@@ -209,13 +209,11 @@ export const getProjectWPsData = async (req: Request, res: Response) => {
         // FORMATAGE DES DONNÉES DU WP POUR LE DATATABLE
         const formattedWPs = (project as any).workPackages.map((wp: any) => {
             const plainWp = wp.get({ plain: true });
-
             return {
                 id: plainWp.id,
                 slug: plainWp.slug,
-                // On passe le slug du projet pour pouvoir construire l'URL /project/monprojet/wp/monslug
+                analyticalCode: (project as any).analyticalCode,
                 projectSlug: (project as any).slug,
-
                 name: plainWp.wpName,
                 account: plainWp.accountNumber,
                 parent: plainWp.father ? plainWp.father.wpName : 'Aucun',
@@ -245,12 +243,17 @@ const generateSlug = (text: string) => {
 
 export const createProject = async (req: Request, res: Response) => {
     try {
-        const { projectName, projectTypeId, startDate, endDate, leaderIds } = req.body;
+        const { projectName, analyticalCode, projectTypeId, startDate, endDate, leaderIds } = req.body;
         const currentUser = (req as any).user;
 
         const isManagerOrAdmin = hasRole(currentUser, ['Administrateur', 'Program Manager']);
         if (!isManagerOrAdmin) {
             return res.status(403).json({ error: "Action non autorisée." });
+        }
+
+        const codeRegex = /^[a-zA-Z0-9\-_]+$/;
+        if (!analyticalCode || !codeRegex.test(analyticalCode) || analyticalCode.length > 50) {
+            return res.status(400).json({ error: "Invalid Analytical Code. Use only alphanumeric characters, dashes, or underscores (max 50 chars)." });
         }
 
         if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
@@ -266,6 +269,7 @@ export const createProject = async (req: Request, res: Response) => {
 
         const newProject = await Project.create({
             projectName,
+            analyticalCode,
             slug: generatedSlug,
             projectTypeId,
             startDate: startDate || null,
@@ -289,7 +293,7 @@ export const createProject = async (req: Request, res: Response) => {
 
 export const updateProject = async (req: Request, res: Response) => {
     try {
-        const { id, projectName, projectTypeId, startDate, endDate, statId, leaderIds } = req.body;
+        const { id, projectName, analyticalCode, projectTypeId, startDate, endDate, statId, leaderIds } = req.body;
         const currentUser = (req as any).user;
 
         const isManagerOrAdmin = hasRole(currentUser, ['Administrateur', 'Program Manager']);
@@ -303,11 +307,19 @@ export const updateProject = async (req: Request, res: Response) => {
         // Mise à jour des informations de base du projet
         await project.update({
             projectName: projectName || (project as any).projectName,
+            analyticalCode: analyticalCode || (project as any).analyticalCode,
             projectTypeId: projectTypeId || (project as any).projectTypeId,
             startDate: startDate || (project as any).startDate,
             endDate: endDate || (project as any).endDate,
             statId: statId || (project as any).statId
         });
+
+        if (analyticalCode) {
+            const codeRegex = /^[a-zA-Z0-9\-_]+$/;
+            if (!codeRegex.test(analyticalCode) || analyticalCode.length > 50) {
+                return res.status(400).json({ error: "Invalid Analytical Code. Use only alphanumeric characters, dashes, or underscores (max 50 chars)." });
+            }
+        }
 
         // Mise à jour des Leaders (on supprime les anciens et on insère les nouveaux)
         if (leaderIds && Array.isArray(leaderIds)) {

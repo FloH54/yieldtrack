@@ -5,22 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="traduction des vues en anglais">
-      <change afterPath="$PROJECT_DIR$/src/controllers/adminResourcesController.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/controllers/exportController.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rootes/adminRoutes.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/rootes/exportRoutes.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/Pages/adminCodes.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/Pages/adminUnits.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/Pages/export.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/authControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/authControllers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/tasksController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/tasksController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/exportController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/exportController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/projectController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/projectController.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/wpControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/wpControllers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/Index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/class/Project.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/class/Project.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/projects.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/projects.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/partials/sidebar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/sidebar.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -72,37 +62,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "JavaScript Debug.localhost:3000.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Node.js.app.ts.executor": "Debug",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "javascript.nodejs.core.library.configured.version": "22.22.1",
-    "javascript.nodejs.core.library.typings.version": "22.19.15",
-    "javascript.preferred.runtime.type.id": "node",
-    "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/home/flofloz/dev/yieldtrack",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.grazie",
-    "to.speed.mode.migration.done": "true",
-    "ts.external.directory.path": "/home/flofloz/dev/yieldtrack/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;JavaScript Debug.localhost:3000.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Node.js.app.ts.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;22.22.1&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;22.19.15&quot;,
+    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/flofloz/dev/yieldtrack&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.grazie&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/flofloz/dev/yieldtrack/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/views/Pages" />
@@ -213,6 +203,9 @@
       <workItem from="1775118379135" duration="18815000" />
       <workItem from="1775199368810" duration="7813000" />
       <workItem from="1775226332450" duration="1709000" />
+      <workItem from="1775231711058" duration="1470000" />
+      <workItem from="1775543621328" duration="1393000" />
+      <workItem from="1775553113150" duration="2682000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
