@@ -4,14 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="traduction des vues en anglais">
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="update des controllers pour le code analytic">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/exportController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/exportController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/projectController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/projectController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/wpControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/wpControllers.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/class/Project.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/class/Project.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/modals/projects.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/projects.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/partials/sidebar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partials/sidebar.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/allocation.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/allocation.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/projects.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projects.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Pages/remaining.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/remaining.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,7 +203,7 @@
       <workItem from="1775226332450" duration="1709000" />
       <workItem from="1775231711058" duration="1470000" />
       <workItem from="1775543621328" duration="1393000" />
-      <workItem from="1775553113150" duration="2682000" />
+      <workItem from="1775553113150" duration="4265000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -463,7 +461,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775118040459</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="update des controllers pour le code analytic">
+      <option name="closed" value="true" />
+      <created>1775555955296</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1775555955296</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -481,7 +487,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[modify] rétractation de la barre latérale" />
     <MESSAGE value="[modify] gestion du roles admin" />
     <MESSAGE value="[modify] ejs d'un tableau" />
     <MESSAGE value="[modify] tableau v1" />
@@ -506,6 +511,7 @@
     <MESSAGE value="Déplacement du create-unit.ejs, rectification etc" />
     <MESSAGE value="routes non commmit" />
     <MESSAGE value="traduction des vues en anglais" />
-    <option name="LAST_COMMIT_MESSAGE" value="traduction des vues en anglais" />
+    <MESSAGE value="update des controllers pour le code analytic" />
+    <option name="LAST_COMMIT_MESSAGE" value="update des controllers pour le code analytic" />
   </component>
 </project>
