@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
 import { Task, RWs, User, WorkPackage, Project, Status, Codes, Units } from "../models/Index";
 import { Op } from "sequelize";
+import {Roles} from "../config/roles";
 
 // Vérifie si l'utilisateur a le droit d'exporter
 const canExport = (user: any) => {
     if (!user || !user.profiles) return false;
-    return user.profiles.some((profile: any) => {
-        const roleName = profile.profileName || profile.ProfileName || profile.name;
-        return ['Administrateur', 'Program Manager', 'Key User'].includes(roleName);
+    return user.profiles.some((p: any) => {
+        const profileId = p.id || p.ProfileId;
+        return [Roles.ADMINISTRATOR, Roles.PROGRAM_MANAGER, Roles.KEY_USER].includes(profileId);
     });
 };
 
@@ -26,6 +27,8 @@ const formatDateForCSV = (dateStr: string | Date | null) => {
 
     return `${day}/${month}/${year} ${hours}:${minutes}`;
 };
+
+
 
 export const renderExportPage = async (req: Request, res: Response) => {
     try {

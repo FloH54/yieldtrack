@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Project, Task, Units, User, WorkPackage } from "../models/Index";
 import { UserToUnits } from "../models/class/UserToUnits";
 import { Op } from "sequelize";
+import {Roles} from "../config/roles";
 
 export const UNITS_COLUMNS = [
     { id: 'id', label: "ID" },
@@ -17,10 +18,11 @@ export const UNITS_COLUMNS = [
 
 // Fonction utilitaire pour vérifier si l'utilisateur est Admin
 const isAdmin = (user: any) => {
-    if (!user.profiles) return false;
+    if (!user || !user.profiles) return false;
     return user.profiles.some((profile: any) => {
-        const roleName = profile.profileName || profile.ProfileName || profile.name;
-        return roleName === 'Administrateur';
+        // On vérifie l'ID numérique au lieu du nom en français
+        const profileId = profile.id || profile.ProfileId;
+        return profileId === Roles.ADMINISTRATOR;
     });
 };
 

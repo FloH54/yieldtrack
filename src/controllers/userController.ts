@@ -191,7 +191,7 @@ export const createUnit = async (req: Request, res: Response) => {
         );
 
         if (!isAdmin) {
-            return res.status(403).json({ error: "Seul un Administrateur peut créer une unité." });
+            return res.status(403).json({ error: "Only an Administrator can create a unit." });
         }
 
         await Units.create({
@@ -203,6 +203,6 @@ export const createUnit = async (req: Request, res: Response) => {
         res.status(200).json({ success: true, redirect: '/users' });
     } catch (error) {
         console.error("Erreur création unité :", error);
-        res.status(500).json({ error: "Erreur lors de la création de l'unité." });
+        res.status(500).json({ error: "Error creating unit." });
     }
 };

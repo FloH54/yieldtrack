@@ -89,6 +89,7 @@ CREATE TABLE IF NOT EXISTS Projects (
     Slug VARCHAR(255) NOT NULL,
     CreatorUserId INT UNSIGNED NOT NULL,
     ProjectTypeId INT UNSIGNED NOT NULL,
+    AnalyticalCode VARCHAR(50) NOT NULL,
     StartDate DATE NULL,
     EndDate DATE NULL,
     StatId INT UNSIGNED NOT NULL DEFAULT 1,

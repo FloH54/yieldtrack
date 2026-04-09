@@ -103,7 +103,7 @@
         data.leaderIds = Array.from(leaderSelect.selectedOptions).map(opt => opt.value);
 
         try {
-            const response = await fetch('/project/updtate', {
+            const response = await fetch('/project/update', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)

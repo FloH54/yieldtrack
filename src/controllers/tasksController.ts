@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Task, Status, WorkPackage, Project, RWs, Units, Codes } from '../models/Index';
 import { Op } from "sequelize";
+import {Roles} from "../config/roles";
 
 export const AVAILABLE_COLUMNS = [
     { id: 'id', label: "ID" },
@@ -58,9 +59,10 @@ export const renderRemainingPage = async (req: Request, res: Response) => {
 
 const isManagerOrAdmin = (user: any) => {
     if (!user || !user.profiles) return false;
-    return user.profiles.some((p: any) =>
-        ['Administrateur', 'Program Manager'].includes(p.profileName || p.ProfileName || p.name)
-    );
+    return user.profiles.some((p: any) => {
+        const profileId = p.id || p.ProfileId;
+        return [Roles.ADMINISTRATOR, Roles.PROGRAM_MANAGER].includes(profileId);
+    });
 };
 
 export const getRemainingTasksData = async (req: Request, res: Response) => {
@@ -105,11 +107,11 @@ export const createTask = async (req: Request, res: Response) => {
         };
 
         const parsedWpId = safeInt(wpId);
-        if (!parsedWpId) return res.status(400).json({ error: "L'ID du Work Package est manquant." });
+        if (!parsedWpId) return res.status(400).json({ error: "Work Package ID is missing." });
 
         const parentWp = await WorkPackage.findByPk(parsedWpId, { include: [{ model: Project, as: 'project' }] });
         if (parentWp && (parentWp as any).project.projectTypeId === 1 && !isManagerOrAdmin(currentUser)) {
-            return res.status(403).json({ error: "Modification bloquée : Ce Work Package fait partie d'un Corporate Template." });
+            return res.status(403).json({ error: "Modification blocked: This Work Package is part of a Corporate Template." });
         }
 
         await Task.create({
@@ -129,7 +131,7 @@ export const createTask = async (req: Request, res: Response) => {
         res.status(200).json({ success: true });
     } catch (error) {
         console.error("Erreur création tâche:", error);
-        res.status(500).json({ error: "Erreur lors de la création de la tâche." });
+        res.status(500).json({ error: "Error while creating the task." });
     }
 };
 
@@ -181,7 +183,7 @@ export const bulkSubmitRW = async (req: Request, res: Response) => {
         const now = new Date();
 
         if (!updates || updates.length === 0) {
-            return res.status(400).json({ error: "Aucune donnée à sauvegarder" });
+            return res.status(400).json({ error: "No data to save." });
         }
 
         for (const update of updates) {
@@ -204,7 +206,7 @@ export const bulkSubmitRW = async (req: Request, res: Response) => {
         res.status(200).json({ success: true });
     } catch (error) {
         console.error("Erreur Bulk RW:", error);
-        res.status(500).json({ error: "Erreur lors de la sauvegarde du Remaining Work" });
+        res.status(500).json({ error: "Error while saving Remaining Work." });
     }
 };
 
@@ -222,6 +224,6 @@ export const getTaskRWHistory = async (req: Request, res: Response) => {
         res.json({ data: history });
     } catch (error) {
         console.error("Erreur lors du chargement de l'historique :", error);
-        res.status(500).json({ error: "Erreur serveur lors de la récupération de l'historique" });
+        res.status(500).json({ error: "Server error while retrieving history." });
     }
 };

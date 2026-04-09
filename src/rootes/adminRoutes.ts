@@ -12,13 +12,14 @@ import {
     deleteCode
 } from '../controllers/adminResourcesController';
 import {authorize} from "../middlewares/roleMiddleware";
+import {Roles} from "../config/roles";
 
 
 
 const router = Router();
 
 // Optionnel: Protéger toutes les routes admin
-router.use(authorize(['Administrateur']));
+router.use(authorize([Roles.ADMINISTRATOR]));
 
 // --- Pages EJS ---
 router.get('/units', renderUnitsAdminPage);

@@ -1,13 +1,16 @@
 import { Request, Response } from 'express';
 import { Project, WorkPackage, Units, User, Profiles, Status, ProjectTypes, ProjectLeaders } from "../models/Index";
 import { Op } from "sequelize";
+import {Roles} from "../config/roles";
 
 // Aide pour vérifier les rôles plus facilement
-const hasRole = (user: any, roles: string[]) => {
+// On attend un tableau de nombres (les IDs de Roles)
+const hasRole = (user: any, rolesRequired: number[]) => {
     if (!user || !user.profiles) return false;
     return user.profiles.some((profile: any) => {
-        const roleName = profile.profileName || profile.ProfileName || profile.name;
-        return roles.includes(roleName);
+        // On récupère l'ID du profil comme dans votre roleMiddleware
+        const profileId = profile.id || profile.ProfileId;
+        return rolesRequired.includes(profileId);
     });
 };
 
@@ -40,7 +43,7 @@ export const renderProjectsPage = async (req: Request, res: Response) => {
         const TABLE_ID = 'projectList';
         const selectedColumns = (req as any).tablePreferences[TABLE_ID] || ['name', 'type', 'start', 'end', 'status'];
 
-        const isManagerOrAdmin = hasRole(user, ['Administrateur', 'Program Manager']);
+        const isManagerOrAdmin = hasRole(user, [Roles.ADMINISTRATOR, Roles.PROGRAM_MANAGER]);
 
         // Récupération des données pour les listes déroulantes de création/édition
         const allTypes = await ProjectTypes.findAll();
@@ -78,7 +81,7 @@ export const renderProjectsPage = async (req: Request, res: Response) => {
 export const getProjectsData = async (req: Request, res: Response) => {
     try {
         const user = (req as any).user;
-        const isManagerOrAdmin = hasRole(user, ['Administrateur', 'Program Manager']);
+        const isManagerOrAdmin = hasRole(user, [Roles.ADMINISTRATOR, Roles.PROGRAM_MANAGER]);
 
         let includeLeaders: any = {
             model: User,
@@ -116,7 +119,7 @@ export const getProjectsData = async (req: Request, res: Response) => {
                 type: plain.type ? plain.type.projectTypeName : 'N/A',
                 leaders: plain.leaders && plain.leaders.length > 0
                     ? plain.leaders.map((l: any) => `${l.firstName} ${l.lastName}`).join(', ')
-                    : 'Aucun',
+                    : 'None',
                 start: plain.startDate ? plain.startDate.toString().split('T')[0] : 'N/A',
                 end: plain.endDate ? plain.endDate.toString().split('T')[0] : 'N/A',
 
@@ -153,11 +156,11 @@ export const renderProjectDetails = async (req: Request, res: Response) => {
 
         if (!project) return res.status(404).render('404', { user });
 
-        const isManagerOrAdmin = hasRole(user, ['Administrateur', 'Program Manager']);
+        const isManagerOrAdmin = hasRole(user, [Roles.ADMINISTRATOR, Roles.PROGRAM_MANAGER]);
         const isAssignedLeader = (project as any).leaders.some((l: any) => l.id === user.id);
 
         if (!isManagerOrAdmin && !isAssignedLeader) {
-            return res.status(403).send("Accès refusé : vous n'êtes pas assigné à ce projet.");
+            return res.status(403).send("Access denied: you are not assigned to this project.");
         }
 
         const projectWPs = await WorkPackage.findAll({ where: { projectId: (project as any).id } });
@@ -169,8 +172,8 @@ export const renderProjectDetails = async (req: Request, res: Response) => {
         });
 
         // Définition des boutons (Principal = Vide, Secondaire = Template)
-        const createAction = { label: "Empty Wokrpackage", icon: "fas fa-plus", modalTarget: "#customWPModal" };
-        const secondaryAction = { label: "Depuis un Template", icon: "fas fa-copy", modalTarget: "#createWpFromTemplateModal", btnClass: "btn-info" };
+        const createAction = { label: "Empty Workpackage", icon: "fas fa-plus", modalTarget: "#customWPModal" };
+        const secondaryAction = { label: "From a Template", icon: "fas fa-copy", modalTarget: "#createWpFromTemplateModal", btnClass: "btn-info" };
 
         res.render('Pages/projectsDetails', {
             user, project, tableId: TABLE_ID, tableTitle: "Work Packages",
@@ -216,7 +219,7 @@ export const getProjectWPsData = async (req: Request, res: Response) => {
                 projectSlug: (project as any).slug,
                 name: plainWp.wpName,
                 account: plainWp.accountNumber,
-                parent: plainWp.father ? plainWp.father.wpName : 'Aucun',
+                parent: plainWp.father ? plainWp.father.wpName : 'None',
                 status: plainWp.status ? (plainWp.status.StatName || plainWp.status.statName) : 'N/A',
 
                 // Données brutes pour la modale d'édition
@@ -246,9 +249,9 @@ export const createProject = async (req: Request, res: Response) => {
         const { projectName, analyticalCode, projectTypeId, startDate, endDate, leaderIds } = req.body;
         const currentUser = (req as any).user;
 
-        const isManagerOrAdmin = hasRole(currentUser, ['Administrateur', 'Program Manager']);
+        const isManagerOrAdmin = hasRole(currentUser, [Roles.ADMINISTRATOR, Roles.PROGRAM_MANAGER]);
         if (!isManagerOrAdmin) {
-            return res.status(403).json({ error: "Action non autorisée." });
+            return res.status(403).json({ error: "Unauthorized action." });
         }
 
         const codeRegex = /^[a-zA-Z0-9\-_]+$/;
@@ -296,9 +299,9 @@ export const updateProject = async (req: Request, res: Response) => {
         const { id, projectName, analyticalCode, projectTypeId, startDate, endDate, statId, leaderIds } = req.body;
         const currentUser = (req as any).user;
 
-        const isManagerOrAdmin = hasRole(currentUser, ['Administrateur', 'Program Manager']);
+        const isManagerOrAdmin = hasRole(currentUser, [Roles.ADMINISTRATOR, Roles.PROGRAM_MANAGER]);
         if (!isManagerOrAdmin) {
-            return res.status(403).json({ error: "Seuls les Program Managers ou Administrateurs peuvent modifier un projet." });
+            return res.status(403).json({ error: "Only Program Managers or Administrators can modify a project." });
         }
 
         const project = await Project.findByPk(id);

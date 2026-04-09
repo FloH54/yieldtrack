@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { WorkPackage, Task, Status, Project, Units, RWs, Codes } from "../models/Index";
 import { Op } from "sequelize";
 import sequelize from "../config/database";
+import {Roles} from "../config/roles";
 
 export const AVAILABLE_COLUMNS = [
     { id: 'id', label: "ID" },
@@ -48,9 +49,10 @@ export const renderWPDetails = async (req: Request, res: Response) => {
 
 const isManagerOrAdmin = (user: any) => {
     if (!user || !user.profiles) return false;
-    return user.profiles.some((p: any) =>
-        ['Administrateur', 'Program Manager'].includes(p.profileName || p.ProfileName || p.name)
-    );
+    return user.profiles.some((p: any) => {
+        const profileId = p.id || p.ProfileId;
+        return [Roles.ADMINISTRATOR, Roles.PROGRAM_MANAGER].includes(profileId);
+    });
 };
 
 export const getWPTasksData = async (req: Request, res: Response) => {
@@ -96,7 +98,7 @@ export const createWP = async (req: Request, res: Response) => {
         if (!project) return res.status(404).json({ error: "Project not found." });
 
         if ((project as any).projectTypeId === 1 && !isManagerOrAdmin(currentUser)) {
-            return res.status(403).json({ error: "Seuls les Program Managers peuvent créer un WP dans un Corporate Template." });
+            return res.status(403).json({ error: "Only Program Managers can create a WP in a Corporate Template." });
         }
 
         if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
@@ -151,7 +153,7 @@ export const updateWP = async (req: Request, res: Response) => {
 
         // VÉRIFICATION DE SÉCURITÉ
         if ((wp as any).project.projectTypeId === 1 && !isManagerOrAdmin(currentUser)) {
-            return res.status(403).json({ error: "Vous n'avez pas l'autorisation de modifier un Corporate Template." });
+            return res.status(403).json({ error: "You do not have permission to modify a Corporate Template." });
         }
 
         await wp.update({
@@ -177,7 +179,7 @@ export const createWPFromTemplate = async (req: Request, res: Response) => {
         const sourceWp = await WorkPackage.findByPk(sourceWpId);
         if (!sourceWp) {
             await transaction.rollback();
-            return res.status(404).json({ error: "Template Work Package introuvable." });
+            return res.status(404).json({ error: "Template Work Package not found." });
         }
 
         const generatedSlug = generateSlug(wpName);
@@ -187,7 +189,7 @@ export const createWPFromTemplate = async (req: Request, res: Response) => {
 
         if (existingWP) {
             await transaction.rollback();
-            return res.status(400).json({ error: "Ce nom (ou slug) de Work Package existe déjà dans ce projet." });
+            return res.status(400).json({ error: "This Work Package name (or slug) already exists in this project." });
         }
 
         const newWp = await WorkPackage.create({
@@ -230,6 +232,6 @@ export const createWPFromTemplate = async (req: Request, res: Response) => {
     } catch (error) {
         await transaction.rollback();
         console.error("Erreur Création WP depuis Template :", error);
-        res.status(500).json({ error: "Erreur serveur lors de la génération du Work Package." });
+        res.status(500).json({ error: "Server error while generating the Work Package." });
     }
 };

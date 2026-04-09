@@ -4,12 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="update des controllers pour le code analytic">
+    <list default="true" id="6723a217-808b-4121-b131-b8a7bd8d73cb" name="Changes" comment="update des vues pour le code analytic">
+      <change afterPath="$PROJECT_DIR$/doc/dev_data.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/config/roles.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Pages/allocation.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/allocation.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Pages/projects.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projects.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/projectsDetails.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/Pages/remaining.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/Pages/remaining.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/creation_db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/doc/creation_db.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/doc/data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/config/database.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/database.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/authControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/authControllers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/exportController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/exportController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/projectController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/projectController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/tasksController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/tasksController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/unitsController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/unitsController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/userController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/userController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/wpControllers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/wpControllers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middlewares/authMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/authMiddleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middlewares/roleMiddleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middlewares/roleMiddleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rootes/adminRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/adminRoutes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rootes/exportRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/exportRoutes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rootes/projectRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/projectRoutes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rootes/unitRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/unitRoutes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rootes/userRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/userRoutes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rootes/wpRoutes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/modals/edit-project.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/modals/edit-project.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,7 +35,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="1924" />
+    <option name="cachedIndexableFilesCount" value="1926" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -71,10 +89,11 @@
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;22.22.1&quot;,
-    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;22.19.15&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;22.22.2&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;22.19.17&quot;,
     &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/flofloz/dev/yieldtrack&quot;,
@@ -85,7 +104,7 @@
     &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.grazie&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.AcpAgentsConfigurable&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/home/flofloz/dev/yieldtrack/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -120,7 +139,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-WS-253.32098.39" />
+        <option value="bundled-js-predefined-d6986cc7102b-3bd3a6803838-JavaScript-WS-261.22158.274" />
       </set>
     </attachedChunks>
   </component>
@@ -203,7 +222,17 @@
       <workItem from="1775226332450" duration="1709000" />
       <workItem from="1775231711058" duration="1470000" />
       <workItem from="1775543621328" duration="1393000" />
-      <workItem from="1775553113150" duration="4265000" />
+      <workItem from="1775553113150" duration="4371000" />
+      <workItem from="1775567341499" duration="3751000" />
+      <workItem from="1775634554900" duration="5505000" />
+      <workItem from="1775650237673" duration="3697000" />
+      <workItem from="1775666040496" duration="391000" />
+      <workItem from="1775666633320" duration="566000" />
+      <workItem from="1775668334149" duration="3308000" />
+      <workItem from="1775672855148" duration="2477000" />
+      <workItem from="1775715501297" duration="1158000" />
+      <workItem from="1775717314322" duration="865000" />
+      <workItem from="1775718502544" duration="3988000" />
     </task>
     <task id="LOCAL-00001" summary="Push de base">
       <option name="closed" value="true" />
@@ -469,7 +498,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775555955296</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="update des vues pour le code analytic">
+      <option name="closed" value="true" />
+      <created>1775559086711</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1775559086711</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -487,7 +524,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[modify] gestion du roles admin" />
     <MESSAGE value="[modify] ejs d'un tableau" />
     <MESSAGE value="[modify] tableau v1" />
     <MESSAGE value="[modify] première gestion des routes sur plusieurs pages" />
@@ -512,6 +548,7 @@
     <MESSAGE value="routes non commmit" />
     <MESSAGE value="traduction des vues en anglais" />
     <MESSAGE value="update des controllers pour le code analytic" />
-    <option name="LAST_COMMIT_MESSAGE" value="update des controllers pour le code analytic" />
+    <MESSAGE value="update des vues pour le code analytic" />
+    <option name="LAST_COMMIT_MESSAGE" value="update des vues pour le code analytic" />
   </component>
 </project>

@@ -4,16 +4,17 @@ import bcrypt, {hash} from 'bcrypt';
 import { Request, Response } from 'express';
 import { User, Profiles} from "../models/Index";
 
-const JWT_SECRET = 'ta_cle_secrete_tres_longue'; // TODO À mettre dans un fichier .env plus tard
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error("FATAL ERROR: JWT_SECRET is not defined.");
 
 // --- CONFIGURATION NODEMAILER ---
-// À remplacer par vos identifiants SMTP (idéalement stockés dans un fichier .env)
 const transporter = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
-    port: 2525,
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT) || 587,
+    secure: process.env.SMTP_PORT === '465', // 'true' uniquement pour le port 465, 'false' pour 587 et autres
     auth: {
-        user: "VOTRE_USER_MAILTRAP",
-        pass: "VOTRE_MDP_MAILTRAP"
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASSWORD
     }
 });
 
@@ -29,7 +30,7 @@ export const login = async (req: Request, res: Response) => {
 
         // Si pas d'email associé, le notifié
         if (!user) {
-            return res.render('login', { error: 'Unknow email.' });
+            return res.render('login', { error: 'Unknown email.' });
         }
 
         // Vérifier le mot de passe
@@ -65,7 +66,7 @@ export const login = async (req: Request, res: Response) => {
         console.log('voici le token :',token);
     } catch (error) {
         console.error("Erreur lors du login:", error);
-        res.status(500).send("Erreur serveur.");
+        res.status(500).send("Internal server error");
     }
 };
 
@@ -92,7 +93,7 @@ export const changePassword = async (req: Request, res: Response) => {
         if (newPassword !== confirmPassword) {
             return res.render('Pages/change-password', {
                 user: (req as any).user,
-                error: "Les nouveaux mots de passe ne correspondent pas.",
+                error: "The new passwords do not match.",
                 success: null
             });
         }
@@ -105,7 +106,7 @@ export const changePassword = async (req: Request, res: Response) => {
         if (!isValid) {
             return res.render('Pages/change-password', {
                 user: (req as any).user,
-                error: "Le mot de passe actuel est incorrect.",
+                error: "The current password is incorrect.",
                 success: null
             });
         }
@@ -118,13 +119,13 @@ export const changePassword = async (req: Request, res: Response) => {
         res.render('Pages/change-password', {
             user: (req as any).user,
             error: null,
-            success: "Votre mot de passe a été mis à jour avec succès."
+            success: "Your password has been successfully updated."
         });
     } catch (error) {
         console.error("Erreur lors du changement de mot de passe:", error);
         res.render('Pages/change-password', {
             user: (req as any).user,
-            error: "Une erreur serveur est survenue.",
+            error: "Internal server error",
             success: null
         });
     }
@@ -137,7 +138,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
         const user = await User.findOne({ where: { email } });
 
         // Sécurité : On affiche le même message que l'email existe ou non pour éviter le scan d'emails
-        const successMessage = "Si cet email existe dans notre base, un lien de réinitialisation vous a été envoyé.";
+        const successMessage = "A reset link has been sent to you..";
 
         if (!user) {
             return res.render('login', { error: null, success: successMessage, next: '' });
@@ -151,22 +152,24 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
         // Envoi de l'email
         await transporter.sendMail({
-            from: '"Yieldtrack Support" <support@yieldtrack.io>',
-            to: user.email,
-            subject: "Réinitialisation de votre mot de passe",
+            from: process.env.SMTP_FROM || '"YieldTrack ERP" <no-reply@yieldtrack.com>',
+            to: user.email, // L'email de destination (ex: lors d'un mot de passe oublié)
+            subject: "Reset your password",
             html: `
-                <h3>Bonjour ${user.firstName},</h3>
-                <p>Vous avez demandé à réinitialiser votre mot de passe sur Yieldtrack.</p>
-                <p>Cliquez sur le lien ci-dessous (valide 15 minutes) :</p>
-                <a href="${resetLink}" style="display:inline-block; padding:10px 20px; background-color:#4e73df; color:#fff; text-decoration:none; border-radius:5px;">Réinitialiser mon mot de passe</a>
-                <p>Si vous n'êtes pas à l'origine de cette demande, ignorez simplement cet email.</p>
-            `
+                <h3>Hello ${user.firstName},</h3>
+                <p>You have requested to reset your password on Yieldtrack.</p>
+
+                <p>Click the link below (valid for 15 minutes):</p>
+
+                <a href="${resetLink}" style="display:inline-block; padding:10px 20px; background-color:#4e73df; color:#fff; text-decoration:none; border-radius:5px;">Reset my password</a>
+                
+                <p>If you did not initiate this request, simply ignore this email.</p>`
         });
 
         res.render('login', { error: null, success: successMessage, next: '' });
     } catch (error) {
         console.error("Erreur forgotPassword:", error);
-        res.render('login', { error: "Erreur lors de l'envoi de l'email.", success: null, next: '' });
+        res.render('login', { error: "Error sending email.", success: null, next: '' });
     }
 };
 
@@ -183,7 +186,7 @@ export const renderResetPassword = async (req: Request, res: Response) => {
         jwt.verify(token as string, JWT_SECRET);
         res.render('reset-password', { token, error: null });
     } catch (error) {
-        res.render('login', { error: 'Le lien de réinitialisation est invalide ou a expiré.', success: null, next: '' });
+        res.render('login', { error: 'The reset link is invalid or has expired.', success: null, next: '' });
     }
 };
 
@@ -197,7 +200,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 
         const user = await User.findByPk(decoded.id);
         if (!user) {
-            return res.render('login', { error: 'Utilisateur introuvable.', success: null, next: '' });
+            return res.render('login', { error: 'User not found.', success: null, next: '' });
         }
 
         // Hasher le nouveau mot de passe
@@ -206,8 +209,8 @@ export const resetPassword = async (req: Request, res: Response) => {
         // Mettre à jour la base de données
         await user.update({ pwd: hashedPassword });
 
-        res.render('login', { error: null, success: 'Mot de passe mis à jour avec succès. Vous pouvez maintenant vous connecter.', next: '' });
+        res.render('login', { error: null, success: 'Password successfully updated. You can now log in.', next: '' });
     } catch (error) {
-        res.render('login', { error: 'Erreur : le lien de réinitialisation est invalide ou a expiré.', success: null, next: '' });
+        res.render('login', { error: 'Error: The reset link is invalid or has expired.', success: null, next: '' });
     }
 };
